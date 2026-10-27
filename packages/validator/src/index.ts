@@ -265,7 +265,7 @@ export function validateProfile(setup: string, r: Ruleset, opts?: { color?: Colo
   if (kingSquares.length !== 1) {
     issues.push(err('KING_COUNT', `setup must have exactly one king, found ${kingSquares.length}`, kingSquares));
   } else if (kingRankIdx !== 0) {
-    issues.push(err('KING_RANK', 'king must be on rank 1', kingSquares));
+    issues.push(err('KING_RANK', 'king must be on your back rank (rank 1, bottom row in the Builder)', kingSquares));
   }
 
   // OVER_BUDGET / MAX_COUNT
@@ -288,10 +288,10 @@ export function validateProfile(setup: string, r: Ruleset, opts?: { color?: Colo
   }
 
   // PAWN_LAST_RANK — kept per spec even though unreachable in a 3-rank zone.
-  const lastRankIdx = parsed.ranks.length - 1;
+  const lastRankIdx = 7; // Relative promotion rank 8, NEVER the last setup-zone row.
   const pawnLastRankSquares: number[] = [];
   for (let f = 0; f < 8; f++) {
-    const id = parsed.ranks[lastRankIdx]![f];
+    const id = parsed.ranks[lastRankIdx]?.[f];
     if (id && id !== KING_ID && r.pieces[id]?.tier === 'pawn') {
       pawnLastRankSquares.push(setupSquare(color, lastRankIdx, f));
     }

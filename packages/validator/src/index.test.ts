@@ -271,8 +271,10 @@ describe('validateProfile: PAWN_LAST_RANK', () => {
   it('pass: no pawn on rank 3 of the zone', () => {
     expect(validateProfile('2026.1:RNBQKBNR/PPPPPPPP/8', rs).some((i) => i.code === 'PAWN_LAST_RANK')).toBe(false);
   });
-  it('fail: pawn placed on the zone\'s last rank', () => {
-    expect(validateProfile('2026.1:RNBQKBNR/PPPPPPP1/7P', rs).some((i) => i.code === 'PAWN_LAST_RANK')).toBe(true);
+  it('allows pawns on rank 3: last rank means promotion rank 8, not the zone edge', () => {
+    for (const color of ['w', 'b'] as const) {
+      expect(validateProfile('2026.1:RNBQKBNR/PPPPPPP1/7P', rs, { color }).some((i) => i.code === 'PAWN_LAST_RANK')).toBe(false);
+    }
   });
 });
 

@@ -65,7 +65,7 @@
         role="button"
         tabindex="0"
         data-sq={sq}
-        aria-label="square {sq}"
+        aria-label="square {'abcdefgh'[sq % 8]}{Math.floor(sq / 8) + 1}"
         onclick={() => onSquareClick?.(sq)}
         onkeydown={(ev) => onKey(sq, ev)}
       />
@@ -83,7 +83,7 @@
             role="button"
             tabindex="0"
             data-sq={sq}
-            aria-label="piece at square {sq}"
+            aria-label="piece at square {'abcdefgh'[sq % 8]}{Math.floor(sq / 8) + 1}"
             onpointerdown={(ev) => onPieceDown?.(sq, ev)}
             onclick={() => onSquareClick?.(sq)}
             onkeydown={(ev) => onKey(sq, ev)}
@@ -92,6 +92,10 @@
           </div>
         </foreignObject>
       {/if}
+    {/each}
+    {#each squareList.filter((sq) => (flipped ? sq % 8 === 7 : sq % 8 === 0)) as sq}
+      {@const p = xy(sq, ranks, flipped, cellSize)}
+      <text class="rank-label" x={p.x + 3} y={p.y + 12} fill={isLight(sq) ? '#302b22' : '#fff'}>{Math.floor(sq / 8) + 1}</text>
     {/each}
   </svg>
   {#if fileLabels}
@@ -105,6 +109,7 @@
 </div>
 
 <style>
+  .rank-label { pointer-events: none; font-size: 11px; font-weight: bold; }
   .board-shell { display: inline-block; max-width: 100%; }
   .board { touch-action: none; max-width: 100%; height: auto; display: block; }
   .square.light { fill: #e9e3d3; }
