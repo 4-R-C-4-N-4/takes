@@ -162,6 +162,28 @@ importers:
         specifier: workspace:*
         version: link:../../packages/validator
 
+  tools/valuation:
+    dependencies:
+      '@takes/betza':
+        specifier: workspace:*
+        version: link:../betza
+      '@takes/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
+      '@takes/library':
+        specifier: workspace:*
+        version: link:../../packages/library
+      '@takes/perft':
+        specifier: workspace:*
+        version: link:../perft
+      '@takes/validator':
+        specifier: workspace:*
+        version: link:../../packages/validator
+    devDependencies:
+      tsx:
+        specifier: ^4.23.0
+        version: 4.23.15
+
 packages:
 
   '@babel/runtime@7.29.10':

@@ -1,0 +1,25 @@
+{
+  "name": "@takes/valuation",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "value": "node --import tsx scripts/value.ts",
+    "run-all": "node --import tsx scripts/run-all.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.0"
+  },
+  "dependencies": {
+    "@takes/library": "workspace:*",
+    "@takes/engine": "workspace:*",
+    "@takes/validator": "workspace:*",
+    "@takes/betza": "workspace:*",
+    "@takes/perft": "workspace:*"
+  }
+}

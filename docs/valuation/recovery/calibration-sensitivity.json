@@ -1,0 +1,132 @@
+{
+  "scope": "leave-one-fixed-opening-anchor-out model sensitivity at fixed observed target score; not a CI, not an uncertainty bound",
+  "fits": [
+    {
+      "omittedAnchor": "-14 (queen+rook down)",
+      "fit": {
+        "a": 0.16790337087637217,
+        "b": 0.6797422430557859
+      }
+    },
+    {
+      "omittedAnchor": "-9 (queen down)",
+      "fit": {
+        "a": 0.16749616077441534,
+        "b": 0.6761979051881132
+      }
+    },
+    {
+      "omittedAnchor": "-5 (rook down)",
+      "fit": {
+        "a": 0.18119040778462436,
+        "b": 0.6598207226051691
+      }
+    },
+    {
+      "omittedAnchor": "-2 pawns",
+      "fit": {
+        "a": 0.07519731518065344,
+        "b": 0.7241956372276422
+      }
+    },
+    {
+      "omittedAnchor": "-1 pawn",
+      "fit": {
+        "a": 0.20641810585126744,
+        "b": 0.7061131722320435
+      }
+    },
+    {
+      "omittedAnchor": "+1 pawn",
+      "fit": {
+        "a": 0.21665507092237496,
+        "b": 0.6893274018413623
+      }
+    },
+    {
+      "omittedAnchor": "+2 pawns",
+      "fit": {
+        "a": 0.08259614977374434,
+        "b": 0.6555841768391726
+      }
+    },
+    {
+      "omittedAnchor": "+knight",
+      "fit": {
+        "a": 0.1955545091194164,
+        "b": 0.6629950861295965
+      }
+    },
+    {
+      "omittedAnchor": "+bishop",
+      "fit": {
+        "a": 0.16075736236868807,
+        "b": 0.6188054505846209
+      }
+    },
+    {
+      "omittedAnchor": "+rook",
+      "fit": {
+        "a": 0.2269951653973612,
+        "b": 0.7456365597486748
+      }
+    },
+    {
+      "omittedAnchor": "+queen",
+      "fit": {
+        "a": 0.16749616077441534,
+        "b": 0.6761979051881133
+      }
+    }
+  ],
+  "rows": [
+    {
+      "source": "berolina-pawn-x1.json",
+      "point": 1.0354224607571667,
+      "min": 0.9530886921825945,
+      "max": 1.1669049274143455
+    },
+    {
+      "source": "berolina-pawn-x2.json",
+      "point": 0.7691638624520178,
+      "min": 0.7369696859476704,
+      "max": 0.847299376804188
+    },
+    {
+      "source": "berolina-pawn-x4.json",
+      "point": 0.8580978509882546,
+      "min": 0.8423618364890579,
+      "max": 0.8987844403078471
+    },
+    {
+      "source": "bishop-minor-x1.json",
+      "point": 3.3800557736828076,
+      "min": 3.267352137078084,
+      "max": 3.52433624163004
+    },
+    {
+      "source": "knight-minor-x1.json",
+      "point": 2.635294012246421,
+      "min": 2.569583658210367,
+      "max": 2.7856380032217842
+    },
+    {
+      "source": "lancer-rook-x1.json",
+      "point": 2.143380770914135,
+      "min": 1.8728053590079878,
+      "max": 2.4460422755689004
+    },
+    {
+      "source": "warden-rook-x1.json",
+      "point": 2.4284019851410172,
+      "min": 2.185980197023258,
+      "max": 2.7136416462191932
+    },
+    {
+      "source": "wraith-rook-x1.json",
+      "point": 4.121579068570383,
+      "min": 4.046404728132236,
+      "max": 4.303323744634948
+    }
+  ]
+}

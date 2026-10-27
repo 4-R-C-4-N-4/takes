@@ -1,0 +1,111 @@
+{
+  "piece": "berolina",
+  "slot": "minor",
+  "referenceId": "knight",
+  "referenceValuePawns": 3,
+  "iterations": [
+    {
+      "iteration": 0,
+      "injectedMg": null,
+      "injectedEg": null,
+      "estimate": 0.9865667236866216,
+      "lo": 0.7606090267894254,
+      "hi": 1.2136500985667469,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 110,
+      "draws": 73,
+      "losses": 517,
+      "parityBugs": 0
+    },
+    {
+      "iteration": 1,
+      "injectedMg": 124.30740718451432,
+      "injectedEg": 205.2058785268173,
+      "estimate": 0.7863860417440285,
+      "lo": 0.364006598371895,
+      "hi": 0.8051811130072042,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 65,
+      "draws": 100,
+      "losses": 535,
+      "parityBugs": 0
+    }
+  ],
+  "finalEstimate": 0.7863860417440285,
+  "finalLo": 0.364006598371895,
+  "finalHi": 0.8051811130072042,
+  "finalOutOfRange": false,
+  "calibration": [
+    {
+      "label": "-9 (queen+rook down)",
+      "deltaPawns": 9,
+      "p": 1
+    },
+    {
+      "label": "-5 (queen down)",
+      "deltaPawns": 5,
+      "p": 1
+    },
+    {
+      "label": "-3 (rook down)",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "-2 pawns",
+      "deltaPawns": 2,
+      "p": 0.6875
+    },
+    {
+      "label": "-1 pawn",
+      "deltaPawns": 1,
+      "p": 0.5375
+    },
+    {
+      "label": "+1 pawn",
+      "deltaPawns": 1,
+      "p": 0.625
+    },
+    {
+      "label": "+2 pawns",
+      "deltaPawns": 2,
+      "p": 0.85
+    },
+    {
+      "label": "+knight",
+      "deltaPawns": 3,
+      "p": 0.9125
+    },
+    {
+      "label": "+bishop",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "+rook",
+      "deltaPawns": 5,
+      "p": 0.9125
+    },
+    {
+      "label": "+queen",
+      "deltaPawns": 9,
+      "p": 1
+    }
+  ],
+  "calibrationFit": {
+    "a": 0.16661838081188773,
+    "b": 0.7429373111595662
+  },
+  "calibrationRange": {
+    "lo": -9,
+    "hi": 9
+  },
+  "label": "berolina (1 pawn, same-tier)",
+  "parityBugs": 0,
+  "excludedGames": 0,
+  "elapsedS": 120.318
+}

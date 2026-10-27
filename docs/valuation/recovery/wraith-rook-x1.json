@@ -1,0 +1,5010 @@
+{
+  "piece": "wraith",
+  "slot": "rook",
+  "referenceId": "rook",
+  "referenceValuePawns": 5,
+  "iterations": [
+    {
+      "iteration": 0,
+      "injectedMg": null,
+      "injectedEg": null,
+      "estimate": 4.121579068570383,
+      "feedbackEstimate": 4.121579068570383,
+      "rawEstimate": 4.121579068570383,
+      "lo": 3.9250114544636983,
+      "hi": 4.317033175081751,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 188,
+      "draws": 176,
+      "losses": 336,
+      "parityBugs": 0,
+      "trials": [
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 1,
+          "nodes": 6037
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 2,
+          "nodes": 6074
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 3,
+          "nodes": 6111
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 4,
+          "nodes": 6148
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 5,
+          "nodes": 6185
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 6,
+          "nodes": 6222
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 7,
+          "nodes": 6259
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 8,
+          "nodes": 6296
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 9,
+          "nodes": 6333
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 10,
+          "nodes": 6370
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 11,
+          "nodes": 6407
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 12,
+          "nodes": 6444
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 13,
+          "nodes": 6481
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 14,
+          "nodes": 6518
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 15,
+          "nodes": 6555
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 16,
+          "nodes": 6592
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 17,
+          "nodes": 6629
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 18,
+          "nodes": 6666
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 19,
+          "nodes": 6703
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 20,
+          "nodes": 6740
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 21,
+          "nodes": 6777
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 22,
+          "nodes": 6814
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 23,
+          "nodes": 6851
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 24,
+          "nodes": 6888
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 25,
+          "nodes": 6925
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 26,
+          "nodes": 6962
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 27,
+          "nodes": 6999
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 28,
+          "nodes": 7036
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "classic",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 0,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 1,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 1,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 2,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 2,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 3,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 3,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 4,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 4,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 5,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 5,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 6,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 6,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 7,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 7,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 8,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 8,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 9,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 9,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 10,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 10,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 11,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 11,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 12,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 12,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 13,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 13,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 14,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 14,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 15,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 15,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 16,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 16,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 17,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 17,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 18,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 18,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 19,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 19,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 20,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 20,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 21,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 21,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 22,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 22,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 23,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 23,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 24,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 24,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 25,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 25,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 26,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 26,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 27,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 27,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 28,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 28,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 29,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 29,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 30,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 30,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 31,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 31,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 32,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 32,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 33,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 33,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 34,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 34,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 35,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 35,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 36,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 36,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 37,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 37,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 38,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 38,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 39,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 39,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 40,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 40,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 41,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 41,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 42,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 42,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 43,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 43,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 44,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 44,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 45,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 45,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 46,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 46,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 47,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 47,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 48,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 48,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 49,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 49,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 50,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 50,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 51,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 51,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 52,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 52,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 53,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 53,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 54,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 54,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 55,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 55,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 56,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 56,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 57,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 57,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 58,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 58,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 59,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 59,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 60,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 60,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 61,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 61,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 62,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 62,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 63,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 63,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 64,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 64,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 65,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 65,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 66,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 66,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 67,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 67,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 68,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 68,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 69,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 69,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 70,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 70,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 71,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 71,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 72,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 72,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 73,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 73,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 74,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 74,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 75,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 75,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 76,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 76,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 77,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 77,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 78,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 78,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 79,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 79,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 80,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 80,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 81,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 81,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 82,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 82,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 83,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 83,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 84,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 84,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 85,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 85,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 86,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 86,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 87,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 87,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 88,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 88,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 89,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 89,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 90,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 90,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 91,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 91,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 92,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 92,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 93,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 93,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 94,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 94,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 95,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 95,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 96,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 96,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 97,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 97,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 98,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 98,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 99,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 99,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 100,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 100,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 101,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 101,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 102,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 102,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 103,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 103,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 104,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 104,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 105,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 105,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 106,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 106,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 107,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 107,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 108,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 108,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 109,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 109,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 110,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 110,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 111,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 111,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 112,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 112,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 113,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 113,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 114,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 114,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 115,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 115,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 116,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 116,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 117,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 117,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 118,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 118,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 119,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 119,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 120,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 120,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 121,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 121,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 122,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 122,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 123,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 123,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 124,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 124,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 125,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 125,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 126,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 126,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 127,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 127,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 128,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 128,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 129,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 129,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 130,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 130,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 131,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 131,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 132,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 132,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 133,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 133,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 134,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 134,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 135,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 135,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 136,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 136,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 137,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 137,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 138,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 138,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 139,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 139,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 140,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 140,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 141,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 141,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 142,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 142,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 143,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 143,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 144,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 144,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 145,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 145,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 146,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 146,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 147,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 147,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 148,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 148,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 149,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 149,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 150,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 150,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 151,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 151,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 152,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 152,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 153,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 153,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 154,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 154,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 155,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 155,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 156,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 156,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 157,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 157,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 158,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 158,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 159,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 159,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 160,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 160,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 161,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 161,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 162,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 162,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 163,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 163,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 164,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 164,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 165,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 165,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 166,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 166,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 167,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 167,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 168,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 168,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 169,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 169,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 170,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 170,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 171,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 171,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 0,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 172,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 172,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 173,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 173,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": 1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 174,
+          "nodes": 6000
+        },
+        {
+          "targetOutcome": -1,
+          "excluded": false,
+          "stratum": "random",
+          "cluster": 174,
+          "nodes": 6000
+        }
+      ]
+    }
+  ],
+  "finalEstimate": 4.121579068570383,
+  "finalFeedbackEstimate": 4.121579068570383,
+  "sameTierCount": 1,
+  "intervalScope": "nominal 95% iid game bootstrap conditional on fixed calibration; excludes calibration uncertainty and repeated-opening dependence",
+  "finalLo": 3.9250114544636983,
+  "finalHi": 4.317033175081751,
+  "finalOutOfRange": false,
+  "calibration": [
+    {
+      "label": "-14 (queen+rook down)",
+      "deltaPawns": 14,
+      "p": 1
+    },
+    {
+      "label": "-9 (queen down)",
+      "deltaPawns": 9,
+      "p": 1
+    },
+    {
+      "label": "-5 (rook down)",
+      "deltaPawns": 5,
+      "p": 0.9875
+    },
+    {
+      "label": "-2 pawns",
+      "deltaPawns": 2,
+      "p": 0.6875
+    },
+    {
+      "label": "-1 pawn",
+      "deltaPawns": 1,
+      "p": 0.5375
+    },
+    {
+      "label": "+1 pawn",
+      "deltaPawns": 1,
+      "p": 0.625
+    },
+    {
+      "label": "+2 pawns",
+      "deltaPawns": 2,
+      "p": 0.85
+    },
+    {
+      "label": "+knight",
+      "deltaPawns": 3,
+      "p": 0.9125
+    },
+    {
+      "label": "+bishop",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "+rook",
+      "deltaPawns": 5,
+      "p": 0.9125
+    },
+    {
+      "label": "+queen",
+      "deltaPawns": 9,
+      "p": 1
+    }
+  ],
+  "calibrationFit": {
+    "a": 0.16793160753265313,
+    "b": 0.679929377451676
+  },
+  "calibrationRange": {
+    "lo": -14,
+    "hi": 14
+  },
+  "parityBugs": 0,
+  "excludedGames": 0,
+  "elapsedS": 89.006,
+  "settings": {
+    "games": 700,
+    "nodes": 6000,
+    "workers": 8,
+    "seed": 1,
+    "iterations": 1
+  },
+  "calibrationSource": "recovery/calibration.json"
+}

@@ -1,0 +1,111 @@
+{
+  "piece": "wraith",
+  "slot": "minor",
+  "referenceId": "knight",
+  "referenceValuePawns": 3,
+  "iterations": [
+    {
+      "iteration": 0,
+      "injectedMg": null,
+      "injectedEg": null,
+      "estimate": 3.907056308876352,
+      "lo": 3.7333042064469906,
+      "hi": 4.0999034037053885,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 426,
+      "draws": 126,
+      "losses": 148,
+      "parityBugs": 0
+    },
+    {
+      "iteration": 1,
+      "injectedMg": 492.28909491842035,
+      "injectedEg": 812.6677122462812,
+      "estimate": 3.6933979723664425,
+      "lo": 3.301489250207302,
+      "hi": 3.6685299407337233,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 349,
+      "draws": 181,
+      "losses": 170,
+      "parityBugs": 0
+    }
+  ],
+  "finalEstimate": 3.6933979723664425,
+  "finalLo": 3.301489250207302,
+  "finalHi": 3.6685299407337233,
+  "finalOutOfRange": false,
+  "calibration": [
+    {
+      "label": "-9 (queen+rook down)",
+      "deltaPawns": 9,
+      "p": 1
+    },
+    {
+      "label": "-5 (queen down)",
+      "deltaPawns": 5,
+      "p": 1
+    },
+    {
+      "label": "-3 (rook down)",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "-2 pawns",
+      "deltaPawns": 2,
+      "p": 0.6875
+    },
+    {
+      "label": "-1 pawn",
+      "deltaPawns": 1,
+      "p": 0.5375
+    },
+    {
+      "label": "+1 pawn",
+      "deltaPawns": 1,
+      "p": 0.625
+    },
+    {
+      "label": "+2 pawns",
+      "deltaPawns": 2,
+      "p": 0.85
+    },
+    {
+      "label": "+knight",
+      "deltaPawns": 3,
+      "p": 0.9125
+    },
+    {
+      "label": "+bishop",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "+rook",
+      "deltaPawns": 5,
+      "p": 0.9125
+    },
+    {
+      "label": "+queen",
+      "deltaPawns": 9,
+      "p": 1
+    }
+  ],
+  "calibrationFit": {
+    "a": 0.16661838081188773,
+    "b": 0.7429373111595662
+  },
+  "calibrationRange": {
+    "lo": -9,
+    "hi": 9
+  },
+  "label": "wraith (minor slot)",
+  "parityBugs": 0,
+  "excludedGames": 0,
+  "elapsedS": 125.498
+}

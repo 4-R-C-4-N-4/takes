@@ -1,0 +1,525 @@
+{
+  "sources": [
+    {
+      "file": "all.json",
+      "sha256": "bcaf997f7a2ae39dd8b51c289ba922a100ee979765e3707d65d001ec95032a1e"
+    },
+    {
+      "file": "berolina-x1.json",
+      "sha256": "38711ed2465c61a8a344f0aff1b94c7d76c3bb29c551492d1aba100fb47feea6"
+    },
+    {
+      "file": "berolina-x2.json",
+      "sha256": "9abc0dd22e1778f8ee99447faab4ea6a2a5feb26bba8800cee6775ddb27d318c"
+    },
+    {
+      "file": "berolina.json",
+      "sha256": "705bc334990246db22c25032fc16da4e897ffd2afe197c8d87f8983f22cd9d87"
+    },
+    {
+      "file": "bishop-minor.json",
+      "sha256": "038a8487b51c18dfc8c34d94502c364ff15e0c04d51bf145145ca437a062dace"
+    },
+    {
+      "file": "bishop.json",
+      "sha256": "044026e991bf4ead0cd4e0e84ffe0615e1004a70f681499c5a3c949d33b30c0f"
+    },
+    {
+      "file": "calibration.json",
+      "sha256": "65e13f18e7e9ac792901342441017d219917f1d22fb6be49973f7445b33b2a94"
+    },
+    {
+      "file": "knight-minor.json",
+      "sha256": "9dcbf30822c69441d3093945682b09605bf97e56eb00bade7f83c9b1be3e4df0"
+    },
+    {
+      "file": "knight.json",
+      "sha256": "6efdfa0b9d8e386be4bfc7649b41760cb937bf22593930efc7fac27f68b76900"
+    },
+    {
+      "file": "lancer-minor.json",
+      "sha256": "a96f7713ccec63c1bd9b71e7327c613a0794c7cab1516da5e10180017c9568cc"
+    },
+    {
+      "file": "lancer-rook.json",
+      "sha256": "0e40c99f945e5a27e89ddc93a174e11ce56d8037cbf365b6f936e2965aa96834"
+    },
+    {
+      "file": "lancer.json",
+      "sha256": "5d7b38c5571946d93a5084f722cec7d8a9c6e55168597c8e1f132e693342876a"
+    },
+    {
+      "file": "warden-minor.json",
+      "sha256": "036df544738eb13b8e5cbef5f28147172b02a3c135654b3bd116d2a3b07bec37"
+    },
+    {
+      "file": "warden-rook.json",
+      "sha256": "8d5b0f07ccee56aec65e7411b70dcae067150ab0e796e74ff7b71d48ce8d8814"
+    },
+    {
+      "file": "warden.json",
+      "sha256": "eb8e91718520fb41613a7f95fa9abf6c97e671437b9aabd02b3643abd84e3123"
+    },
+    {
+      "file": "wraith-minor.json",
+      "sha256": "113f76ae9ab60d685a4565d9e4d4013fb21aa3e293dd988885c3186a2c64e6e7"
+    },
+    {
+      "file": "wraith-rook.json",
+      "sha256": "a03a393c51cddfc2e1a022e4a7e85ca519a05ce7de05fe0e1c589243329987ab"
+    },
+    {
+      "file": "wraith.json",
+      "sha256": "3de6cb0ff292cd9581003556c09ff111cd5eb9239b800cdf13bb458f5a97f43f"
+    }
+  ],
+  "missingReferences": {
+    "knight": 133,
+    "bishop": 127,
+    "rook": 112
+  },
+  "recovered": [
+    {
+      "source": "berolina-x1.json",
+      "piece": "berolina",
+      "slot": "minor",
+      "referenceId": "knight",
+      "status": "invalid pawn experiment: minor reference, copy count mismatch for x2",
+      "missingReferenceGamesPerIteration": 133,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 0.9865667236866216,
+          "lo": 0.7606090267894254,
+          "hi": 1.2136500985667469,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 110,
+          "draws": 73,
+          "losses": 517,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 0.9865667236866216,
+          "recoveredUndampedEstimate": 0.9865667236866216,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 124.30740718451432,
+          "injectedEg": 205.2058785268173,
+          "estimate": 0.7863860417440285,
+          "lo": 0.364006598371895,
+          "hi": 0.8051811130072042,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 65,
+          "draws": 100,
+          "losses": 535,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 0.7863860417440285,
+          "recoveredUndampedEstimate": 0.5862053598014354,
+          "pointOutsideSavedInterval": false
+        }
+      ]
+    },
+    {
+      "source": "berolina-x2.json",
+      "piece": "berolina",
+      "slot": "minor",
+      "referenceId": "knight",
+      "status": "invalid pawn experiment: minor reference, copy count mismatch for x2",
+      "missingReferenceGamesPerIteration": 133,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 0.7281895872283695,
+          "lo": 0.49301877389519655,
+          "hi": 0.9573332060576387,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 92,
+          "draws": 67,
+          "losses": 541,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 0.7281895872283695,
+          "recoveredUndampedEstimate": 0.7281895872283695,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 91.75188799077455,
+          "injectedEg": 151.46343414350085,
+          "estimate": 0.5421640272742587,
+          "lo": 0.08477412693262165,
+          "hi": 0.6071042161578584,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 67,
+          "draws": 65,
+          "losses": 568,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 0.5421640272742587,
+          "recoveredUndampedEstimate": 0.356138467320148,
+          "pointOutsideSavedInterval": false
+        }
+      ]
+    },
+    {
+      "source": "bishop-minor.json",
+      "piece": "bishop",
+      "slot": "minor",
+      "referenceId": "knight",
+      "status": "descriptive only: wrong calibration deltas, extra-piece random games, repeated openings",
+      "missingReferenceGamesPerIteration": 133,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 3.664247649687137,
+          "lo": 3.4797396358565336,
+          "hi": 3.843719464662873,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 393,
+          "draws": 137,
+          "losses": 170,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 3.664247649687137,
+          "recoveredUndampedEstimate": 3.664247649687137,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 461.6952038605793,
+          "injectedEg": 762.1635111349245,
+          "estimate": 3.3143638879640696,
+          "lo": 2.794959249890609,
+          "hi": 3.1433435556566494,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 297,
+          "draws": 155,
+          "losses": 248,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 3.3143638879640696,
+          "recoveredUndampedEstimate": 2.9644801262410017,
+          "pointOutsideSavedInterval": true
+        }
+      ]
+    },
+    {
+      "source": "knight-minor.json",
+      "piece": "knight",
+      "slot": "minor",
+      "referenceId": "bishop",
+      "status": "descriptive only: wrong calibration deltas, extra-piece random games, repeated openings",
+      "missingReferenceGamesPerIteration": 127,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 3.1394264264427094,
+          "lo": 2.9644801262410017,
+          "hi": 3.3094824530740445,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 306,
+          "draws": 182,
+          "losses": 212,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 3.1394264264427094,
+          "recoveredUndampedEstimate": 3.1394264264427094,
+          "pointOutsideSavedInterval": false
+        }
+      ]
+    },
+    {
+      "source": "lancer-minor.json",
+      "piece": "lancer",
+      "slot": "minor",
+      "referenceId": "knight",
+      "status": "descriptive only: wrong calibration deltas, extra-piece random games, repeated openings",
+      "missingReferenceGamesPerIteration": 133,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 1.537680465204273,
+          "lo": 1.3377027937970218,
+          "hi": 1.7166966757759508,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 139,
+          "draws": 121,
+          "losses": 440,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 1.537680465204273,
+          "recoveredUndampedEstimate": 1.537680465204273,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 193.7477386157384,
+          "injectedEg": 319.8375367624888,
+          "estimate": 1.267918878886133,
+          "lo": 0.7670337257362854,
+          "hi": 1.2083520074450658,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 106,
+          "draws": 83,
+          "losses": 511,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 1.267918878886133,
+          "recoveredUndampedEstimate": 0.9981572925679933,
+          "pointOutsideSavedInterval": true
+        }
+      ]
+    },
+    {
+      "source": "lancer-rook.json",
+      "piece": "lancer",
+      "slot": "rook",
+      "referenceId": "rook",
+      "status": "descriptive only: wrong calibration deltas, extra-piece random games, repeated openings",
+      "missingReferenceGamesPerIteration": 112,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 3.0382773033275896,
+          "lo": 2.811473656628004,
+          "hi": 3.2608520259945912,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 112,
+          "draws": 78,
+          "losses": 510,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 3.0382773033275896,
+          "recoveredUndampedEstimate": 3.0382773033275896,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 382.8229402192763,
+          "injectedEg": 631.9616790921386,
+          "estimate": 2.892989119305307,
+          "lo": 2.5149174443296984,
+          "hi": 2.9632097357214535,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 86,
+          "draws": 82,
+          "losses": 532,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 2.892989119305307,
+          "recoveredUndampedEstimate": 2.747700935283024,
+          "pointOutsideSavedInterval": false
+        }
+      ]
+    },
+    {
+      "source": "warden-minor.json",
+      "piece": "warden",
+      "slot": "minor",
+      "referenceId": "knight",
+      "status": "descriptive only: wrong calibration deltas, extra-piece random games, repeated openings",
+      "missingReferenceGamesPerIteration": 133,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 2.2419780044662234,
+          "lo": 2.055235621681321,
+          "hi": 2.415949630110793,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 198,
+          "draws": 167,
+          "losses": 335,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 2.2419780044662234,
+          "recoveredUndampedEstimate": 2.2419780044662234,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 282.48922856274413,
+          "injectedEg": 466.33142492897446,
+          "estimate": 2.1547912044488733,
+          "lo": 1.8872128078531305,
+          "hi": 2.233975500748318,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 173,
+          "draws": 174,
+          "losses": 353,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 2.1547912044488733,
+          "recoveredUndampedEstimate": 2.0676044044315227,
+          "pointOutsideSavedInterval": false
+        }
+      ]
+    },
+    {
+      "source": "warden-rook.json",
+      "piece": "warden",
+      "slot": "rook",
+      "referenceId": "rook",
+      "status": "descriptive only: wrong calibration deltas, extra-piece random games, repeated openings",
+      "missingReferenceGamesPerIteration": 112,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 3.47572711924955,
+          "lo": 3.2867137304648226,
+          "hi": 3.6762168013339087,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 148,
+          "draws": 90,
+          "losses": 462,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 3.47572711924955,
+          "recoveredUndampedEstimate": 3.47572711924955,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 437.9416170254433,
+          "injectedEg": 722.9512408039063,
+          "estimate": 3.4092384236648603,
+          "lo": 3.116544521043672,
+          "hi": 3.56118309798315,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 146,
+          "draws": 67,
+          "losses": 487,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 3.4092384236648603,
+          "recoveredUndampedEstimate": 3.342749728080171,
+          "pointOutsideSavedInterval": false
+        }
+      ]
+    },
+    {
+      "source": "wraith-minor.json",
+      "piece": "wraith",
+      "slot": "minor",
+      "referenceId": "knight",
+      "status": "descriptive only: wrong calibration deltas, extra-piece random games, repeated openings",
+      "missingReferenceGamesPerIteration": 133,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 3.907056308876352,
+          "lo": 3.7333042064469906,
+          "hi": 4.0999034037053885,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 426,
+          "draws": 126,
+          "losses": 148,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 3.907056308876352,
+          "recoveredUndampedEstimate": 3.907056308876352,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 492.28909491842035,
+          "injectedEg": 812.6677122462812,
+          "estimate": 3.6933979723664425,
+          "lo": 3.301489250207302,
+          "hi": 3.6685299407337233,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 349,
+          "draws": 181,
+          "losses": 170,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 3.6933979723664425,
+          "recoveredUndampedEstimate": 3.4797396358565336,
+          "pointOutsideSavedInterval": true
+        }
+      ]
+    },
+    {
+      "source": "wraith-rook.json",
+      "piece": "wraith",
+      "slot": "rook",
+      "referenceId": "rook",
+      "status": "descriptive only: wrong calibration deltas, extra-piece random games, repeated openings",
+      "missingReferenceGamesPerIteration": 112,
+      "iterations": [
+        {
+          "iteration": 0,
+          "injectedMg": null,
+          "injectedEg": null,
+          "estimate": 4.714187688570164,
+          "lo": 4.544418307366647,
+          "hi": 4.887320525544407,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 260,
+          "draws": 164,
+          "losses": 276,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 4.714187688570164,
+          "recoveredUndampedEstimate": 4.714187688570164,
+          "pointOutsideSavedInterval": false
+        },
+        {
+          "iteration": 1,
+          "injectedMg": 593.9876487598407,
+          "injectedEg": 980.5510392225942,
+          "estimate": 4.513894155594579,
+          "lo": 4.1330937632679845,
+          "hi": 4.490078264194016,
+          "outOfRange": false,
+          "games": 700,
+          "excludedGames": 0,
+          "wins": 222,
+          "draws": 137,
+          "losses": 341,
+          "parityBugs": 0,
+          "originalFeedbackEstimate": 4.513894155594579,
+          "recoveredUndampedEstimate": 4.313600622618993,
+          "pointOutsideSavedInterval": true
+        }
+      ]
+    }
+  ]
+}
