@@ -11,15 +11,19 @@ Gate: `pnpm check && pnpm test` (Node 22, pnpm 9).
 ## Status
 | Stream | Branch | Scope | State |
 | --- | --- | --- | --- |
-| 0 scaffold | main | monorepo, library core, decisions | done (8 tests) |
-| A engine | engine (~/Work/takes-wt/engine) | M1 rules engine + perft | dispatched |
-| B validator | validator (~/Work/takes-wt/validator) | M2 piece/profile validation, king safety | dispatched |
-| C art | art (~/Work/takes-wt/art) | procedural SVG + badges, tools/artgen codex candidates | dispatched |
+| 0 scaffold | main | monorepo, library core, decisions | merged |
+| A engine | engine | M1: movegen, castling (D2), ep, promotion (D6), FEN/UCI, perft | merged — start/Kiwipete/CPW 3–6/960 perft exact; fast-check props |
+| B validator | validator | M2: piece/ruleset/profile validation, king safety | merged — 65 tests; 2026.1 ruleset validates clean |
+| C art | art | procedural SVG + badges; tools/artgen codex candidates (9 pieces, 9 codex calls) | merged — candidates need human review before promotion to art.svg |
+| D betza | main | Betza exporter, variants.ini, FSF driver; Betza round-trip | merged — all pieces match FSF |
+| D2 parity | main | tools/perft: random valid profiles; engine vs FSF perft | merged — 100 pairs depth 3 + 100 played-out depth 2, zero mismatches |
+| protocol | main | typed WS messages + input parser | merged |
+| E web | web | M3: Svelte app, 5 screens, hotseat, online client | dispatched |
+| F server | server | M4: WS rooms, SQLite, reconnect, FSF bot (D12) | dispatched |
+| G valuation | valuation | M6: FSF self-play value harness + first table | dispatched |
 
-| D betza | main | Betza exporter, variants.ini gen, FSF batch driver; Betza round-trip vs FSF (every piece, every square, blocker rings) | done on main (FSF built at ~/programs/Fairy-Stockfish/src/stockfish) |
-| protocol | main | typed WS messages + untrusted-input parser | done on main |
+Gate on main: `pnpm check && pnpm test` → 131 passed (2026-10-27).
 
-## Next wave (after A/B merge)
-- D2 FSF perft parity on random profile pairs (needs engine + random profile generator)
-- E apps/web: library, builder, profiles, hotseat game (M3; needs engine+validator+art)
-- F packages/protocol + apps/server invite rooms (M4; needs engine+validator)
+## Open for Ivy
+- Codex art candidates (docs/art/candidates-40.png) read as fairly classical chess silhouettes; procedural (docs/art/procedural-40.png) is clean but samey for rook/warden/wraith. Pick a direction before promoting any art.svg.
+- All DECISIONS.md defaults stand unless overridden.
