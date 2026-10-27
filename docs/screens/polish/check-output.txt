@@ -1,0 +1,16 @@
+
+> takes@ check /home/ivy/Work/takes-wt/web-verify
+> tsc -b && pnpm check:web
+
+
+> takes@ check:web /home/ivy/Work/takes-wt/web-verify
+> pnpm --filter @takes/web check
+
+
+> @takes/web@0.0.1 check /home/ivy/Work/takes-wt/web-verify/apps/web
+> svelte-check --tsconfig ./tsconfig.json
+
+Loading svelte-check in workspace: /home/ivy/Work/takes-wt/web-verify/apps/web
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings

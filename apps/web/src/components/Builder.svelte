@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getRuleset, CURRENT_RULESET_VERSION, parseSetup, serializeSetup, setupCost, type Setup } from '@takes/library';
+  import { onDestroy } from 'svelte';
   import { KING_ID } from '@takes/library';
   import { validateProfile, hasErrors, type Issue } from '@takes/validator';
   import Board from './Board.svelte';
@@ -23,12 +24,21 @@
   let drag = $state<DragState>(idle());
   let saveName = $state('');
 
-  if (profileId) {
+  $effect(() => {
     const existing = loadProfiles().find((p: StoredProfile) => p.id === profileId);
+    setup = emptySetup();
+    saveName = existing?.name ?? '';
+    drag = idle();
     if (existing) {
       try { setup = parseSetup(existing.setup); } catch { /* keep empty */ }
+    } else {
+      try {
+        const draft = sessionStorage.getItem('takes.builder.draft');
+        sessionStorage.removeItem('takes.builder.draft');
+        if (draft) setup = parseSetup(draft);
+      } catch { /* keep empty */ }
     }
-  }
+  });
 
   const setupText = $derived(serializeSetup(setup));
   const cost = $derived(setupCost(setup, ruleset));
@@ -128,25 +138,54 @@
     return { sq, onBoard };
   }
 
+  let pendingPointer: { source: DragSource; x: number; y: number; id: number } | null = null;
+
+  function cleanupPointer(): void {
+    pendingPointer = null;
+    window.removeEventListener('pointermove', onGlobalPointerMove);
+    window.removeEventListener('pointerup', onGlobalPointerUp);
+    window.removeEventListener('pointercancel', onPointerCancel);
+  }
+
   function onGlobalPointerMove(ev: PointerEvent): void {
-    if (drag.mode !== 'dragging') return;
-    drag = moveDrag(drag, ev.clientX, ev.clientY);
+    if (!pendingPointer || ev.pointerId !== pendingPointer.id) return;
+    if (drag.mode !== 'dragging' && Math.hypot(ev.clientX - pendingPointer.x, ev.clientY - pendingPointer.y) >= 6) {
+      drag = startDrag(pendingPointer.source, ev.clientX, ev.clientY);
+    }
+    if (drag.mode === 'dragging') drag = moveDrag(drag, ev.clientX, ev.clientY);
   }
 
   function onGlobalPointerUp(ev: PointerEvent): void {
-    if (drag.mode !== 'dragging') return;
-    const { sq, onBoard } = squareUnderPoint(ev.clientX, ev.clientY);
-    applySource(drag.source, onBoard ? sq : null);
-    drag = idle();
-    window.removeEventListener('pointermove', onGlobalPointerMove);
-    window.removeEventListener('pointerup', onGlobalPointerUp);
+    if (!pendingPointer || ev.pointerId !== pendingPointer.id) return;
+    if (drag.mode === 'dragging') {
+      const { sq, onBoard } = squareUnderPoint(ev.clientX, ev.clientY);
+      applySource(drag.source, onBoard ? sq : null);
+      drag = idle();
+      // Consume the compatibility click following a drag, preserving ordinary taps.
+      const suppress = (event: MouseEvent) => { event.preventDefault(); event.stopPropagation(); };
+      window.addEventListener('click', suppress, { capture: true, once: true });
+      setTimeout(() => window.removeEventListener('click', suppress, true), 0);
+    }
+    cleanupPointer();
   }
 
+  function onPointerCancel(): void {
+    drag = idle();
+    cleanupPointer();
+  }
+
+  onDestroy(cleanupPointer);
+
   function startPointerDrag(source: DragSource, ev: PointerEvent): void {
-    ev.preventDefault();
-    drag = startDrag(source, ev.clientX, ev.clientY);
+    if (!ev.isPrimary || ev.button !== 0) return;
+    cleanupPointer();
+    pendingPointer = { source, x: ev.clientX, y: ev.clientY, id: ev.pointerId };
+    // Touch's implicit capture otherwise hides the drop target from the click path.
+    const target = ev.target as Element;
+    if (target.hasPointerCapture(ev.pointerId)) target.releasePointerCapture(ev.pointerId);
     window.addEventListener('pointermove', onGlobalPointerMove);
-    window.addEventListener('pointerup', onGlobalPointerUp, { once: true });
+    window.addEventListener('pointerup', onGlobalPointerUp);
+    window.addEventListener('pointercancel', onPointerCancel);
   }
 
   function onPalettePointerDown(id: string, ev: PointerEvent): void {
@@ -301,7 +340,7 @@
   .tier-row { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
   .tier-label { width: 50px; font-size: 12px; opacity: 0.7; text-transform: capitalize; }
   .palette-piece {
-    background: #2d2d33; border: 1px solid #444; border-radius: 6px; padding: 2px 6px; cursor: pointer;
+    touch-action: none; background: #2d2d33; border: 1px solid #444; border-radius: 6px; padding: 2px 6px; cursor: pointer;
     display: flex; align-items: center; gap: 4px; color: #eee;
   }
   .palette-piece.selected { border-color: #6ab0f3; box-shadow: 0 0 0 2px #6ab0f3; }

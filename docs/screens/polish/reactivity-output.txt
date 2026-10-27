@@ -1,0 +1,6 @@
+Game HEAD
+	function boardPieces() {
+					let $1 = $.derived_safe_equal(() => ($.untrack(boardPieces)));
+Game working
+	function boardPieces(game) {
+					let $1 = $.derived_safe_equal(() => ($.get(game), $.untrack(() => boardPieces($.get(game)))));

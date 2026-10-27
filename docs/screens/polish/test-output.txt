@@ -1,0 +1,7 @@
+
+> takes@ test /home/ivy/Work/takes-wt/web-verify
+> vitest run
+
+
+ RUN  v5.0.5 /home/ivy/Work/takes-wt/web-verify
+
