@@ -9,10 +9,10 @@
   import Game from './components/Game.svelte';
   import { seedIfEmpty } from './lib/profiles.js';
 
+  seedIfEmpty();
   let route: Route = parseHash(location.hash);
 
   onMount(() => {
-    seedIfEmpty();
     const onHash = () => (route = parseHash(location.hash));
     window.addEventListener('hashchange', onHash);
     if (!location.hash) location.hash = routeHref('library');

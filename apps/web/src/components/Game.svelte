@@ -105,7 +105,8 @@
     game = game; // trigger reactivity
   }
 
-  if (!isOnline) setTimeout(() => { revealed = true; applyScriptedMoves(); }, 400);
+  const revealTimer = !isOnline ? setTimeout(() => { revealed = true; applyScriptedMoves(); }, 400) : undefined;
+  onDestroy(() => clearTimeout(revealTimer));
 
   function pieceColorAt(sq: number): 'w' | 'b' | null {
     if (!game) return null;
@@ -113,7 +114,7 @@
     return b[sq] ? b[sq]!.color : null;
   }
 
-  function boardPieces(): Map<number, { svg: string; color: 'w' | 'b' }> {
+  function boardPieces(game: Game | null): Map<number, { svg: string; color: 'w' | 'b' }> {
     const map = new Map<number, { svg: string; color: 'w' | 'b' }>();
     if (!game) return map;
     const board = game.board();
@@ -128,7 +129,7 @@
     return game ? game.legalMoves().filter((m) => m.from === sq) : [];
   }
 
-  function highlights(): Map<number, string> {
+  function highlights(game: Game | null, selectedSq: number | null, lastMove: Move | null): Map<number, string> {
     const map = new Map<number, string>();
     if (!game) return map;
     if (lastMove) { map.set(lastMove.from, 'lastmove'); map.set(lastMove.to, 'lastmove'); }
@@ -217,7 +218,7 @@
 {:else if game}
   <div class="board-wrap">
     {#key renderTick}
-      <Board ranks={8} cellSize={44} flipped={isOnline ? myColor === 'b' : flipped} pieces={boardPieces()} highlights={highlights()} onSquareClick={onSquareClick} />
+      <Board ranks={8} cellSize={44} flipped={isOnline ? myColor === 'b' : flipped} pieces={boardPieces(game)} highlights={highlights(game, selectedSq, lastMove)} onSquareClick={onSquareClick} />
     {/key}
   </div>
 

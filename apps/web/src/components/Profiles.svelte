@@ -41,9 +41,11 @@
       alert(`Could not parse setup: ${(e as Error).message}`);
       return;
     }
+    try { sessionStorage.setItem('takes.builder.draft', pasteText); } catch {
+      alert('Could not transfer the setup. Paste it into the builder directly.');
+      return;
+    }
     location.hash = routeHref('builder');
-    // The builder picks up setupText via paste box there; simplest path: store as a draft profile.
-    refresh([...profiles]);
   }
 </script>
 
@@ -78,10 +80,10 @@
 <style>
   .profile-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .profile-list li { background: #26262b; border-radius: 8px; padding: 8px; }
-  .row { display: flex; gap: 8px; align-items: center; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .ok { color: #6c6; } .bad { color: #e55; } .review { color: #e9a93c; }
   .actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
   .setup-str { display: block; font-size: 11px; opacity: 0.7; margin-top: 4px; word-break: break-all; }
-  .paste-row { display: flex; gap: 6px; margin-top: 12px; }
-  .paste-row input { flex: 1; }
+  .paste-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .paste-row input { flex: 1; min-width: 0; }
 </style>
