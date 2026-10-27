@@ -1,0 +1,111 @@
+{
+  "piece": "bishop",
+  "slot": "minor",
+  "referenceId": "knight",
+  "referenceValuePawns": 3,
+  "iterations": [
+    {
+      "iteration": 0,
+      "injectedMg": null,
+      "injectedEg": null,
+      "estimate": 3.664247649687137,
+      "lo": 3.4797396358565336,
+      "hi": 3.843719464662873,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 393,
+      "draws": 137,
+      "losses": 170,
+      "parityBugs": 0
+    },
+    {
+      "iteration": 1,
+      "injectedMg": 461.6952038605793,
+      "injectedEg": 762.1635111349245,
+      "estimate": 3.3143638879640696,
+      "lo": 2.794959249890609,
+      "hi": 3.1433435556566494,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 297,
+      "draws": 155,
+      "losses": 248,
+      "parityBugs": 0
+    }
+  ],
+  "finalEstimate": 3.3143638879640696,
+  "finalLo": 2.794959249890609,
+  "finalHi": 3.1433435556566494,
+  "finalOutOfRange": false,
+  "calibration": [
+    {
+      "label": "-9 (queen+rook down)",
+      "deltaPawns": 9,
+      "p": 1
+    },
+    {
+      "label": "-5 (queen down)",
+      "deltaPawns": 5,
+      "p": 1
+    },
+    {
+      "label": "-3 (rook down)",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "-2 pawns",
+      "deltaPawns": 2,
+      "p": 0.6875
+    },
+    {
+      "label": "-1 pawn",
+      "deltaPawns": 1,
+      "p": 0.5375
+    },
+    {
+      "label": "+1 pawn",
+      "deltaPawns": 1,
+      "p": 0.625
+    },
+    {
+      "label": "+2 pawns",
+      "deltaPawns": 2,
+      "p": 0.85
+    },
+    {
+      "label": "+knight",
+      "deltaPawns": 3,
+      "p": 0.9125
+    },
+    {
+      "label": "+bishop",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "+rook",
+      "deltaPawns": 5,
+      "p": 0.9125
+    },
+    {
+      "label": "+queen",
+      "deltaPawns": 9,
+      "p": 1
+    }
+  ],
+  "calibrationFit": {
+    "a": 0.16661838081188773,
+    "b": 0.7429373111595662
+  },
+  "calibrationRange": {
+    "lo": -9,
+    "hi": 9
+  },
+  "label": "bishop (control, minor slot)",
+  "parityBugs": 0,
+  "excludedGames": 0,
+  "elapsedS": 125.07
+}

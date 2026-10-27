@@ -1,7 +1,7 @@
 /** Async long-lived Fairy-Stockfish UCI process driver (one process per worker, Threads=1). */
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { createInterface } from 'node:readline';
-import { writeFileSync, mkdtempSync } from 'node:fs';
+import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fsfPath } from '@takes/betza';
@@ -51,6 +51,7 @@ export class FsfProcess {
   }
 
   private started = false;
+  private variantDir: string | undefined;
 
   /** One-time UCI handshake + static options. Call setVariant() per game after this. */
   async start(): Promise<void> {
@@ -66,7 +67,9 @@ export class FsfProcess {
    * repeatedly within one process (verified empirically) — no process restart needed per game. */
   async setVariant(ini: string, variant: string): Promise<void> {
     await this.start();
+    if (this.variantDir) rmSync(this.variantDir, { recursive: true, force: true });
     const dir = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'fsf-'));
+    this.variantDir = dir;
     const iniPath = join(dir, 'variants.ini');
     writeFileSync(iniPath, ini);
     this.send(`setoption name VariantPath value ${iniPath}`);
@@ -101,6 +104,7 @@ export class FsfProcess {
   }
 
   quit(): void {
+    if (this.variantDir) rmSync(this.variantDir, { recursive: true, force: true });
     if (this.closed) return;
     try { this.send('quit'); } catch { /* ignore */ }
     this.proc.kill('SIGKILL');

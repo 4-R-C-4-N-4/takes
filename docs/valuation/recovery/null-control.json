@@ -1,0 +1,1421 @@
+{
+  "kind": "identical-army-null-control",
+  "wins": 84,
+  "draws": 70,
+  "losses": 46,
+  "games": 200,
+  "whiteScore": 0.595,
+  "fittedWhiteScoreAtZero": 0.5418845159275337,
+  "excludedGames": 0,
+  "parityBugs": 0,
+  "settings": {
+    "games": 200,
+    "classic": 100,
+    "random": 100,
+    "nodes": 6000,
+    "workers": 8,
+    "seed": 1
+  },
+  "trials": [
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 0,
+      "nodes": 6000
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 0,
+      "nodes": 6000
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 1,
+      "nodes": 6037
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 1,
+      "nodes": 6037
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 2,
+      "nodes": 6074
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 2,
+      "nodes": 6074
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 3,
+      "nodes": 6111
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 3,
+      "nodes": 6111
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 4,
+      "nodes": 6148
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 4,
+      "nodes": 6148
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 5,
+      "nodes": 6185
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 5,
+      "nodes": 6185
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 6,
+      "nodes": 6222
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 6,
+      "nodes": 6222
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 7,
+      "nodes": 6259
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 7,
+      "nodes": 6259
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 8,
+      "nodes": 6296
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 8,
+      "nodes": 6296
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 9,
+      "nodes": 6333
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 9,
+      "nodes": 6333
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 10,
+      "nodes": 6370
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 10,
+      "nodes": 6370
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 11,
+      "nodes": 6407
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 11,
+      "nodes": 6407
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 12,
+      "nodes": 6444
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 12,
+      "nodes": 6444
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 13,
+      "nodes": 6481
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 13,
+      "nodes": 6481
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 14,
+      "nodes": 6518
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 14,
+      "nodes": 6518
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 15,
+      "nodes": 6555
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 15,
+      "nodes": 6555
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 16,
+      "nodes": 6592
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 16,
+      "nodes": 6592
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 17,
+      "nodes": 6629
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 17,
+      "nodes": 6629
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 18,
+      "nodes": 6666
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 18,
+      "nodes": 6666
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 19,
+      "nodes": 6703
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 19,
+      "nodes": 6703
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 20,
+      "nodes": 6740
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 20,
+      "nodes": 6740
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 21,
+      "nodes": 6777
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 21,
+      "nodes": 6777
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 22,
+      "nodes": 6814
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 22,
+      "nodes": 6814
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 23,
+      "nodes": 6851
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 23,
+      "nodes": 6851
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 24,
+      "nodes": 6888
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 24,
+      "nodes": 6888
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 25,
+      "nodes": 6925
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 25,
+      "nodes": 6925
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 26,
+      "nodes": 6962
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 26,
+      "nodes": 6962
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 27,
+      "nodes": 6999
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 27,
+      "nodes": 6999
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 28,
+      "nodes": 7036
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 28,
+      "nodes": 7036
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 29,
+      "nodes": 6000
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 29,
+      "nodes": 6000
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 30,
+      "nodes": 6037
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 30,
+      "nodes": 6037
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 31,
+      "nodes": 6074
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 31,
+      "nodes": 6074
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 32,
+      "nodes": 6111
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 32,
+      "nodes": 6111
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 33,
+      "nodes": 6148
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 33,
+      "nodes": 6148
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 34,
+      "nodes": 6185
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 34,
+      "nodes": 6185
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 35,
+      "nodes": 6222
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 35,
+      "nodes": 6222
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 36,
+      "nodes": 6259
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 36,
+      "nodes": 6259
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 37,
+      "nodes": 6296
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 37,
+      "nodes": 6296
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 38,
+      "nodes": 6333
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 38,
+      "nodes": 6333
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 39,
+      "nodes": 6370
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 39,
+      "nodes": 6370
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 40,
+      "nodes": 6407
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 40,
+      "nodes": 6407
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 41,
+      "nodes": 6444
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 41,
+      "nodes": 6444
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 42,
+      "nodes": 6481
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 42,
+      "nodes": 6481
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 43,
+      "nodes": 6518
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 43,
+      "nodes": 6518
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 44,
+      "nodes": 6555
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 44,
+      "nodes": 6555
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 45,
+      "nodes": 6592
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 45,
+      "nodes": 6592
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 46,
+      "nodes": 6629
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 46,
+      "nodes": 6629
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 47,
+      "nodes": 6666
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 47,
+      "nodes": 6666
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 48,
+      "nodes": 6703
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 48,
+      "nodes": 6703
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 49,
+      "nodes": 6740
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "classic",
+      "pair": 49,
+      "nodes": 6740
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 50,
+      "nodes": 6777
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 50,
+      "nodes": 6777
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 51,
+      "nodes": 6814
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 51,
+      "nodes": 6814
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 52,
+      "nodes": 6851
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 52,
+      "nodes": 6851
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 53,
+      "nodes": 6888
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 53,
+      "nodes": 6888
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 54,
+      "nodes": 6925
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 54,
+      "nodes": 6925
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 55,
+      "nodes": 6962
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 55,
+      "nodes": 6962
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 56,
+      "nodes": 6999
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 56,
+      "nodes": 6999
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 57,
+      "nodes": 7036
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 57,
+      "nodes": 7036
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 58,
+      "nodes": 6000
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 58,
+      "nodes": 6000
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 59,
+      "nodes": 6037
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 59,
+      "nodes": 6037
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 60,
+      "nodes": 6074
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 60,
+      "nodes": 6074
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 61,
+      "nodes": 6111
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 61,
+      "nodes": 6111
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 62,
+      "nodes": 6148
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 62,
+      "nodes": 6148
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 63,
+      "nodes": 6185
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 63,
+      "nodes": 6185
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 64,
+      "nodes": 6222
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 64,
+      "nodes": 6222
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 65,
+      "nodes": 6259
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 65,
+      "nodes": 6259
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 66,
+      "nodes": 6296
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 66,
+      "nodes": 6296
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 67,
+      "nodes": 6333
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 67,
+      "nodes": 6333
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 68,
+      "nodes": 6370
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 68,
+      "nodes": 6370
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 69,
+      "nodes": 6407
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 69,
+      "nodes": 6407
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 70,
+      "nodes": 6444
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 70,
+      "nodes": 6444
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 71,
+      "nodes": 6481
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 71,
+      "nodes": 6481
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 72,
+      "nodes": 6518
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 72,
+      "nodes": 6518
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 73,
+      "nodes": 6555
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 73,
+      "nodes": 6555
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 74,
+      "nodes": 6592
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 74,
+      "nodes": 6592
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 75,
+      "nodes": 6629
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 75,
+      "nodes": 6629
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 76,
+      "nodes": 6666
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 76,
+      "nodes": 6666
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 77,
+      "nodes": 6703
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 77,
+      "nodes": 6703
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 78,
+      "nodes": 6740
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 78,
+      "nodes": 6740
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 79,
+      "nodes": 6777
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 79,
+      "nodes": 6777
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 80,
+      "nodes": 6814
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 80,
+      "nodes": 6814
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 81,
+      "nodes": 6851
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 81,
+      "nodes": 6851
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 82,
+      "nodes": 6888
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 82,
+      "nodes": 6888
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 83,
+      "nodes": 6925
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 83,
+      "nodes": 6925
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 84,
+      "nodes": 6962
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 84,
+      "nodes": 6962
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 85,
+      "nodes": 6999
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 85,
+      "nodes": 6999
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 86,
+      "nodes": 7036
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 86,
+      "nodes": 7036
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 87,
+      "nodes": 6000
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 87,
+      "nodes": 6000
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 88,
+      "nodes": 6037
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 88,
+      "nodes": 6037
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 89,
+      "nodes": 6074
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 89,
+      "nodes": 6074
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 90,
+      "nodes": 6111
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 90,
+      "nodes": 6111
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 91,
+      "nodes": 6148
+    },
+    {
+      "result": -1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 91,
+      "nodes": 6148
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 92,
+      "nodes": 6185
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 92,
+      "nodes": 6185
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 93,
+      "nodes": 6222
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 93,
+      "nodes": 6222
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 94,
+      "nodes": 6259
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 94,
+      "nodes": 6259
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 95,
+      "nodes": 6296
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 95,
+      "nodes": 6296
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 96,
+      "nodes": 6333
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 96,
+      "nodes": 6333
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 97,
+      "nodes": 6370
+    },
+    {
+      "result": 0,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 97,
+      "nodes": 6370
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 98,
+      "nodes": 6407
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 98,
+      "nodes": 6407
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 99,
+      "nodes": 6444
+    },
+    {
+      "result": 1,
+      "excluded": false,
+      "stratum": "random",
+      "pair": 99,
+      "nodes": 6444
+    }
+  ]
+}

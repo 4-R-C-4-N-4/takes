@@ -1,0 +1,108 @@
+{
+  "piece": "knight",
+  "slot": "minor",
+  "referenceId": "bishop",
+  "referenceValuePawns": 3,
+  "iterations": [
+    {
+      "iteration": 0,
+      "injectedMg": null,
+      "injectedEg": null,
+      "estimate": 2.635294012246421,
+      "feedbackEstimate": 2.635294012246421,
+      "rawEstimate": 2.635294012246421,
+      "lo": 2.44089324181422,
+      "hi": 2.816057509428971,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 233,
+      "draws": 206,
+      "losses": 261,
+      "parityBugs": 0
+    }
+  ],
+  "finalEstimate": 2.635294012246421,
+  "finalFeedbackEstimate": 2.635294012246421,
+  "sameTierCount": 1,
+  "intervalScope": "nominal 95% iid game bootstrap conditional on fixed calibration; excludes calibration uncertainty and repeated-opening dependence",
+  "finalLo": 2.44089324181422,
+  "finalHi": 2.816057509428971,
+  "finalOutOfRange": false,
+  "calibration": [
+    {
+      "label": "-14 (queen+rook down)",
+      "deltaPawns": 14,
+      "p": 1
+    },
+    {
+      "label": "-9 (queen down)",
+      "deltaPawns": 9,
+      "p": 1
+    },
+    {
+      "label": "-5 (rook down)",
+      "deltaPawns": 5,
+      "p": 0.9875
+    },
+    {
+      "label": "-2 pawns",
+      "deltaPawns": 2,
+      "p": 0.6875
+    },
+    {
+      "label": "-1 pawn",
+      "deltaPawns": 1,
+      "p": 0.5375
+    },
+    {
+      "label": "+1 pawn",
+      "deltaPawns": 1,
+      "p": 0.625
+    },
+    {
+      "label": "+2 pawns",
+      "deltaPawns": 2,
+      "p": 0.85
+    },
+    {
+      "label": "+knight",
+      "deltaPawns": 3,
+      "p": 0.9125
+    },
+    {
+      "label": "+bishop",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "+rook",
+      "deltaPawns": 5,
+      "p": 0.9125
+    },
+    {
+      "label": "+queen",
+      "deltaPawns": 9,
+      "p": 1
+    }
+  ],
+  "calibrationFit": {
+    "a": 0.16793160753265313,
+    "b": 0.679929377451676
+  },
+  "calibrationRange": {
+    "lo": -14,
+    "hi": 14
+  },
+  "parityBugs": 0,
+  "excludedGames": 0,
+  "elapsedS": 95.877,
+  "settings": {
+    "games": 700,
+    "nodes": 6000,
+    "workers": 8,
+    "seed": 1,
+    "iterations": 1
+  },
+  "calibrationSource": "recovery/calibration.json"
+}

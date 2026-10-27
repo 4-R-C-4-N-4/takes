@@ -31,6 +31,12 @@ function fakeEngine(scores: number[]): SearchEngine {
 }
 
 describe('adjudication', () => {
+  it('excludes a missing FSF move when Takes still has legal moves', async () => {
+    const engine: SearchEngine = { async goNodes() { return { bestmove: null, scoreCp: null, mate: null }; } };
+    const outcome = await playGame(engine, ruleset, whiteSetup, blackSetup, 1000);
+    expect(outcome.excluded).toBe(true);
+    expect(outcome.parityBugDetails[0]!.fsfMove).toBe('(none)');
+  });
   it('ends decisively after a persistent lopsided eval', async () => {
     const scores = new Array(200).fill(2000); // white crushing, from side-to-move perspective alternates but stays large
     const outcome = await playGame(fakeEngine(scores), ruleset, whiteSetup, blackSetup, 1000, DEFAULT_ADJUDICATION);
@@ -53,5 +59,7 @@ describe('adjudication', () => {
     const outcome = await playGame(engine, ruleset, whiteSetup, blackSetup, 1000, DEFAULT_ADJUDICATION);
     expect(outcome.parityBugs.length).toBeGreaterThan(0);
     expect(outcome.reason).toBe('parity-bug-abort');
+    expect(outcome.excluded).toBe(true);
+    expect(outcome.parityBugDetails[0]!.fsfMove).toBe('a1a1');
   });
 });

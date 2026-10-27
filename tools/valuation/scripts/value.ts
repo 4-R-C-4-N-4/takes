@@ -1,6 +1,6 @@
 #!/usr/bin/env -S node --experimental-strip-types
-/** CLI: pnpm --filter @takes/valuation run value -- --piece wraith --games 400 --nodes 10000 --workers 12 --seed 1 --out docs/valuation/wraith.json */
-import { writeFileSync, mkdirSync } from 'node:fs';
+/** CLI: pnpm --filter @takes/valuation run value -- --piece wraith --games 400 --nodes 10000 --workers 8 --seed 1 --out docs/valuation/wraith.json */
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { getRuleset } from '@takes/library';
 import { valuePiece } from '../src/value.js';
@@ -22,10 +22,15 @@ async function main() {
   if (!ruleset) throw new Error('unknown ruleset');
   if (!ruleset.pieces[piece]) throw new Error(`unknown piece '${piece}'`);
 
+  if (out && existsSync(out)) throw new Error(`refusing to overwrite ${out}`);
+  const slot = arg('slot', piece === 'berolina' ? 'pawn' : 'minor');
+  if (slot !== 'minor' && slot !== 'rook' && slot !== 'pawn') throw new Error('invalid slot');
+  const sameTierCount = Number(arg('count', '1'));
+  const maxIterations = Number(arg('iterations', '2'));
   const t0 = Date.now();
-  const { result, parityBugs } = await valuePiece(ruleset, { piece, games, nodes, workers, seed });
+  const { result, parityBugs, excludedGames } = await valuePiece(ruleset, { piece, games, nodes, workers, seed, slot, sameTierCount, maxIterations, parityBugLog: out ? `${out}.parity.jsonl` : undefined });
   const elapsedS = (Date.now() - t0) / 1000;
-  const report = { ...result, parityBugs, elapsedS };
+  const report = { ...result, parityBugs, excludedGames, elapsedS };
   console.log(JSON.stringify(report, null, 2));
   if (out) {
     mkdirSync(dirname(out), { recursive: true });

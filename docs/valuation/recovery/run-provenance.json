@@ -1,0 +1,42 @@
+{
+  "baseCommit": "5a7e96b",
+  "node": "v22.22.2",
+  "pnpm": "9.15.0",
+  "tmpdir": "/home/ivy/.hermes/cache/scratch",
+  "fsfPath": "/home/ivy/programs/Fairy-Stockfish/src/stockfish",
+  "fsfSha256": "7bdc2e86501dadede62e2afdb55e7e5d22a9dd1b9e702215bf80279e98a33bff",
+  "firstBatch": {
+    "outputs": [
+      "calibration.json",
+      "knight-minor-x1.json",
+      "bishop-minor-x1.json",
+      "berolina-pawn-x1.json",
+      "berolina-pawn-x2.json",
+      "berolina-pawn-x4.json"
+    ],
+    "jitter": "per game, i % 29 * 37",
+    "targetTrialRecordsRetained": false
+  },
+  "secondBatch": {
+    "outputs": [
+      "null-control.json",
+      "wraith-rook-x1.json",
+      "warden-rook-x1.json",
+      "lancer-rook-x1.json"
+    ],
+    "jitter": "paired colors share budget; floor(i / 2) % 29 * 37; random rook games fixed 6000",
+    "targetTrialRecordsRetained": true
+  },
+  "tests": {
+    "command": "pnpm check && pnpm test",
+    "exitCode": 0,
+    "filesPassed": 17,
+    "testsPassed": 164
+  },
+  "remainingBlockers": [
+    "conditional iid intervals exclude calibration and opening dependence",
+    "color mixture/model calibration unresolved",
+    "invalid historical minor candidate experiments not replayed",
+    "fresh runs do not validate adaptive feedback convergence"
+  ]
+}

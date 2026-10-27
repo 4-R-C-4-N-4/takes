@@ -1,4 +1,4 @@
-/** Runs a batch of games across a fixed pool of long-lived FSF processes (max 12, Threads=1, Hash=16).
+/** Runs a batch of games across a fixed pool of long-lived FSF processes (max 8, Threads=1, Hash=16).
  * Each game gets its OWN FSF variant whose promotionPieceTypes exactly match the Takes engine's
  * own-set promotion targets for that game's starting armies [D6] — eliminates the approximation
  * that caused parity bugs. FSF accepts re-setting VariantPath/UCI_Variant repeatedly in one
@@ -33,28 +33,30 @@ export function perGameVariant(ruleset: Ruleset, white: string, black: string, o
   return { ini, name };
 }
 
-export async function runBatch(ruleset: Ruleset, jobs: GameJob[], workers = 12): Promise<BatchResult> {
-  const n = Math.max(1, Math.min(workers, 12, jobs.length || 1));
+export async function runBatch(ruleset: Ruleset, jobs: GameJob[], workers = 8): Promise<BatchResult> {
+  if (!Number.isInteger(workers) || workers < 1) throw new Error('workers must be a positive integer');
+  if (jobs.length === 0) return { outcomes: [], parityBugCount: 0 };
+  const n = Math.max(1, Math.min(workers, 8, jobs.length || 1));
   const procs: FsfProcess[] = [];
-  for (let i = 0; i < n; i++) {
-    const p = new FsfProcess(16);
-    await p.start();
-    procs.push(p);
-  }
   const outcomes: GameOutcome[] = new Array(jobs.length);
-  let next = 0;
-  const worker = async (p: FsfProcess) => {
-    for (;;) {
-      const i = next++;
-      if (i >= jobs.length) break;
-      const job = jobs[i]!;
-      const { ini, name } = perGameVariant(ruleset, job.white, job.black, job.pieceValueOverrides ?? []);
-      await p.setVariant(ini, name);
-      await p.newGame();
-      outcomes[i] = await playGame(p, ruleset, job.white, job.black, job.nodes);
-    }
-  };
   try {
+    for (let i = 0; i < n; i++) {
+      const p = new FsfProcess(16);
+      procs.push(p);
+      await p.start();
+    }
+    let next = 0;
+    const worker = async (p: FsfProcess) => {
+      for (;;) {
+        const i = next++;
+        if (i >= jobs.length) break;
+        const job = jobs[i]!;
+        const { ini, name } = perGameVariant(ruleset, job.white, job.black, job.pieceValueOverrides ?? []);
+        await p.setVariant(ini, name);
+        await p.newGame();
+        outcomes[i] = await playGame(p, ruleset, job.white, job.black, job.nodes);
+      }
+    };
     await Promise.all(procs.map(worker));
   } finally {
     for (const p of procs) p.quit();

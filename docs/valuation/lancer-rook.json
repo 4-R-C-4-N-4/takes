@@ -1,0 +1,111 @@
+{
+  "piece": "lancer",
+  "slot": "rook",
+  "referenceId": "rook",
+  "referenceValuePawns": 5,
+  "iterations": [
+    {
+      "iteration": 0,
+      "injectedMg": null,
+      "injectedEg": null,
+      "estimate": 3.0382773033275896,
+      "lo": 2.811473656628004,
+      "hi": 3.2608520259945912,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 112,
+      "draws": 78,
+      "losses": 510,
+      "parityBugs": 0
+    },
+    {
+      "iteration": 1,
+      "injectedMg": 382.8229402192763,
+      "injectedEg": 631.9616790921386,
+      "estimate": 2.892989119305307,
+      "lo": 2.5149174443296984,
+      "hi": 2.9632097357214535,
+      "outOfRange": false,
+      "games": 700,
+      "excludedGames": 0,
+      "wins": 86,
+      "draws": 82,
+      "losses": 532,
+      "parityBugs": 0
+    }
+  ],
+  "finalEstimate": 2.892989119305307,
+  "finalLo": 2.5149174443296984,
+  "finalHi": 2.9632097357214535,
+  "finalOutOfRange": false,
+  "calibration": [
+    {
+      "label": "-9 (queen+rook down)",
+      "deltaPawns": 9,
+      "p": 1
+    },
+    {
+      "label": "-5 (queen down)",
+      "deltaPawns": 5,
+      "p": 1
+    },
+    {
+      "label": "-3 (rook down)",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "-2 pawns",
+      "deltaPawns": 2,
+      "p": 0.6875
+    },
+    {
+      "label": "-1 pawn",
+      "deltaPawns": 1,
+      "p": 0.5375
+    },
+    {
+      "label": "+1 pawn",
+      "deltaPawns": 1,
+      "p": 0.625
+    },
+    {
+      "label": "+2 pawns",
+      "deltaPawns": 2,
+      "p": 0.85
+    },
+    {
+      "label": "+knight",
+      "deltaPawns": 3,
+      "p": 0.9125
+    },
+    {
+      "label": "+bishop",
+      "deltaPawns": 3,
+      "p": 0.9875
+    },
+    {
+      "label": "+rook",
+      "deltaPawns": 5,
+      "p": 0.9125
+    },
+    {
+      "label": "+queen",
+      "deltaPawns": 9,
+      "p": 1
+    }
+  ],
+  "calibrationFit": {
+    "a": 0.16661838081188773,
+    "b": 0.7429373111595662
+  },
+  "calibrationRange": {
+    "lo": -9,
+    "hi": 9
+  },
+  "label": "lancer (rook slot)",
+  "parityBugs": 0,
+  "excludedGames": 0,
+  "elapsedS": 118.692
+}

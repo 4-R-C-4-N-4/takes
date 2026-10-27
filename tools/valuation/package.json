@@ -9,8 +9,8 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "value": "tsx scripts/value.ts",
-    "run-all": "tsx scripts/run-all.ts"
+    "value": "node --import tsx scripts/value.ts",
+    "run-all": "node --import tsx scripts/run-all.ts"
   },
   "devDependencies": {
     "tsx": "^4.23.0"
