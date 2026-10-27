@@ -18,11 +18,14 @@ Gate: `pnpm check && pnpm test` (Node 22, pnpm 9).
 | D betza | main | Betza exporter, variants.ini, FSF driver; Betza round-trip | merged — all pieces match FSF |
 | D2 parity | main | tools/perft: random valid profiles; engine vs FSF perft | merged — 100 pairs depth 3 + 100 played-out depth 2, zero mismatches |
 | protocol | main | typed WS messages + input parser | merged |
-| E web | web | M3: Svelte app, 5 screens, hotseat, online client | dispatched |
-| F server | server | M4: WS rooms, SQLite, reconnect, FSF bot (D12) | dispatched |
+| E web | web | M3: Svelte app, 5 screens, hotseat, online client | merged — hotseat verified in browser (castle/ep/promo). Orchestrator fixed art.svg override glob (was silently broken) + svelte-check now in root gate |
+| F server | server | M4: WS rooms, SQLite, reconnect, FSF bot (D12) | merged — 10 server tests; zero FSF moves rejected |
+| protocol bot field | main | create_room.bot ('easy'/'medium'/'hard') | merged |
+| H online | online | wire web online flow + bot to server, server serves web, real-browser 2-player verification | dispatched |
+| I rules-review | rules-review | adversarial engine/validator review vs spec; pinning tests | dispatched |
 | G valuation | valuation | M6: FSF self-play value harness + first table | dispatched |
 
-Gate on main: `pnpm check && pnpm test` → 131 passed (2026-10-27).
+Gate on main: `pnpm check && pnpm test` (check = tsc -b + svelte-check) → 157 passed; `pnpm --filter @takes/web build` ok (2026-10-27).
 
 ## Open for Ivy
 - Codex art candidates (docs/art/candidates-40.png) read as fairly classical chess silhouettes; procedural (docs/art/procedural-40.png) is clean but samey for rook/warden/wraith. Pick a direction before promoting any art.svg.
