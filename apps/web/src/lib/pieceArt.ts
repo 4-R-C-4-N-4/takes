@@ -1,7 +1,7 @@
 // Shared piece-art/palette helpers for Svelte components (not pure-logic test scope,
 // but tiny glue functions so components stay thin).
 import type { Piece, Ruleset } from '@takes/library';
-import { pieceSvg, resolveArt } from '@takes/art';
+import { pieceSvg, badgeSvg, resolveArt } from '@takes/art';
 import { KING_PIECE } from './king.js';
 
 const artOverrides = import.meta.glob('../../../../packages/library/pieces/*/art.svg', {
@@ -32,4 +32,9 @@ export function artFor(ruleset: Ruleset, id: string): string {
 
 export function tierOrder(): Array<Piece['tier']> {
   return ['major', 'rook', 'minor', 'pawn'];
+}
+
+export function badgeFor(ruleset: Ruleset, id: string): string {
+  const piece = pieceById(ruleset, id);
+  return badgeSvg(piece);
 }
