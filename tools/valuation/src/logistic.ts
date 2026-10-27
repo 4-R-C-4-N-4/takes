@@ -4,12 +4,15 @@ export interface LogisticFit { a: number; b: number; }
 
 const clamp = (x: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, x));
 
-/** Fits p = sigmoid(a + b*x) to (x, p) pairs via gradient descent on log-loss. */
-export function fitLogistic(xs: number[], ps: number[], iters = 4000, lr = 0.05): LogisticFit {
+/** Fits p = sigmoid(a + b*x) to (x, p) pairs via gradient descent on log-loss. Optional per-point
+ * weights (e.g. game counts) downweight noisy low-n anchors relative to well-sampled ones. */
+export function fitLogistic(xs: number[], ps: number[], iters = 4000, lr = 0.05, weights?: number[]): LogisticFit {
   if (xs.length !== ps.length || xs.length < 2) throw new Error('need >= 2 points to fit');
   let a = 0;
   let b = 0.5;
   const n = xs.length;
+  const w = weights ?? xs.map(() => 1);
+  const wSum = w.reduce((s, x) => s + x, 0);
   for (let it = 0; it < iters; it++) {
     let ga = 0;
     let gb = 0;
@@ -17,12 +20,12 @@ export function fitLogistic(xs: number[], ps: number[], iters = 4000, lr = 0.05)
       const x = xs[i]!;
       const p = clamp(ps[i]!, 1e-6, 1 - 1e-6);
       const pred = 1 / (1 + Math.exp(-(a + b * x)));
-      const err = pred - p;
+      const err = (pred - p) * w[i]!;
       ga += err;
       gb += err * x;
     }
-    a -= (lr * ga) / n;
-    b -= (lr * gb) / n;
+    a -= (lr * ga) / wSum;
+    b -= (lr * gb) / wSum;
   }
   return { a, b };
 }

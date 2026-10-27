@@ -31,6 +31,8 @@ export interface ValueOptions {
   sameTierCount?: number;
   /** Path to append JSONL parity-bug diagnostics to. */
   parityBugLog?: string;
+  /** Precomputed calibration (shared across pieces to save wall-clock); if omitted, computed fresh. */
+  calibration?: { calibration: { label: string; deltaPawns: number; p: number }[]; fit: LogisticFit; parityBugs: number; excludedGames: number; range: { lo: number; hi: number } };
 }
 
 export interface IterationRecord {
@@ -86,7 +88,10 @@ export async function runCalibration(ruleset: Ruleset, nodesPerGame: number, wor
   for (const p of pairings) {
     for (let i = 0; i < gamesPerAnchor; i++) {
       const pp: Pairing = i % 2 === 0 ? p : swapColors(p);
-      jobs.push({ white: pp.white, black: pp.black, nodes: nodesPerGame });
+      // Small per-game node jitter breaks FSF's search determinism (fixed node budget on an
+      // identical deterministic position otherwise repeats the same 2 games verbatim regardless
+      // of gamesPerAnchor, giving zero real statistical signal beyond n=2).
+      jobs.push({ white: pp.white, black: pp.black, nodes: nodesPerGame + (i % 29) * 37 });
       meta.push({ label: p.label, deltaPawns: pp.deltaPawns });
     }
   }
@@ -105,19 +110,19 @@ export async function runCalibration(ruleset: Ruleset, nodesPerGame: number, wor
   const calibration: { label: string; deltaPawns: number; p: number }[] = [];
   const xs: number[] = [];
   const ps: number[] = [];
+  const weights: number[] = [];
   let minAnchor = Infinity;
   let maxAnchor = -Infinity;
   for (const [label, e] of byLabel) {
     const { p } = scoreWithCi(e.wins, e.draws, e.losses);
-    const signed = Math.abs(e.deltaPawns); // deltaPawns already carries sign from calibrationPairings for the unswapped side
     calibration.push({ label, deltaPawns: e.deltaPawns, p });
     xs.push(e.deltaPawns);
     ps.push(p);
+    weights.push(e.wins + e.draws + e.losses);
     minAnchor = Math.min(minAnchor, e.deltaPawns);
     maxAnchor = Math.max(maxAnchor, e.deltaPawns);
-    void signed;
   }
-  const fit = fitLogistic(xs, ps);
+  const fit = fitLogistic(xs, ps, 4000, 0.05, weights);
   return { calibration, fit, parityBugs: batch.parityBugCount, excludedGames: batch.outcomes.filter((o) => o.excluded).length, range: { lo: minAnchor, hi: maxAnchor } };
 }
 
@@ -137,7 +142,8 @@ export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<
   }
 
   const calibGames = Math.max(10, Math.round(opts.games * 0.3));
-  const { calibration, fit, parityBugs: calibBugs, excludedGames: calibExcluded, range } = await runCalibration(ruleset, opts.nodes, opts.workers, Math.max(2, Math.round(calibGames / 12)), opts.parityBugLog);
+  const { calibration, fit, parityBugs: calibBugs, excludedGames: calibExcluded, range } = opts.calibration
+    ?? await runCalibration(ruleset, opts.nodes, opts.workers, Math.max(30, Math.round(calibGames / 12)), opts.parityBugLog);
 
   const rand = mulberry32(opts.seed);
   let totalParityBugs = calibBugs;
@@ -163,7 +169,7 @@ export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<
     const half = Math.max(2, Math.floor(opts.games / 2));
     for (let i = 0; i < half; i++) {
       const classic = i % 2 === 0 ? classicPairing : swapColors(classicPairing);
-      classicJobs.push({ white: classic.white, black: classic.black, nodes: opts.nodes, pieceValueOverrides: overrides });
+      classicJobs.push({ white: classic.white, black: classic.black, nodes: opts.nodes + (i % 29) * 37, pieceValueOverrides: overrides });
     }
     const randomJobs: GameJob[] = [];
     const randomGames = opts.games - half;
