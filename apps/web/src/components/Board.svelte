@@ -56,6 +56,7 @@
         <div
           style="width:100%;height:100%"
           on:pointerdown={(ev) => onPieceDown?.(sq, ev)}
+          on:click={() => onSquareClick?.(sq)}
         >
           <PieceIcon svg={piece.svg} color={piece.color} size={cellSize} />
         </div>
@@ -68,6 +69,7 @@
   .board { touch-action: none; max-width: 100%; }
   .square.light { fill: #e9e3d3; }
   .square.dark { fill: #7a6a52; }
+  .highlight { pointer-events: none; }
   .highlight.quiet { fill: rgba(70, 150, 230, 0.4); }
   .highlight.capture { fill: rgba(220, 70, 70, 0.45); }
   .highlight.select { fill: rgba(240, 220, 90, 0.5); }

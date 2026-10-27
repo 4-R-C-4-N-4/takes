@@ -38,6 +38,7 @@
   let online: OnlineSnapshot | null = null;
   let ctrl: OnlineGameController | null = null;
   let myColor: 'w' | 'b' | null = null;
+  let renderTick = 0;
 
   function startOnline(): void {
     ctrl = new OnlineGameController({ url: wsUrl() });
@@ -46,6 +47,7 @@
       myColor = s.color;
       if (s.game) { game = s.game; }
       if (s.lastMove) lastMove = s.lastMove;
+      renderTick++;
       if (s.phase === 'playing' || s.phase === 'over') revealed = true;
       if (s.code && gameParam === 'online-new') {
         // Swap the temp slug for the real invite code without remounting (no hashchange fired).
@@ -214,7 +216,9 @@
   <p class="reveal">Revealing setups…</p>
 {:else if game}
   <div class="board-wrap">
-    <Board ranks={8} cellSize={44} flipped={isOnline ? myColor === 'b' : flipped} pieces={boardPieces()} highlights={highlights()} onSquareClick={onSquareClick} />
+    {#key renderTick}
+      <Board ranks={8} cellSize={44} flipped={isOnline ? myColor === 'b' : flipped} pieces={boardPieces()} highlights={highlights()} onSquareClick={onSquareClick} />
+    {/key}
   </div>
 
   {#if promoChoice}
