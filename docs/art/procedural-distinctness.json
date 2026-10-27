@@ -1,0 +1,780 @@
+{
+  "40": {
+    "metric": "mean absolute alpha difference / 255 over full canvas",
+    "minimum": {
+      "pair": [
+        "berolina",
+        "pawn"
+      ],
+      "distance": 0.022885
+    },
+    "bounds": {
+      "berolina": [
+        10,
+        13,
+        30,
+        38
+      ],
+      "bishop": [
+        9,
+        5,
+        31,
+        38
+      ],
+      "king": [
+        9,
+        1,
+        31,
+        38
+      ],
+      "knight": [
+        9,
+        5,
+        31,
+        38
+      ],
+      "lancer": [
+        9,
+        5,
+        31,
+        38
+      ],
+      "pawn": [
+        11,
+        13,
+        29,
+        38
+      ],
+      "queen": [
+        9,
+        1,
+        31,
+        38
+      ],
+      "rook": [
+        6,
+        8,
+        34,
+        38
+      ],
+      "warden": [
+        6,
+        8,
+        34,
+        38
+      ],
+      "wraith": [
+        9,
+        5,
+        31,
+        38
+      ]
+    },
+    "pairs": [
+      {
+        "pair": [
+          "berolina",
+          "pawn"
+        ],
+        "distance": 0.022885
+      },
+      {
+        "pair": [
+          "rook",
+          "warden"
+        ],
+        "distance": 0.035176
+      },
+      {
+        "pair": [
+          "bishop",
+          "knight"
+        ],
+        "distance": 0.039882
+      },
+      {
+        "pair": [
+          "bishop",
+          "wraith"
+        ],
+        "distance": 0.041292
+      },
+      {
+        "pair": [
+          "knight",
+          "lancer"
+        ],
+        "distance": 0.043387
+      },
+      {
+        "pair": [
+          "bishop",
+          "lancer"
+        ],
+        "distance": 0.046152
+      },
+      {
+        "pair": [
+          "king",
+          "queen"
+        ],
+        "distance": 0.049576
+      },
+      {
+        "pair": [
+          "bishop",
+          "king"
+        ],
+        "distance": 0.050664
+      },
+      {
+        "pair": [
+          "bishop",
+          "queen"
+        ],
+        "distance": 0.051853
+      },
+      {
+        "pair": [
+          "king",
+          "lancer"
+        ],
+        "distance": 0.055924
+      },
+      {
+        "pair": [
+          "knight",
+          "wraith"
+        ],
+        "distance": 0.060875
+      },
+      {
+        "pair": [
+          "lancer",
+          "wraith"
+        ],
+        "distance": 0.068331
+      },
+      {
+        "pair": [
+          "king",
+          "knight"
+        ],
+        "distance": 0.072184
+      },
+      {
+        "pair": [
+          "king",
+          "wraith"
+        ],
+        "distance": 0.078078
+      },
+      {
+        "pair": [
+          "knight",
+          "queen"
+        ],
+        "distance": 0.079877
+      },
+      {
+        "pair": [
+          "lancer",
+          "queen"
+        ],
+        "distance": 0.083554
+      },
+      {
+        "pair": [
+          "lancer",
+          "pawn"
+        ],
+        "distance": 0.084784
+      },
+      {
+        "pair": [
+          "queen",
+          "wraith"
+        ],
+        "distance": 0.086841
+      },
+      {
+        "pair": [
+          "berolina",
+          "lancer"
+        ],
+        "distance": 0.096591
+      },
+      {
+        "pair": [
+          "warden",
+          "wraith"
+        ],
+        "distance": 0.100576
+      },
+      {
+        "pair": [
+          "bishop",
+          "pawn"
+        ],
+        "distance": 0.116078
+      },
+      {
+        "pair": [
+          "knight",
+          "pawn"
+        ],
+        "distance": 0.120108
+      },
+      {
+        "pair": [
+          "king",
+          "pawn"
+        ],
+        "distance": 0.125365
+      },
+      {
+        "pair": [
+          "berolina",
+          "bishop"
+        ],
+        "distance": 0.129571
+      },
+      {
+        "pair": [
+          "rook",
+          "wraith"
+        ],
+        "distance": 0.130306
+      },
+      {
+        "pair": [
+          "lancer",
+          "warden"
+        ],
+        "distance": 0.130696
+      },
+      {
+        "pair": [
+          "bishop",
+          "warden"
+        ],
+        "distance": 0.131451
+      },
+      {
+        "pair": [
+          "berolina",
+          "knight"
+        ],
+        "distance": 0.133924
+      },
+      {
+        "pair": [
+          "knight",
+          "warden"
+        ],
+        "distance": 0.136828
+      },
+      {
+        "pair": [
+          "berolina",
+          "king"
+        ],
+        "distance": 0.138858
+      },
+      {
+        "pair": [
+          "pawn",
+          "wraith"
+        ],
+        "distance": 0.145184
+      },
+      {
+        "pair": [
+          "knight",
+          "rook"
+        ],
+        "distance": 0.147794
+      },
+      {
+        "pair": [
+          "berolina",
+          "wraith"
+        ],
+        "distance": 0.149475
+      },
+      {
+        "pair": [
+          "lancer",
+          "rook"
+        ],
+        "distance": 0.151255
+      },
+      {
+        "pair": [
+          "king",
+          "warden"
+        ],
+        "distance": 0.153909
+      },
+      {
+        "pair": [
+          "pawn",
+          "queen"
+        ],
+        "distance": 0.154333
+      },
+      {
+        "pair": [
+          "bishop",
+          "rook"
+        ],
+        "distance": 0.166544
+      },
+      {
+        "pair": [
+          "berolina",
+          "queen"
+        ],
+        "distance": 0.167826
+      },
+      {
+        "pair": [
+          "queen",
+          "warden"
+        ],
+        "distance": 0.17425
+      },
+      {
+        "pair": [
+          "king",
+          "rook"
+        ],
+        "distance": 0.189002
+      },
+      {
+        "pair": [
+          "pawn",
+          "warden"
+        ],
+        "distance": 0.195103
+      },
+      {
+        "pair": [
+          "berolina",
+          "warden"
+        ],
+        "distance": 0.195934
+      },
+      {
+        "pair": [
+          "queen",
+          "rook"
+        ],
+        "distance": 0.209343
+      },
+      {
+        "pair": [
+          "pawn",
+          "rook"
+        ],
+        "distance": 0.211667
+      },
+      {
+        "pair": [
+          "berolina",
+          "rook"
+        ],
+        "distance": 0.212498
+      }
+    ]
+  },
+  "64": {
+    "metric": "mean absolute alpha difference / 255 over full canvas",
+    "minimum": {
+      "pair": [
+        "berolina",
+        "pawn"
+      ],
+      "distance": 0.023346
+    },
+    "bounds": {
+      "berolina": [
+        16,
+        22,
+        48,
+        60
+      ],
+      "bishop": [
+        14,
+        8,
+        50,
+        60
+      ],
+      "king": [
+        15,
+        1,
+        49,
+        60
+      ],
+      "knight": [
+        14,
+        8,
+        50,
+        60
+      ],
+      "lancer": [
+        14,
+        8,
+        50,
+        60
+      ],
+      "pawn": [
+        17,
+        22,
+        47,
+        60
+      ],
+      "queen": [
+        15,
+        1,
+        49,
+        60
+      ],
+      "rook": [
+        9,
+        13,
+        55,
+        60
+      ],
+      "warden": [
+        9,
+        13,
+        55,
+        60
+      ],
+      "wraith": [
+        14,
+        8,
+        50,
+        60
+      ]
+    },
+    "pairs": [
+      {
+        "pair": [
+          "berolina",
+          "pawn"
+        ],
+        "distance": 0.023346
+      },
+      {
+        "pair": [
+          "rook",
+          "warden"
+        ],
+        "distance": 0.034425
+      },
+      {
+        "pair": [
+          "bishop",
+          "knight"
+        ],
+        "distance": 0.040056
+      },
+      {
+        "pair": [
+          "bishop",
+          "wraith"
+        ],
+        "distance": 0.041202
+      },
+      {
+        "pair": [
+          "knight",
+          "lancer"
+        ],
+        "distance": 0.043939
+      },
+      {
+        "pair": [
+          "bishop",
+          "lancer"
+        ],
+        "distance": 0.046738
+      },
+      {
+        "pair": [
+          "king",
+          "queen"
+        ],
+        "distance": 0.049571
+      },
+      {
+        "pair": [
+          "bishop",
+          "king"
+        ],
+        "distance": 0.051346
+      },
+      {
+        "pair": [
+          "bishop",
+          "queen"
+        ],
+        "distance": 0.051787
+      },
+      {
+        "pair": [
+          "king",
+          "lancer"
+        ],
+        "distance": 0.056324
+      },
+      {
+        "pair": [
+          "knight",
+          "wraith"
+        ],
+        "distance": 0.061413
+      },
+      {
+        "pair": [
+          "lancer",
+          "wraith"
+        ],
+        "distance": 0.0688
+      },
+      {
+        "pair": [
+          "king",
+          "knight"
+        ],
+        "distance": 0.072675
+      },
+      {
+        "pair": [
+          "king",
+          "wraith"
+        ],
+        "distance": 0.078924
+      },
+      {
+        "pair": [
+          "knight",
+          "queen"
+        ],
+        "distance": 0.079712
+      },
+      {
+        "pair": [
+          "lancer",
+          "queen"
+        ],
+        "distance": 0.083453
+      },
+      {
+        "pair": [
+          "lancer",
+          "pawn"
+        ],
+        "distance": 0.084993
+      },
+      {
+        "pair": [
+          "queen",
+          "wraith"
+        ],
+        "distance": 0.086586
+      },
+      {
+        "pair": [
+          "berolina",
+          "lancer"
+        ],
+        "distance": 0.097064
+      },
+      {
+        "pair": [
+          "warden",
+          "wraith"
+        ],
+        "distance": 0.10049
+      },
+      {
+        "pair": [
+          "bishop",
+          "pawn"
+        ],
+        "distance": 0.116201
+      },
+      {
+        "pair": [
+          "knight",
+          "pawn"
+        ],
+        "distance": 0.120278
+      },
+      {
+        "pair": [
+          "king",
+          "pawn"
+        ],
+        "distance": 0.125779
+      },
+      {
+        "pair": [
+          "rook",
+          "wraith"
+        ],
+        "distance": 0.12955
+      },
+      {
+        "pair": [
+          "berolina",
+          "bishop"
+        ],
+        "distance": 0.130128
+      },
+      {
+        "pair": [
+          "lancer",
+          "warden"
+        ],
+        "distance": 0.130875
+      },
+      {
+        "pair": [
+          "bishop",
+          "warden"
+        ],
+        "distance": 0.131785
+      },
+      {
+        "pair": [
+          "berolina",
+          "knight"
+        ],
+        "distance": 0.13467
+      },
+      {
+        "pair": [
+          "knight",
+          "warden"
+        ],
+        "distance": 0.137043
+      },
+      {
+        "pair": [
+          "berolina",
+          "king"
+        ],
+        "distance": 0.139252
+      },
+      {
+        "pair": [
+          "pawn",
+          "wraith"
+        ],
+        "distance": 0.145513
+      },
+      {
+        "pair": [
+          "knight",
+          "rook"
+        ],
+        "distance": 0.147734
+      },
+      {
+        "pair": [
+          "berolina",
+          "wraith"
+        ],
+        "distance": 0.150244
+      },
+      {
+        "pair": [
+          "lancer",
+          "rook"
+        ],
+        "distance": 0.151317
+      },
+      {
+        "pair": [
+          "pawn",
+          "queen"
+        ],
+        "distance": 0.154506
+      },
+      {
+        "pair": [
+          "king",
+          "warden"
+        ],
+        "distance": 0.15492
+      },
+      {
+        "pair": [
+          "bishop",
+          "rook"
+        ],
+        "distance": 0.166206
+      },
+      {
+        "pair": [
+          "berolina",
+          "queen"
+        ],
+        "distance": 0.167978
+      },
+      {
+        "pair": [
+          "queen",
+          "warden"
+        ],
+        "distance": 0.174922
+      },
+      {
+        "pair": [
+          "king",
+          "rook"
+        ],
+        "distance": 0.189341
+      },
+      {
+        "pair": [
+          "pawn",
+          "warden"
+        ],
+        "distance": 0.195564
+      },
+      {
+        "pair": [
+          "berolina",
+          "warden"
+        ],
+        "distance": 0.196436
+      },
+      {
+        "pair": [
+          "queen",
+          "rook"
+        ],
+        "distance": 0.209343
+      },
+      {
+        "pair": [
+          "pawn",
+          "rook"
+        ],
+        "distance": 0.211863
+      },
+      {
+        "pair": [
+          "berolina",
+          "rook"
+        ],
+        "distance": 0.212735
+      }
+    ]
+  }
+}

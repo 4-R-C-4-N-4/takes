@@ -1,27 +1,27 @@
-// Render every library piece's procedural SVG + badge to a combined contact
-// sheet (docs/art/procedural-sheet.svg), then rasterize 40px tiles in both
-// colors on light/dark squares via rsvg-convert + ImageMagick.
-//
-// Run: node --experimental-strip-types packages/art/scripts/contact-sheet.ts
-import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+// Generate SVGs and raster jobs; run through contact-sheet.py.
+import { mkdirSync, writeFileSync } from 'node:fs';
+// Emit raster jobs for the Python runner (Node child processes may be sandboxed).
+const jobs: Array<{ command: string; args: string[] }> = [];
+function queueRaster(command: string, args: string[]) { jobs.push({ command, args }); }
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getRuleset } from '@takes/library';
-import { pieceSvg, badgeSvg } from '../src/index.ts';
+import { pieceSvg, badgeSvg, KING_PIECE } from '../src/index.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '../../..');
 const outDir = path.join(repoRoot, 'docs/art');
-const tmpDir = path.join(repoRoot, '.art-contact-sheet-tmp');
+const jobFile = process.argv[2];
+if (!jobFile) throw new Error('Run: python packages/art/scripts/contact-sheet.py');
+const tmpDir = path.dirname(jobFile);
 
 mkdirSync(outDir, { recursive: true });
-rmSync(tmpDir, { recursive: true, force: true });
+
 mkdirSync(tmpDir, { recursive: true });
 
 const ruleset = getRuleset('2026.1');
 if (!ruleset) throw new Error('ruleset 2026.1 not found');
-const pieces = Object.values(ruleset.pieces).sort((a, b) => a.id.localeCompare(b.id));
+const pieces = [...Object.values(ruleset.pieces).sort((a, b) => a.id.localeCompare(b.id)), KING_PIECE];
 
 const LIGHT = '#eceadc';
 const DARK = '#7b8b6f';
@@ -85,7 +85,7 @@ function renderTile(svg: string, fill: string, stroke: string, bg: string, outPn
   const bordered = `<svg xmlns="http://www.w3.org/2000/svg" width="${TILE}" height="${TILE}" viewBox="0 0 100 100"><rect width="100" height="100" fill="${bg}"/>${resolved.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '')}</svg>`;
   const svgPath = outPng.replace(/\.png$/, '.svg');
   writeFileSync(svgPath, bordered);
-  execFileSync('rsvg-convert', ['-w', String(TILE), '-h', String(TILE), svgPath, '-o', outPng]);
+  queueRaster('rsvg-convert', ['-w', String(TILE), '-h', String(TILE), svgPath, '-o', outPng]);
 }
 
 const tilePaths: string[][] = [];
@@ -102,10 +102,10 @@ for (const kind of ['piece', 'badge'] as const) {
   }
 }
 
-// Montage: cols = pieces, rows = kind x variant (8 rows), tile size 40, then upscale for viewing.
+// Montage: columns = pieces, rows = kind x variant, at native 40px.
 const allTiles = tilePaths.flat();
 const montageOut = path.join(outDir, 'procedural-40.png');
-execFileSync('magick', [
+queueRaster('magick', [
   'montage',
   ...allTiles,
   '-tile',
@@ -118,4 +118,60 @@ execFileSync('magick', [
 ]);
 console.log('wrote', montageOut, `(${pieces.length} pieces x ${tilePaths.length} rows: piece/badge x w-light/w-dark/b-light/b-dark)`);
 
-rmSync(tmpDir, { recursive: true, force: true });
+// 64px pieces in all four color/square combinations.
+const TILE64 = 64;
+const row64: string[] = [];
+for (const variant of variants) {
+  for (const p of pieces) {
+    const svg = pieceSvg(p);
+    const tilePath = path.join(tmpDir, `p64-${variant.name}-${p.id}.png`);
+    const resolved = svg.replaceAll('var(--piece-fill)', variant.fill).replaceAll('var(--piece-stroke)', variant.stroke);
+    const bordered = `<svg xmlns="http://www.w3.org/2000/svg" width="${TILE64}" height="${TILE64}" viewBox="0 0 100 100"><rect width="100" height="100" fill="${variant.bg}"/>${resolved.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '')}</svg>`;
+    const svgPath = tilePath.replace(/\.png$/, '.svg');
+    writeFileSync(svgPath, bordered);
+    queueRaster('rsvg-convert', ['-w', String(TILE64), '-h', String(TILE64), svgPath, '-o', tilePath]);
+    row64.push(tilePath);
+  }
+}
+const out64 = path.join(outDir, 'procedural-64.png');
+queueRaster('magick', ['montage', ...row64, '-tile', `${pieces.length}x4`, '-geometry', `${TILE64}x${TILE64}+1+1`, '-background', '#888888', out64]);
+console.log('wrote', out64);
+
+// Labeled 40px white-on-light row with piece names underneath, for a quick
+// "could a person tell these apart" visual check.
+const LABEL_H = 14;
+const labeledTiles: string[] = [];
+for (const p of pieces) {
+  const svg = pieceSvg(p);
+  const resolved = svg.replaceAll('var(--piece-fill)', FILL_W).replaceAll('var(--piece-stroke)', STROKE_W);
+  const inner = resolved.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
+  const cellSvg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${TILE}" height="${TILE + LABEL_H}">` +
+    `<rect width="${TILE}" height="${TILE}" fill="${LIGHT}"/>` +
+    `<g transform="scale(${TILE / 100})">${inner}</g>` +
+    `<rect y="${TILE}" width="${TILE}" height="${LABEL_H}" fill="white"/>` +
+    `<text x="${TILE / 2}" y="${TILE + LABEL_H - 3}" font-size="7" text-anchor="middle" font-family="sans-serif">${p.id}</text>` +
+    `</svg>`;
+  const svgPath = path.join(tmpDir, `labeled-${p.id}.svg`);
+  const pngPath = path.join(tmpDir, `labeled-${p.id}.png`);
+  writeFileSync(svgPath, cellSvg);
+  queueRaster('rsvg-convert', ['-w', String(TILE), '-h', String(TILE + LABEL_H), svgPath, '-o', pngPath]);
+  labeledTiles.push(pngPath);
+}
+const labeledOut = path.join(outDir, 'procedural-labeled.png');
+queueRaster('magick', [
+  'montage',
+  ...labeledTiles,
+  '-tile',
+  `${pieces.length}x1`,
+  '-geometry',
+  `${TILE}x${TILE + LABEL_H}+1+1`,
+  '-background',
+  '#888888',
+  labeledOut,
+]);
+console.log('wrote', labeledOut);
+
+
+
+writeFileSync(jobFile, JSON.stringify(jobs));
