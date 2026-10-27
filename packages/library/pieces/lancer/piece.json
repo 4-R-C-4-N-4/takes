@@ -1,0 +1,32 @@
+{
+  "id": "lancer",
+  "name": "Lancer",
+  "glyph": "L",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": [
+        "f"
+      ],
+      "range": null,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": [
+        "b"
+      ],
+      "range": 1,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

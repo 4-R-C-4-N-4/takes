@@ -1,0 +1,33 @@
+{
+  "id": "berolina",
+  "name": "Berolina",
+  "glyph": "E",
+  "tier": "pawn",
+  "components": [
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": [
+        "fl",
+        "fr"
+      ],
+      "range": 1,
+      "path": "slide",
+      "mode": "move"
+    },
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": [
+        "f"
+      ],
+      "range": 1,
+      "path": "slide",
+      "mode": "capture"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "pawn",
+  "name": "Pawn",
+  "glyph": "P",
+  "tier": "pawn",
+  "components": [
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": [
+        "f"
+      ],
+      "range": 1,
+      "path": "slide",
+      "mode": "move"
+    },
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": [
+        "f"
+      ],
+      "range": 2,
+      "path": "slide",
+      "mode": "move",
+      "cond": "rank2"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": [
+        "fl",
+        "fr"
+      ],
+      "range": 1,
+      "path": "slide",
+      "mode": "capture"
+    }
+  ]
+}

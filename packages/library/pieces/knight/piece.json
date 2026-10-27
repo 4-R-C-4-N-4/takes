@@ -1,0 +1,18 @@
+{
+  "id": "knight",
+  "name": "Knight",
+  "glyph": "N",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        1,
+        2
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    }
+  ]
+}

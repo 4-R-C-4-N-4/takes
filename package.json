@@ -1,0 +1,20 @@
+{
+  "name": "takes",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "tsc -b",
+    "test": "vitest run",
+    "build:rulesets": "node --experimental-strip-types packages/library/scripts/build-rulesets.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "fast-check": "^4.10.2",
+    "typescript": "^5.6.3",
+    "vitest": "^5.0.5"
+  }
+}

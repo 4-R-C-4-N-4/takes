@@ -1,0 +1,28 @@
+{
+  "id": "queen",
+  "name": "Queen",
+  "glyph": "Q",
+  "tier": "major",
+  "components": [
+    {
+      "vec": [
+        1,
+        0
+      ],
+      "sym": "all",
+      "range": null,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": "all",
+      "range": null,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

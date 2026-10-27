@@ -1,0 +1,18 @@
+{
+  "id": "rook",
+  "name": "Rook",
+  "glyph": "R",
+  "tier": "rook",
+  "components": [
+    {
+      "vec": [
+        1,
+        0
+      ],
+      "sym": "all",
+      "range": null,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

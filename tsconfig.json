@@ -1,0 +1,20 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "packages/library"
+    },
+    {
+      "path": "packages/engine"
+    },
+    {
+      "path": "packages/validator"
+    },
+    {
+      "path": "packages/art"
+    },
+    {
+      "path": "packages/protocol"
+    }
+  ]
+}
