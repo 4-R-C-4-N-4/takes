@@ -7,7 +7,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "check": "tsc -b",
+    "check": "tsc -b && pnpm check:web",
+    "check:web": "pnpm --filter @takes/web check",
     "test": "vitest run",
     "build:rulesets": "node --experimental-strip-types packages/library/scripts/build-rulesets.ts",
     "server:start": "pnpm --filter @takes/server start"
