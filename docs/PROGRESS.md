@@ -23,7 +23,7 @@ Gate: `pnpm check && pnpm test` (Node 22, pnpm 9).
 | protocol bot field | main | create_room.bot ('easy'/'medium'/'hard') | merged |
 | H online | online | wire web online flow + bot to server, server serves web, real-browser 2-player verification | dispatched |
 | I rules-review | rules-review | adversarial engine/validator review vs spec; pinning tests | dispatched |
-| G valuation | valuation | M6: FSF self-play value harness + first table | dispatched |
+| G valuation | valuation | M6: FSF self-play value harness | pass 1 NOT merged: 1% games had FSF moves rejected (shared promotion-set approximation, scored as draws), lancer fit diverged, wrong-tier slots. Pass 2 dispatched: per-game variants, same-tier slots, wider calibration, ≥600 games/slot |
 
 Gate on main: `pnpm check && pnpm test` (check = tsc -b + svelte-check) → 157 passed; `pnpm --filter @takes/web build` ok (2026-10-27).
 
