@@ -1,12 +1,37 @@
 // @takes/art: Procedural piece SVG + move-diagram badges.
 import type { Piece, Vector } from '@takes/library';
 import { expandPiece, canMove, canCapture } from '@takes/library';
-import { BASELINE_Y, TIER_SIZE, pieceMotifs, type Motif, type Tier } from './motifs.js';
+import {
+  BASELINE_Y,
+  TIER_SIZE,
+  pieceSignatures,
+  type Tier,
+  type Signature,
+} from './motifs.js';
 
-export { BASELINE_Y, TIER_SIZE, pieceMotifs, describePieceGrammar } from './motifs.js';
-export type { Motif, Tier, TierSize } from './motifs.js';
+export { BASELINE_Y, TIER_SIZE, pieceMotifs, pieceSignatures, describePieceGrammar } from './motifs.js';
+export type { Motif, Tier, TierSize, Signature } from './motifs.js';
 
 const CX = 50; // canvas center x
+
+/**
+ * The engine-fixed king is not part of any ruleset's piece set (it's always
+ * present, can never be bought/sold/promoted-to). We still want procedural
+ * art for it: a standard one-square-any-direction signature (ortho all +
+ * diag all, both step range 1), rendered through the exact same grammar as
+ * every other piece, PLUS a connected crown/cross finial — the
+ * one deliberate per-id exception in this module (see README).
+ */
+export const KING_PIECE: Piece = {
+  id: 'king',
+  name: 'King',
+  glyph: 'K',
+  tier: 'major',
+  components: [
+    { vec: [1, 0], sym: 'all', range: 1, path: 'slide', mode: 'both' },
+    { vec: [1, 1], sym: 'all', range: 1, path: 'slide', mode: 'both' },
+  ],
+};
 
 export interface PieceSvgOpts {
   /** CSS var fallbacks, used only to make standalone previews look reasonable. */
@@ -31,165 +56,75 @@ function polygon(points: Array<[number, number]>): string {
   );
 }
 
-/** Crenellated (square, notched) top edge across [x1,x2] at height y, notch depth d. */
-function crenellations(x1: number, x2: number, y: number, depth: number, teeth = 3): Array<[number, number]> {
-  const w = x2 - x1;
-  const seg = w / (teeth * 2);
-  const pts: Array<[number, number]> = [];
-  let x = x1;
-  pts.push([x, y]);
-  for (let i = 0; i < teeth; i++) {
-    pts.push([x, y - depth]);
-    pts.push([x + seg, y - depth]);
-    x += seg;
-    pts.push([x, y]);
-    pts.push([x + seg, y]);
-    x += seg;
-  }
-  return pts;
-}
-
-/** Mitred (angled, slashed) top edge: a single diagonal notch cut across the top. */
-function mitreCut(x1: number, x2: number, yTop: number, yCut: number): Array<[number, number]> {
-  const mid = (x1 + x2) / 2;
-  return [
-    [x1, yTop],
-    [mid, yCut],
-    [x2, yTop],
-  ];
-}
-
-/** Build the body silhouette polygon for a piece given its tier box and body motifs. */
-function buildBody(tier: Tier, body: Set<Motif>): string {
-  const size = TIER_SIZE[tier];
-  const halfW = size.width / 2;
-  const yBase = BASELINE_Y;
-  const yTop = yBase - size.height;
-  const x1 = CX - halfW;
-  const x2 = CX + halfW;
-
-  // Base shape by tier: a trapezoid trunk widening toward the baseline.
-  const footFlare = tier === 'rook' ? halfW * 0.25 : tier === 'pawn' ? halfW * 0.5 : halfW * 0.35;
-  const neckY = yTop + size.height * (tier === 'rook' ? 0.35 : tier === 'major' ? 0.55 : 0.4);
-  const neckHalfW = halfW * (tier === 'pawn' ? 0.55 : 0.6);
-
-  const pts: Array<[number, number]> = [];
-  // Left side, bottom to top.
-  pts.push([x1 - footFlare, yBase]);
-  pts.push([x1 - footFlare, yBase - size.height * 0.12]);
-  pts.push([x1, neckY]);
-  pts.push([CX - neckHalfW, neckY - size.height * 0.08]);
-
-  // Top edge shaped by motif (leap > orthogonal > diagonal > forward-only > plain priority
-  // for the primary silhouette cue; combos layer wings/crenellation together below).
-  const topY = yTop + size.height * 0.1;
-  if (body.has('orthogonal')) {
-    pts.push(...crenellations(CX - neckHalfW, CX + neckHalfW, topY, size.height * 0.1, tier === 'rook' ? 3 : 2));
-  } else if (body.has('diagonal')) {
-    pts.push(...mitreCut(CX - neckHalfW, CX + neckHalfW, topY, yTop));
-  } else if (body.has('forward-only')) {
-    pts.push([CX - neckHalfW, topY], [CX, yTop], [CX + neckHalfW, topY]);
+/** Component-driven silhouettes. All coordinates remain inside the tier envelope. */
+function silhouette(tier: Tier, sig: Signature, capture: Signature | null, royal: boolean): string {
+  const { height, width } = TIER_SIZE[tier];
+  const bottom = BASELINE_Y;
+  const top = bottom - height;
+  const half = width / 2;
+  const left = CX - half;
+  const right = CX + half;
+  const ortho = sig.ortho;
+  const diagonal = sig.diag;
+  const anyDiag = diagonal.fl.present || diagonal.fr.present || diagonal.bl.present || diagonal.br.present;
+  const anyOrtho = ortho.forward.present || ortho.backward.present || ortho.left.present || ortho.right.present;
+  const verticalSlide = ortho.forward.range === 'slide' && ortho.backward.range === 'slide';
+  const y = (fraction: number) => top + height * fraction;
+  let head: Array<[number, number]>;
+  if (royal) {
+    // Broad cross joined to a stepped crown; readable at 40px.
+    head = [[38,y(.29)],[38,y(.19)],[46,y(.19)],[46,y(.12)],[39,y(.12)],[39,y(.055)],[46,y(.055)],[46,top],[54,top],[54,y(.055)],[61,y(.055)],[61,y(.12)],[54,y(.12)],[54,y(.19)],[62,y(.19)],[62,y(.29)]];
+  } else if (anyOrtho && anyDiag) {
+    // Three open crown points for combined orthogonal + diagonal sliders.
+    head = [[34,y(.3)],[29,y(.04)],[42,y(.14)],[50,top],[58,y(.14)],[71,y(.04)],[66,y(.3)]];
+  } else if (sig.leap) {
+    head = [[36,y(.37)],[left,y(.08)],[43,y(.19)],[50,top],[57,y(.19)],[right,y(.08)],[64,y(.37)]];
+  } else if (ortho.forward.range === 'slide' && !ortho.left.present && !ortho.right.present) {
+    // Forward slider with a short backward step: long spear and broad guard.
+    head = [[33,y(.4)],[33,y(.3)],[43,y(.3)],[43,y(.16)],[50,top],[57,y(.16)],[57,y(.3)],[67,y(.3)],[67,y(.4)]];
+  } else if (ortho.forward.present && ortho.backward.present) {
+    if (verticalSlide) {
+      head = [[left,y(.3)],[left,top],[left+10,top],[left+10,y(.13)],[45,y(.13)],[45,top],[55,top],[55,y(.13)],[right-10,y(.13)],[right-10,top],[right,top],[right,y(.3)]];
+    } else {
+      // Long horizontal shelf, low central gate: sideways slide / vertical step.
+      head = [[left,y(.28)],[left,y(.13)],[40,y(.13)],[40,top],[60,top],[60,y(.13)],[right,y(.13)],[right,y(.28)]];
+    }
+  } else if (anyDiag) {
+    // Split mitre: diagonal motion has two peaks and a deep central slash.
+    head = [[35,y(.34)],[32,y(.16)],[46,top],[46,y(.22)],[57,y(.02)],[68,y(.16)],[65,y(.34)]];
+  } else if (ortho.forward.present) {
+    head = [[35,y(.32)],[35,y(.19)],[50,top],[65,y(.19)],[65,y(.32)]];
   } else {
-    // plain / leap base top: rounded-ish via a shallow arc approximated with points
-    pts.push([CX - neckHalfW, topY], [CX - neckHalfW * 0.4, yTop], [CX + neckHalfW * 0.4, yTop], [CX + neckHalfW, topY]);
+    head = [[35,y(.3)],[35,y(.1)],[65,y(.1)],[65,y(.3)]];
   }
-
-  pts.push([CX + neckHalfW, neckY - size.height * 0.08]);
-  pts.push([x2, neckY]);
-  pts.push([x1 + footFlare + (x2 - x1), yBase - size.height * 0.12]);
-  pts.push([x2 + footFlare, yBase - size.height * 0.12]);
-  pts.push([x2 + footFlare, yBase]);
-
-  let d = polygon(pts);
-
-  // Leap motif: add wings flaring from the neck, overlapping the body so the
-  // silhouette stays a single connected shape.
-  if (body.has('leap')) {
-    const wingY = neckY - size.height * 0.02;
-    const wingSpan = halfW * 0.9;
-    const wingTipY = wingY - size.height * 0.22;
-    d += ' ' + polygon([
-      [CX - neckHalfW * 0.8, wingY],
-      [CX - neckHalfW - wingSpan, wingTipY],
-      [CX - neckHalfW * 0.3, wingY - size.height * 0.05],
-    ]);
-    d += ' ' + polygon([
-      [CX + neckHalfW * 0.8, wingY],
-      [CX + neckHalfW + wingSpan, wingTipY],
-      [CX + neckHalfW * 0.3, wingY - size.height * 0.05],
-    ]);
+  // Capture-only differences are integrated into the head, avoiding floating crests.
+  if (capture && tier === 'pawn') {
+    if (anyDiag) {
+      // Berolina: diagonal movement fork around a straight capture spear.
+      head = [[32,y(.34)],[28,y(.12)],[42,y(.23)],[46,y(.23)],[46,top],[54,top],[54,y(.23)],[58,y(.23)],[72,y(.12)],[68,y(.34)]];
+    } else {
+      // Pawn: a blunt forward head, flanked by diagonal capture shoulders.
+      head = [[31,y(.34)],[31,y(.24)],[40,y(.24)],[40,y(.08)],[46,top],[54,top],[60,y(.08)],[60,y(.24)],[69,y(.24)],[69,y(.34)]];
+    }
+  } else if (capture && anyOrtho) {
+    // Wraith: rook body carrying a tall split bishop crest.
+    head = [[left,y(.34)],[left,y(.19)],[38,y(.19)],[38,y(.1)],[47,top],[47,y(.18)],[59,y(.025)],[64,y(.12)],[62,y(.19)],[right,y(.19)],[right,y(.34)]];
   }
-
-  return d;
-}
-
-/** Base silhouette for the tier (foot + collar), independent of motif. */
-function buildBase(tier: Tier): string {
-  const size = TIER_SIZE[tier];
-  const halfW = size.width / 2;
-  const yBase = BASELINE_Y;
-  const baseH = size.height * 0.1;
-  const baseW = halfW * (tier === 'rook' ? 1.3 : 1.15);
+  const neck = tier === 'rook' ? 21 : tier === 'pawn' ? 13 : 16;
   return polygon([
-    [CX - baseW, yBase],
-    [CX - baseW, yBase - baseH * 0.3],
-    [CX + baseW, yBase - baseH * 0.3],
-    [CX + baseW, yBase],
+    [left,bottom],[left,y(.91)],[CX-neck,y(.72)],
+    [CX-neck,y(.42)],...head,[CX+neck,y(.42)],
+    [CX+neck,y(.72)],[right,y(.91)],[right,bottom],
   ]);
 }
 
-/** Small crest sitting above the body, using capture-set motifs, when distinct from move-set. */
-function buildCrest(tier: Tier, crest: Set<Motif>): string {
-  const size = TIER_SIZE[tier];
-  const halfW = size.width / 2;
-  const yTop = BASELINE_Y - size.height;
-  const crestW = halfW * 0.5;
-  const crestH = size.height * 0.14;
-  const y0 = yTop + size.height * 0.02;
-  const yC = y0 - crestH;
-
-  if (crest.has('orthogonal')) {
-    const pts = crenellations(CX - crestW, CX + crestW, y0, crestH, 2);
-    return polygon([[CX - crestW, y0], ...pts, [CX + crestW, y0]]);
-  }
-  if (crest.has('diagonal')) {
-    return polygon(mitreCut(CX - crestW, CX + crestW, y0, yC));
-  }
-  if (crest.has('leap')) {
-    return polygon([
-      [CX - crestW * 1.4, y0],
-      [CX, yC],
-      [CX + crestW * 1.4, y0],
-    ]);
-  }
-  if (crest.has('forward-only')) {
-    return polygon([[CX - crestW * 0.8, y0], [CX, yC], [CX + crestW * 0.8, y0]]);
-  }
-  return polygon([[CX - crestW, y0], [CX - crestW * 0.3, yC], [CX + crestW * 0.3, yC], [CX + crestW, y0]]);
-}
-
-/**
- * Generate a procedural piece SVG. Deterministic: same piece -> byte-identical
- * output. Single fill + outline colored by CSS vars so one file serves both
- * colors; crest omitted when capture-set motifs match move-set motifs.
- */
-export function pieceSvg(p: Piece, _opts: PieceSvgOpts = {}): string {
-  const tier = p.tier as Tier;
-  const { body, crest } = pieceMotifs(p, 'w');
-
-  const bodyPath = buildBody(tier, body);
-  const basePath = buildBase(tier);
-  const crestPath = crest ? buildCrest(tier, crest) : '';
-
-  const d = [basePath, bodyPath, crestPath].filter(Boolean).join(' ');
-
-  return (
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" ` +
-    `role="img" aria-label="${escapeXml(p.name)}">` +
-    `<path d="${d}" fill="var(--piece-fill)" stroke="var(--piece-stroke)" ` +
-    `stroke-width="3" stroke-linejoin="round" fill-rule="nonzero"/>` +
-    `</svg>`
-  );
+/** Deterministic, tier-scaled SVG; colors are supplied by the host theme. */
+export function pieceSvg(p: Piece, opts: PieceSvgOpts = {}): string {
+  const { body, crest } = pieceSignatures(p, 'w');
+  const d = silhouette(p.tier as Tier, body, crest, p.id === 'king');
+  const fill = opts.fillFallback ? `var(--piece-fill, ${escapeXml(opts.fillFallback)})` : 'var(--piece-fill)';
+  const stroke = opts.strokeFallback ? `var(--piece-stroke, ${escapeXml(opts.strokeFallback)})` : 'var(--piece-stroke)';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="${escapeXml(p.name)}"><path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="3" stroke-linejoin="round"/></svg>`;
 }
 
 function escapeXml(s: string): string {

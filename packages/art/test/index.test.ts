@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { getRuleset } from '@takes/library';
-import { pieceSvg, badgeSvg, badgeMarks, resolveArt } from '../src/index.js';
+import { pieceSvg, badgeSvg, badgeMarks, resolveArt, KING_PIECE, pieceSignatures, BASELINE_Y, TIER_SIZE } from '../src/index.js';
 
 const ruleset = getRuleset('2026.1')!;
-const pieces = Object.values(ruleset.pieces);
+const pieces = [...Object.values(ruleset.pieces), KING_PIECE];
+const geometry = (p: typeof KING_PIECE) => pieceSvg(p).match(/<path d="([^"]+)"/)![1];
 
 function isWellFormedXml(s: string): boolean {
   // Lightweight well-formedness check: every opening tag has a matching close
@@ -40,7 +41,7 @@ describe('pieceSvg', () => {
   });
 
   it('produces distinct SVGs for distinct pieces', () => {
-    const svgs = pieces.map((p) => pieceSvg(p));
+    const svgs = pieces.map(geometry);
     const unique = new Set(svgs);
     expect(unique.size).toBe(svgs.length);
   });
@@ -51,20 +52,51 @@ describe('pieceSvg', () => {
     }
   });
 
-  it('gives the wraith a crest (capture != move) and the rook none', () => {
-    const wraith = ruleset.pieces.wraith;
-    const rook = ruleset.pieces.rook;
-    expect(wraith).toBeDefined();
-    expect(rook).toBeDefined();
-    const wraithSvg = pieceSvg(wraith);
-    const rookSvg = pieceSvg(rook);
-    // Wraith's path data should contain more sub-path segments (base+body+crest)
-    // than the rook's (base+body only) since the crest is an extra closed polygon.
-    const countMoves = (svg: string) => (svg.match(/ M /g) || []).length + (svg.match(/^.*?d="M /) ? 1 : 0);
-    const wraithSegments = (wraithSvg.match(/Z/g) || []).length;
-    const rookSegments = (rookSvg.match(/Z/g) || []).length;
-    expect(wraithSegments).toBeGreaterThan(rookSegments);
+  it('encodes range, direction and separate capture signatures', () => {
+    const rook = pieceSignatures(ruleset.pieces.rook);
+    const warden = pieceSignatures(ruleset.pieces.warden);
+    expect(rook.body.ortho.forward.range).toBe('slide');
+    expect(warden.body.ortho.forward.range).toBe('step');
+    expect(warden.body.ortho.left.range).toBe('slide');
+    expect(rook.crest).toBeNull();
+    const wraith = pieceSignatures(ruleset.pieces.wraith);
+    expect(wraith.body.ortho.forward.present).toBe(true);
+    expect(wraith.crest?.diag.fl.present).toBe(true);
+    expect(pieceSignatures(ruleset.pieces.pawn).body.ortho.forward.present).toBe(true);
+    expect(pieceSignatures(ruleset.pieces.berolina).body.diag.fl.present).toBe(true);
   });
+
+  it('uses components, not library identities, to select geometry', () => {
+    for (const p of pieces.filter(p => p.id !== 'king')) {
+      expect(geometry({ ...p, id: 'new-piece', name: 'A new piece' })).toBe(geometry(p));
+      expect(geometry({ ...p, components: [...p.components].reverse() })).toBe(geometry(p));
+    }
+  });
+
+  it('keeps the outline inside the canvas, tier height and shared baseline', () => {
+    for (const p of pieces) {
+      const numbers = geometry(p).match(/-?\d+(?:\.\d+)?/g)!.map(Number);
+      const xs = numbers.filter((_, i) => i % 2 === 0);
+      const ys = numbers.filter((_, i) => i % 2 === 1);
+      expect(Math.min(...xs)).toBeGreaterThanOrEqual(1.5);
+      expect(Math.max(...xs)).toBeLessThanOrEqual(98.5);
+      expect(Math.min(...ys)).toBe(BASELINE_Y - TIER_SIZE[p.tier].height);
+      expect(Math.max(...ys)).toBe(BASELINE_Y);
+      const outlinedHeight = Math.max(...ys) - Math.min(...ys) + 3;
+      if (p.tier === 'pawn') {
+        expect(outlinedHeight).toBeGreaterThanOrEqual(55);
+        expect(outlinedHeight).toBeLessThanOrEqual(60);
+      }
+      expect(outlinedHeight).toBeLessThanOrEqual(91);
+    }
+  });
+
+  it('preserves theme variables with optional standalone fallbacks', () => {
+    const svg = pieceSvg(KING_PIECE, { fillFallback: '#fff', strokeFallback: '#111' });
+    expect(svg).toContain('var(--piece-fill, #fff)');
+    expect(svg).toContain('var(--piece-stroke, #111)');
+  });
+
 });
 
 describe('badgeSvg', () => {
