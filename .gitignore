@@ -4,4 +4,6 @@ dist/
 .vite/
 coverage/
 *.db
+*.db-shm
+*.db-wal
 .artgen-cache/
