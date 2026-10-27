@@ -6,6 +6,9 @@ import type { Color } from '@takes/library';
 
 export const PROTOCOL_VERSION = 1;
 
+export type BotLevel = 'easy' | 'medium' | 'hard';
+export const BOT_LEVELS: readonly BotLevel[] = ['easy', 'medium', 'hard'];
+
 export interface WireIssue { severity: 'error' | 'warning'; code: string; message: string; squares: number[] }
 export type WireResult = '1-0' | '0-1' | '1/2-1/2';
 export type WireReason =
@@ -14,7 +17,7 @@ export type WireReason =
 
 // ---- Client -> Server ----
 export type ClientMsg =
-  | { t: 'create_room'; ruleset: string; color?: Color }
+  | { t: 'create_room'; ruleset: string; color?: Color; bot?: BotLevel }
   | { t: 'join_room'; code: string }
   | { t: 'resume'; token: string }
   | { t: 'submit_setup'; setup: string }
@@ -40,7 +43,7 @@ export interface GameStateWire {
 }
 
 export type ServerMsg =
-  | { t: 'room_created'; code: string; token: string; color: Color; ruleset: string }
+  | { t: 'room_created'; code: string; token: string; color: Color; ruleset: string; bot?: BotLevel }
   | { t: 'joined'; code: string; token: string; color: Color; ruleset: string }
   | { t: 'setup_accepted' }
   | { t: 'setup_rejected'; issues: WireIssue[] }
@@ -75,8 +78,13 @@ export function parseClientMsg(raw: string): ClientMsg | null {
   const isPly = (v: unknown) => Number.isInteger(v) && (v as number) >= 0;
   switch (o.t) {
     case 'create_room':
-      if (typeof o.ruleset !== 'string' || (o.color !== undefined && o.color !== 'w' && o.color !== 'b')) return null;
-      return o.color ? { t: 'create_room', ruleset: o.ruleset, color: o.color as Color } : { t: 'create_room', ruleset: o.ruleset };
+      if (typeof o.ruleset !== 'string' || o.ruleset.length > 32 || (o.color !== undefined && o.color !== 'w' && o.color !== 'b')) return null;
+      if (o.bot !== undefined && !BOT_LEVELS.includes(o.bot as BotLevel)) return null;
+      return {
+        t: 'create_room', ruleset: o.ruleset,
+        ...(o.color ? { color: o.color as Color } : {}),
+        ...(o.bot ? { bot: o.bot as BotLevel } : {}),
+      };
     case 'join_room': return isInviteCode(o.code) ? { t: 'join_room', code: o.code } : null;
     case 'resume': return typeof o.token === 'string' && o.token.length <= 128 ? { t: 'resume', token: o.token } : null;
     case 'submit_setup': return typeof o.setup === 'string' && o.setup.length <= 512 ? { t: 'submit_setup', setup: o.setup } : null;

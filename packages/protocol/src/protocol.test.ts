@@ -6,6 +6,8 @@ describe('parseClientMsg', () => {
     expect(parseClientMsg('{"t":"move","uci":"e2e4","ply":0}')).toEqual({ t: 'move', uci: 'e2e4', ply: 0 });
     expect(parseClientMsg('{"t":"move","uci":"e7e8x","ply":12}')).toEqual({ t: 'move', uci: 'e7e8x', ply: 12 });
     expect(parseClientMsg('{"t":"create_room","ruleset":"2026.1","color":"b"}')).toEqual({ t: 'create_room', ruleset: '2026.1', color: 'b' });
+    expect(parseClientMsg('{"t":"create_room","ruleset":"2026.1","bot":"hard"}')).toEqual({ t: 'create_room', ruleset: '2026.1', bot: 'hard' });
+    expect(parseClientMsg('{"t":"create_room","ruleset":"2026.1","bot":"godlike"}')).toBeNull();
     expect(parseClientMsg('{"t":"join_room","code":"ABCD2345"}')).toEqual({ t: 'join_room', code: 'ABCD2345' });
   });
   it('rejects malformed or hostile input', () => {
