@@ -8,6 +8,7 @@
   },
   "scripts": {
     "check": "tsc -b",
+    "check:web": "pnpm --filter @takes/web check",
     "test": "vitest run",
     "build:rulesets": "node --experimental-strip-types packages/library/scripts/build-rulesets.ts"
   },
