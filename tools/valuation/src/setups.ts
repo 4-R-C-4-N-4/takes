@@ -59,16 +59,25 @@ export interface Pairing {
   label: string;
 }
 
-/** Calibration pairings: White has a known nominal material edge over a classic Black army. Both orientations are produced by the caller via swap(). */
+/** Calibration pairings: White has a known nominal material edge over a classic Black army, spanning
+ * -9..+9 pawns (incl. a queen-down anchor) so inversion rarely needs to extrapolate [problem 3]. Both
+ * orientations are produced by the caller via swap(); negative anchors remove material from White
+ * instead of adding, to anchor the low end of the curve too. */
 export function calibrationPairings(r: Ruleset): Pairing[] {
   const base = classicSetup(r.version);
   const mk = (label: string, deltaPawns: number, whiteSetup: Setup): Pairing => ({ label, deltaPawns, white: str(whiteSetup), black: str(base) });
   return [
+    mk('-9 (queen+rook down)', -9, removeOne(removeOne(base, 'queen'), 'rook')),
+    mk('-5 (queen down)', -5, removeOne(base, 'queen')),
+    mk('-3 (rook down)', -3, removeOne(base, 'rook')),
+    mk('-2 pawns', -2, removeOne(removeOne(base, 'pawn'), 'pawn')),
+    mk('-1 pawn', -1, removeOne(base, 'pawn')),
     mk('+1 pawn', 1, addExtra(base, 'pawn', 1)),
     mk('+2 pawns', 2, addExtra(base, 'pawn', 2)),
     mk('+knight', 3, addExtra(base, 'knight', 1)),
     mk('+bishop', 3, addExtra(base, 'bishop', 1)),
     mk('+rook', 5, addExtra(base, 'rook', 1)),
+    mk('+queen', 9, addExtra(base, 'queen', 1)),
   ];
 }
 
@@ -88,6 +97,16 @@ export function targetPairing(r: Ruleset, targetId: string): { pairing: Pairing;
   const base = classicSetup(r.version);
   const white = substitute(base, referenceId, targetId);
   return { pairing: { label: `${targetId} vs ${referenceId}`, deltaPawns: NaN, white: str(white), black: str(base) }, referenceId, referenceValuePawns };
+}
+
+/** Same-tier substitution pairing [problem 2]: swaps `count` copies of `referenceId` for `targetId`
+ * in White's army, keeping Black unchanged, so the comparison is per-unit against a same-tier slot
+ * (e.g. rook-for-rook, or N vanilla pawns for N berolina pawns) rather than always a minor's slot. */
+export function sameTierPairing(r: Ruleset, targetId: string, referenceId: string, referenceValuePawns: number, count = 1): { pairing: Pairing; referenceId: string; referenceValuePawns: number } {
+  const base = classicSetup(r.version);
+  let white = clone(base);
+  for (let i = 0; i < count; i++) white = substitute(white, referenceId, targetId);
+  return { pairing: { label: `${count}x ${targetId} vs ${count}x ${referenceId} (same-tier slot)`, deltaPawns: NaN, white: str(white), black: str(base) }, referenceId, referenceValuePawns };
 }
 
 /** Random (Takes-style blind) variant of the substitution experiment, mixed in alongside the classic one per spec.

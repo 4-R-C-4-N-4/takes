@@ -50,17 +50,34 @@ export class FsfProcess {
     return this.buffer;
   }
 
-  async init(ini: string, variant: string): Promise<void> {
-    const dir = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'fsf-'));
-    const iniPath = join(dir, 'variants.ini');
-    writeFileSync(iniPath, ini);
+  private started = false;
+
+  /** One-time UCI handshake + static options. Call setVariant() per game after this. */
+  async start(): Promise<void> {
+    if (this.started) return;
     await this.waitFor((l) => l.includes('uciok'), 'uci');
-    this.send(`setoption name VariantPath value ${iniPath}`);
-    this.send(`setoption name UCI_Variant value ${variant}`);
     this.send('setoption name UCI_Chess960 value true');
     this.send('setoption name Threads value 1');
     this.send(`setoption name Hash value ${this.hashMb}`);
+    this.started = true;
+  }
+
+  /** Loads a (possibly per-game) variant ini. FSF accepts re-setting VariantPath/UCI_Variant
+   * repeatedly within one process (verified empirically) — no process restart needed per game. */
+  async setVariant(ini: string, variant: string): Promise<void> {
+    await this.start();
+    const dir = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'fsf-'));
+    const iniPath = join(dir, 'variants.ini');
+    writeFileSync(iniPath, ini);
+    this.send(`setoption name VariantPath value ${iniPath}`);
+    this.send(`setoption name UCI_Variant value ${variant}`);
     await this.waitFor((l) => l.includes('readyok'), 'isready');
+  }
+
+  /** @deprecated kept for tests; delegates to start()+setVariant(). */
+  async init(ini: string, variant: string): Promise<void> {
+    await this.start();
+    await this.setVariant(ini, variant);
   }
 
   async newGame(): Promise<void> {

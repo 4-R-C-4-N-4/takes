@@ -36,6 +36,14 @@ export function invertLogistic(fit: LogisticFit, p: number): number {
   return (logit - fit.a) / fit.b;
 }
 
+/** Inverts and clamps to the calibrated anchor range [lo, hi] (in delta-pawns); reports whether the
+ * raw inversion fell outside that range (extrapolation is unreliable — report, don't trust the number). */
+export function invertLogisticClamped(fit: LogisticFit, p: number, rangeLo: number, rangeHi: number): { value: number; raw: number; outOfRange: boolean } {
+  const raw = invertLogistic(fit, p);
+  const value = clamp(raw, rangeLo, rangeHi);
+  return { value, raw, outOfRange: raw < rangeLo || raw > rangeHi };
+}
+
 /** Wilson score interval half-width for a win/draw/loss derived score p = (W + D/2) / N. */
 export function scoreWithCi(wins: number, draws: number, losses: number): { p: number; ciHalfWidth: number } {
   const n = wins + draws + losses;
@@ -50,14 +58,16 @@ export function scoreWithCi(wins: number, draws: number, losses: number): { p: n
   return { p, ciHalfWidth: (hi - lo) / 2 };
 }
 
-/** Bootstraps a per-game-pair outcome list into a value-estimate CI (delta-method alternative). */
+/** Bootstraps a per-game-pair outcome list into a value-estimate CI (delta-method alternative).
+ * Clamps to [rangeLo, rangeHi] when given, reporting out-of-range extrapolation via `outOfRange`. */
 export function bootstrapValueCi(
   outcomes: Array<-1 | 0 | 1>,
   fit: LogisticFit,
   refValuePawns: number,
   samples = 2000,
   seed = 1,
-): { estimate: number; lo: number; hi: number } {
+  range?: { lo: number; hi: number },
+): { estimate: number; lo: number; hi: number; raw: number; outOfRange: boolean } {
   let s = seed >>> 0;
   const rand = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
   const scoreOf = (xs: Array<-1 | 0 | 1>) => {
@@ -67,16 +77,18 @@ export function bootstrapValueCi(
     const n = wins + draws + losses;
     return n === 0 ? 0.5 : (wins + draws / 2) / n;
   };
-  const point = refValuePawns + invertLogistic(fit, scoreOf(outcomes));
+  const invert = (p: number) => (range ? invertLogisticClamped(fit, p, range.lo - refValuePawns, range.hi - refValuePawns) : { value: invertLogistic(fit, p), raw: invertLogistic(fit, p), outOfRange: false });
+  const atPoint = invert(scoreOf(outcomes));
+  const point = refValuePawns + atPoint.value;
   const n = outcomes.length;
   const ests: number[] = [];
   for (let i = 0; i < samples; i++) {
     const resample: Array<-1 | 0 | 1> = [];
     for (let j = 0; j < n; j++) resample.push(outcomes[Math.floor(rand() * n)]!);
-    ests.push(refValuePawns + invertLogistic(fit, scoreOf(resample)));
+    ests.push(refValuePawns + invert(scoreOf(resample)).value);
   }
   ests.sort((x, y) => x - y);
   const lo = ests[Math.floor(0.025 * ests.length)]!;
   const hi = ests[Math.min(ests.length - 1, Math.floor(0.975 * ests.length))]!;
-  return { estimate: point, lo, hi };
+  return { estimate: point, lo, hi, raw: refValuePawns + atPoint.raw, outOfRange: atPoint.outOfRange };
 }

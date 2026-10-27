@@ -1,28 +1,21 @@
 /** Orchestrates the value-feedback loop for one piece: calibrate -> play target games -> fit -> inject values -> repeat.
- * [spec "Valuation"; plan-review B9 self-referential feedback loop]. */
+ * [spec "Valuation"; plan-review B9 self-referential feedback loop].
+ *
+ * Parity fix: every game is played against a FSF variant built PER GAME from the Takes engine's own
+ * `promotionTargets()` for that game's exact starting armies [D6], via worker-pool's perGameVariant().
+ * This removes the earlier "officer pool approximation" that caused ~1% parity bugs. Any disagreement
+ * remaining after this fix is a genuine engine/FSF divergence: the game is EXCLUDED from scoring (never
+ * silently scored as a draw) and logged to docs/valuation/parity-bugs.jsonl with full repro detail.
+ */
+import { appendFileSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
 import type { Ruleset } from '@takes/library';
-import { variantIni, variantName } from '@takes/betza';
 import { mulberry32, randomProfile } from '@takes/perft';
-import { withPieceValues, pawnsToInternal } from './ini.js';
-import { calibrationPairings, swapColors, targetPairing, randomTargetPairing, type Pairing } from './setups.js';
+import { pawnsToInternal } from './ini.js';
+import { calibrationPairings, swapColors, targetPairing, sameTierPairing, randomTargetPairing, type Pairing } from './setups.js';
 import { runBatch, type GameJob } from './worker-pool.js';
 import { fitLogistic, scoreWithCi, bootstrapValueCi, type LogisticFit } from './logistic.js';
-
-/**
- * FSF's promotionPieceTypes option is variant-wide, but the Takes engine's promotion targets are
- * 'own-set' [D6] — restricted to pieces actually present in that color's own army. To keep FSF and
- * Takes in agreement (no parity bugs) we build the ini's promotion lists as exactly the officer ids
- * that can appear across every army used in this run (the classic officers plus the target/reference
- * pair), and we restrict randomProfile() to the same officer pool so no out-of-set promotion is ever
- * offered to FSF. This is an approximation of true per-position own-set promotion, documented here.
- */
-function restrictedRuleset(ruleset: Ruleset, officerIds: string[]): Ruleset {
-  const keep = new Set([...officerIds, 'pawn']);
-  const pieces = Object.fromEntries(Object.entries(ruleset.pieces).filter(([id]) => keep.has(id)));
-  const costs = Object.fromEntries(Object.entries(ruleset.costs).filter(([id]) => keep.has(id)));
-  const maxCount = Object.fromEntries(Object.entries(ruleset.maxCount).filter(([id]) => keep.has(id)));
-  return { ...ruleset, pieces, costs, maxCount };
-}
+import type { GameOutcome } from './game-loop.js';
 
 export interface ValueOptions {
   piece: string;
@@ -31,6 +24,13 @@ export interface ValueOptions {
   workers: number;
   seed: number;
   maxIterations?: number;
+  /** 'minor' (default): substitute into a knight/bishop slot. 'rook': substitute into a rook slot
+   * (same-tier test for rook-tier candidates: warden, wraith, lancer) [problem 2]. */
+  slot?: 'minor' | 'rook';
+  /** For same-tier tests (e.g. berolina pawns): how many copies of the reference piece to replace. */
+  sameTierCount?: number;
+  /** Path to append JSONL parity-bug diagnostics to. */
+  parityBugLog?: string;
 }
 
 export interface IterationRecord {
@@ -40,7 +40,9 @@ export interface IterationRecord {
   estimate: number;
   lo: number;
   hi: number;
+  outOfRange: boolean;
   games: number;
+  excludedGames: number;
   wins: number;
   draws: number;
   losses: number;
@@ -49,14 +51,17 @@ export interface IterationRecord {
 
 export interface ValueResult {
   piece: string;
+  slot: string;
   referenceId: string;
   referenceValuePawns: number;
   iterations: IterationRecord[];
   finalEstimate: number;
   finalLo: number;
   finalHi: number;
+  finalOutOfRange: boolean;
   calibration: { label: string; deltaPawns: number; p: number }[];
   calibrationFit: LogisticFit;
+  calibrationRange: { lo: number; hi: number };
 }
 
 function toOutcome(resultWhiteWins1Minus1: 1 | 0 | -1, playedAsWhite: boolean): -1 | 0 | 1 {
@@ -66,7 +71,15 @@ function toOutcome(resultWhiteWins1Minus1: 1 | 0 | -1, playedAsWhite: boolean): 
   return playedAsWhite === whiteWon ? 1 : -1;
 }
 
-export async function runCalibration(ruleset: Ruleset, ini: string, variant: string, nodesPerGame: number, workers: number, gamesPerAnchor: number) {
+function logParityBugs(path: string | undefined, piece: string, variant: 'classic' | 'random' | 'calibration', outcomes: GameOutcome[], white: string, black: string): void {
+  if (!path) return;
+  const records = outcomes.filter((o) => o.excluded).flatMap((o) => o.parityBugDetails.map((d) => ({ piece, variant, fen_before: d.fenBefore, fsf_move: d.fsfMove, engine_legal_moves: d.engineLegalMoves, setups: { white, black } })));
+  if (records.length === 0) return;
+  mkdirSync(dirname(path), { recursive: true });
+  appendFileSync(path, records.map((r) => JSON.stringify(r)).join('\n') + '\n');
+}
+
+export async function runCalibration(ruleset: Ruleset, nodesPerGame: number, workers: number, gamesPerAnchor: number, parityBugLog?: string) {
   const pairings = calibrationPairings(ruleset);
   const jobs: GameJob[] = [];
   const meta: { label: string; deltaPawns: number }[] = [];
@@ -77,12 +90,13 @@ export async function runCalibration(ruleset: Ruleset, ini: string, variant: str
       meta.push({ label: p.label, deltaPawns: pp.deltaPawns });
     }
   }
-  const batch = await runBatch(ini, variant, ruleset, jobs, workers);
-  const byLabel = new Map<string, { deltaPawns: number; wins: number; draws: number; losses: number }>();
+  const batch = await runBatch(ruleset, jobs, workers);
+  logParityBugs(parityBugLog, 'calibration', 'calibration', batch.outcomes, 'various', 'various');
+  const byLabel = new Map<string, { deltaPawns: number; wins: number; draws: number; losses: number; excluded: number }>();
   batch.outcomes.forEach((o, i) => {
     const m = meta[i]!;
-    const entry = byLabel.get(m.label) ?? { deltaPawns: Math.abs(m.deltaPawns), wins: 0, draws: 0, losses: 0 };
-    // Normalize to the "material-favored" side's perspective (white in the unswapped pairing).
+    const entry = byLabel.get(m.label) ?? { deltaPawns: m.deltaPawns, wins: 0, draws: 0, losses: 0, excluded: 0 };
+    if (o.excluded) { entry.excluded++; byLabel.set(m.label, entry); return; }
     const favoredIsWhite = m.deltaPawns > 0;
     const outcome = o.result === 0 ? 0 : o.result === 1 === favoredIsWhite ? 1 : -1;
     if (outcome === 1) entry.wins++; else if (outcome === -1) entry.losses++; else entry.draws++;
@@ -91,89 +105,104 @@ export async function runCalibration(ruleset: Ruleset, ini: string, variant: str
   const calibration: { label: string; deltaPawns: number; p: number }[] = [];
   const xs: number[] = [];
   const ps: number[] = [];
+  let minAnchor = Infinity;
+  let maxAnchor = -Infinity;
   for (const [label, e] of byLabel) {
     const { p } = scoreWithCi(e.wins, e.draws, e.losses);
+    const signed = Math.abs(e.deltaPawns); // deltaPawns already carries sign from calibrationPairings for the unswapped side
     calibration.push({ label, deltaPawns: e.deltaPawns, p });
     xs.push(e.deltaPawns);
     ps.push(p);
+    minAnchor = Math.min(minAnchor, e.deltaPawns);
+    maxAnchor = Math.max(maxAnchor, e.deltaPawns);
+    void signed;
   }
   const fit = fitLogistic(xs, ps);
-  return { calibration, fit, parityBugs: batch.parityBugCount };
+  return { calibration, fit, parityBugs: batch.parityBugCount, excludedGames: batch.outcomes.filter((o) => o.excluded).length, range: { lo: minAnchor, hi: maxAnchor } };
 }
 
-export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<{ result: ValueResult; parityBugs: number }> {
+export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<{ result: ValueResult; parityBugs: number; excludedGames: number }> {
   const maxIterations = opts.maxIterations ?? 3;
-  const variant = variantName(ruleset);
-  const { pairing: classicPairing, referenceId, referenceValuePawns } = targetPairing(ruleset, opts.piece);
-  // Officers that can legally appear in ANY army used by this run (classic test armies + random-profile
-  // armies, which are restricted below to the same pool). Promotion lists in the ini are built from this
-  // closed set so FSF never offers a promotion the Takes engine's own-set rule would reject.
-  const officerIds = [...new Set(['knight', 'bishop', 'rook', 'queen', opts.piece, referenceId])];
-  const baseIni = variantIni(ruleset, { promotion: { w: officerIds, b: officerIds } });
-  const randomRuleset = restrictedRuleset(ruleset, [opts.piece, referenceId]);
+  const slot = opts.slot ?? 'minor';
+  let classicPairing: Pairing;
+  let referenceId: string;
+  let referenceValuePawns: number;
+  if (slot === 'rook') {
+    ({ pairing: classicPairing, referenceId, referenceValuePawns } = sameTierPairing(ruleset, opts.piece, 'rook', 5, opts.sameTierCount ?? 1));
+  } else if (opts.sameTierCount && opts.sameTierCount > 1) {
+    const ref = opts.piece === 'knight' ? 'bishop' : 'knight';
+    ({ pairing: classicPairing, referenceId, referenceValuePawns } = sameTierPairing(ruleset, opts.piece, ref, 3, opts.sameTierCount));
+  } else {
+    ({ pairing: classicPairing, referenceId, referenceValuePawns } = targetPairing(ruleset, opts.piece));
+  }
 
   const calibGames = Math.max(10, Math.round(opts.games * 0.3));
-  const { calibration, fit, parityBugs: calibBugs } = await runCalibration(ruleset, baseIni, variant, opts.nodes, opts.workers, Math.max(2, Math.round(calibGames / 5)));
+  const { calibration, fit, parityBugs: calibBugs, excludedGames: calibExcluded, range } = await runCalibration(ruleset, opts.nodes, opts.workers, Math.max(2, Math.round(calibGames / 12)), opts.parityBugLog);
 
   const rand = mulberry32(opts.seed);
   let totalParityBugs = calibBugs;
+  let totalExcluded = calibExcluded;
   const iterations: IterationRecord[] = [];
   let estimate = referenceValuePawns;
   let lo = referenceValuePawns - 1;
   let hi = referenceValuePawns + 1;
+  let outOfRangeFinal = false;
 
   for (let iter = 0; iter < maxIterations; iter++) {
-    let ini = baseIni;
+    let overrides: { pieceId: string; mg: number; eg: number }[] = [];
     let injectedMg: number | null = null;
     let injectedEg: number | null = null;
     if (iter > 0) {
       const { mg, eg } = pawnsToInternal(estimate);
       injectedMg = mg;
       injectedEg = eg;
-      ini = withPieceValues(baseIni, ruleset, [{ pieceId: opts.piece, mg, eg }]);
+      overrides = [{ pieceId: opts.piece, mg, eg }];
     }
 
     const classicJobs: GameJob[] = [];
     const half = Math.max(2, Math.floor(opts.games / 2));
     for (let i = 0; i < half; i++) {
       const classic = i % 2 === 0 ? classicPairing : swapColors(classicPairing);
-      classicJobs.push({ white: classic.white, black: classic.black, nodes: opts.nodes });
+      classicJobs.push({ white: classic.white, black: classic.black, nodes: opts.nodes, pieceValueOverrides: overrides });
     }
-    // Mix in Takes-style blind randomProfile games (spec: "measure from Takes-style blind setups, not only vanilla swaps").
-    // These armies only ever contain {pawn, target, referenceId}, so they need their own ini with a
-    // matching (narrower) promotion list — reusing the classic ini's wider list (queen/rook/bishop
-    // included) would let FSF offer a promotion the Takes engine's own-set rule rejects.
     const randomJobs: GameJob[] = [];
     const randomGames = opts.games - half;
     const randomSideFlags: boolean[] = [];
+    const randomRefId = slot === 'rook' ? 'rook' : (opts.piece === 'knight' ? 'bishop' : 'knight');
     for (let i = 0; i < randomGames; i++) {
-      const profile = randomProfile(randomRuleset, rand);
-      const rp = randomTargetPairing(ruleset, opts.piece, referenceId, profile);
+      const profile = randomProfile(ruleset, rand);
+      const rp = randomTargetPairing(ruleset, opts.piece, randomRefId, profile);
       const useSwap = i % 2 === 1;
       const pp = useSwap ? swapColors(rp) : rp;
-      randomJobs.push({ white: pp.white, black: pp.black, nodes: opts.nodes });
+      randomJobs.push({ white: pp.white, black: pp.black, nodes: opts.nodes, pieceValueOverrides: overrides });
       randomSideFlags.push(!useSwap);
     }
-    const randomOfficerIds = [...new Set([opts.piece, referenceId])];
-    const randomIni = iter > 0
-      ? withPieceValues(variantIni(ruleset, { promotion: { w: randomOfficerIds, b: randomOfficerIds } }), ruleset, [{ pieceId: opts.piece, mg: injectedMg!, eg: injectedEg! }])
-      : variantIni(ruleset, { promotion: { w: randomOfficerIds, b: randomOfficerIds } });
 
-    const classicBatch = await runBatch(ini, variant, ruleset, classicJobs, opts.workers);
-    const randomBatch = randomJobs.length > 0 ? await runBatch(randomIni, variant, ruleset, randomJobs, opts.workers) : { outcomes: [], parityBugCount: 0 };
+    const classicBatch = await runBatch(ruleset, classicJobs, opts.workers);
+    const randomBatch = randomJobs.length > 0 ? await runBatch(ruleset, randomJobs, opts.workers) : { outcomes: [], parityBugCount: 0 };
+    logParityBugs(opts.parityBugLog, opts.piece, 'classic', classicBatch.outcomes, classicPairing.white, classicPairing.black);
+    logParityBugs(opts.parityBugLog, opts.piece, 'random', randomBatch.outcomes, 'various', 'various');
     totalParityBugs += classicBatch.parityBugCount + randomBatch.parityBugCount;
 
     const sideFlags = [...Array(half).fill(true).map((_, i) => i % 2 === 0), ...randomSideFlags];
-    const outcomesAll = [...classicBatch.outcomes, ...randomBatch.outcomes];
-    const outcomes: Array<-1 | 0 | 1> = outcomesAll.map((o, i) => toOutcome(o.result, sideFlags[i]!));
+    const outcomesAllRaw = [...classicBatch.outcomes, ...randomBatch.outcomes];
+    const excludedCount = outcomesAllRaw.filter((o) => o.excluded).length;
+    totalExcluded += excludedCount;
+    const outcomes: Array<-1 | 0 | 1> = outcomesAllRaw
+      .map((o, i) => ({ o, flag: sideFlags[i]! }))
+      .filter(({ o }) => !o.excluded)
+      .map(({ o, flag }) => toOutcome(o.result, flag));
     const wins = outcomes.filter((v) => v === 1).length;
     const draws = outcomes.filter((v) => v === 0).length;
     const losses = outcomes.filter((v) => v === -1).length;
-    const boot = bootstrapValueCi(outcomes, fit, referenceValuePawns, 1500, opts.seed + iter);
+    const boot = bootstrapValueCi(outcomes, fit, referenceValuePawns, 1500, opts.seed + iter, range);
     const prevEstimate = estimate;
-    estimate = boot.estimate;
+    // Damp the feedback step [problem 3]: average the new estimate with the previous one so an
+    // over/undershoot doesn't compound across iterations and diverge.
+    estimate = iter === 0 ? boot.estimate : (boot.estimate + prevEstimate) / 2;
     lo = boot.lo;
     hi = boot.hi;
+    outOfRangeFinal = boot.outOfRange;
 
     iterations.push({
       iteration: iter,
@@ -182,7 +211,9 @@ export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<
       estimate,
       lo,
       hi,
+      outOfRange: boot.outOfRange,
       games: outcomes.length,
+      excludedGames: excludedCount,
       wins,
       draws,
       losses,
@@ -196,15 +227,19 @@ export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<
   return {
     result: {
       piece: opts.piece,
+      slot,
       referenceId,
       referenceValuePawns,
       iterations,
       finalEstimate: estimate,
       finalLo: lo,
       finalHi: hi,
+      finalOutOfRange: outOfRangeFinal,
       calibration,
       calibrationFit: fit,
+      calibrationRange: range,
     },
     parityBugs: totalParityBugs,
+    excludedGames: totalExcluded,
   };
 }
