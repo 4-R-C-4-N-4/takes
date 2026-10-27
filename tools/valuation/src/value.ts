@@ -97,30 +97,42 @@ export async function runCalibration(ruleset: Ruleset, nodesPerGame: number, wor
   }
   const batch = await runBatch(ruleset, jobs, workers);
   logParityBugs(parityBugLog, 'calibration', 'calibration', batch.outcomes, 'various', 'various');
+  // Bucket by the ACTUAL signed delta from White's perspective (not by label) and score White's
+  // literal win rate. Bucketing by "favored side" probability instead (as before) folds +x and -x
+  // into a symmetric V-shape in logit space that a linear logistic fit cannot represent — that was
+  // the root cause of the earlier degenerate near-zero-slope fit.
+  const byDelta = new Map<number, { wins: number; draws: number; losses: number; excluded: number }>();
   const byLabel = new Map<string, { deltaPawns: number; wins: number; draws: number; losses: number; excluded: number }>();
   batch.outcomes.forEach((o, i) => {
     const m = meta[i]!;
-    const entry = byLabel.get(m.label) ?? { deltaPawns: m.deltaPawns, wins: 0, draws: 0, losses: 0, excluded: 0 };
-    if (o.excluded) { entry.excluded++; byLabel.set(m.label, entry); return; }
+    const dEntry = byDelta.get(m.deltaPawns) ?? { wins: 0, draws: 0, losses: 0, excluded: 0 };
+    const lEntry = byLabel.get(m.label) ?? { deltaPawns: Math.abs(m.deltaPawns), wins: 0, draws: 0, losses: 0, excluded: 0 };
+    if (o.excluded) { dEntry.excluded++; lEntry.excluded++; byDelta.set(m.deltaPawns, dEntry); byLabel.set(m.label, lEntry); return; }
+    if (o.result === 1) dEntry.wins++; else if (o.result === -1) dEntry.losses++; else dEntry.draws++;
+    // Label summary always reported from the material-favored side's perspective (human-readable).
     const favoredIsWhite = m.deltaPawns > 0;
-    const outcome = o.result === 0 ? 0 : o.result === 1 === favoredIsWhite ? 1 : -1;
-    if (outcome === 1) entry.wins++; else if (outcome === -1) entry.losses++; else entry.draws++;
-    byLabel.set(m.label, entry);
+    const favOutcome = o.result === 0 ? 0 : o.result === 1 === favoredIsWhite ? 1 : -1;
+    if (favOutcome === 1) lEntry.wins++; else if (favOutcome === -1) lEntry.losses++; else lEntry.draws++;
+    byDelta.set(m.deltaPawns, dEntry);
+    byLabel.set(m.label, lEntry);
   });
   const calibration: { label: string; deltaPawns: number; p: number }[] = [];
+  for (const [label, e] of byLabel) {
+    const { p } = scoreWithCi(e.wins, e.draws, e.losses);
+    calibration.push({ label, deltaPawns: e.deltaPawns, p });
+  }
   const xs: number[] = [];
   const ps: number[] = [];
   const weights: number[] = [];
   let minAnchor = Infinity;
   let maxAnchor = -Infinity;
-  for (const [label, e] of byLabel) {
+  for (const [delta, e] of byDelta) {
     const { p } = scoreWithCi(e.wins, e.draws, e.losses);
-    calibration.push({ label, deltaPawns: e.deltaPawns, p });
-    xs.push(e.deltaPawns);
+    xs.push(delta);
     ps.push(p);
     weights.push(e.wins + e.draws + e.losses);
-    minAnchor = Math.min(minAnchor, e.deltaPawns);
-    maxAnchor = Math.max(maxAnchor, e.deltaPawns);
+    minAnchor = Math.min(minAnchor, delta);
+    maxAnchor = Math.max(maxAnchor, delta);
   }
   const fit = fitLogistic(xs, ps, 4000, 0.05, weights);
   return { calibration, fit, parityBugs: batch.parityBugCount, excludedGames: batch.outcomes.filter((o) => o.excluded).length, range: { lo: minAnchor, hi: maxAnchor } };
