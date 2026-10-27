@@ -21,6 +21,9 @@
     },
     {
       "path": "tools/artgen"
+    },
+    {
+      "path": "apps/server"
     }
   ]
 }
