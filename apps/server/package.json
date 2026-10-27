@@ -6,20 +6,21 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "start": "node --experimental-strip-types src/index.ts",
+    "start": "tsx src/index.ts",
     "test": "vitest run"
   },
   "dependencies": {
-    "@takes/protocol": "workspace:*",
-    "@takes/engine": "workspace:*",
-    "@takes/validator": "workspace:*",
-    "@takes/library": "workspace:*",
     "@takes/betza": "workspace:*",
-    "ws": "^8.22.0",
-    "better-sqlite3": "^13.0.3"
+    "@takes/engine": "workspace:*",
+    "@takes/library": "workspace:*",
+    "@takes/protocol": "workspace:*",
+    "@takes/validator": "workspace:*",
+    "better-sqlite3": "^13.0.3",
+    "ws": "^8.22.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
     "@types/ws": "^8.5.13",
-    "@types/better-sqlite3": "^7.6.11"
+    "tsx": "^4.23.15"
   }
 }

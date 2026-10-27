@@ -106,6 +106,7 @@ export class RoomManager {
   private forfeitMs: number;
   bot: FsfBot = new FsfBot();
   rejectedBotMoves: Array<{ room: string; fen: string; uci: string }> = [];
+  private closed = false;
 
   constructor(opts: RoomManagerOpts) {
     this.db = openDb(opts.dbPath);
@@ -209,7 +210,7 @@ export class RoomManager {
     const token = generateToken();
     openSeat.token = token;
     openSeat.tokenHash = hashToken(token);
-    this.db.insertSeat(code, openSeat.color, openSeat.tokenHash);
+    this.db.updateSeatToken(code, openSeat.color, openSeat.tokenHash);
     const opp = room.opponentOf(openSeat.color);
     send(opp.ws, { t: 'opponent_joined' });
     return { room, seat: openSeat };
@@ -311,6 +312,7 @@ export class RoomManager {
   }
 
   onDisconnect(room: Room, seat: SeatInfo): void {
+    if (this.closed) return;
     seat.ws = null;
     if (seat.isBot) return;
     seat.disconnectedAt = Date.now();
@@ -320,6 +322,7 @@ export class RoomManager {
   }
 
   private armForfeitTimer(room: Room, color: Color): void {
+    if (this.closed) return;
     const seat = room.seats[color];
     if (seat.isBot || seat.ws) return;
     if (room.phase === 'over') return;
@@ -346,6 +349,7 @@ export class RoomManager {
   }
 
   private async runBotMove(room: Room): Promise<void> {
+    if (this.closed) return;
     const game = room.game;
     if (!game) return;
     const ruleset = room.ruleset();
@@ -367,6 +371,7 @@ export class RoomManager {
       uci = fallbackMove(game);
     }
     const expectedPly = game.ply();
+    if (this.closed) return;
     const err = this.applyMove(room, color, uci, expectedPly);
     if (err) {
       // Fallback failed too (should not happen); resign the bot's side rather than corrupt state.
@@ -375,7 +380,17 @@ export class RoomManager {
   }
 
   disposeBot(): void { this.bot.dispose(); }
-  close(): void { this.disposeBot(); this.db.close(); }
+  close(): void {
+    this.closed = true;
+    for (const room of this.rooms.values()) {
+      for (const c of ['w', 'b'] as Color[]) {
+        const seat = room.seats[c];
+        if (seat.forfeitTimer) { clearTimeout(seat.forfeitTimer); seat.forfeitTimer = null; }
+      }
+    }
+    this.disposeBot();
+    this.db.close();
+  }
 }
 
 function fallbackMove(game: Game): string {

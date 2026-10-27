@@ -77,8 +77,9 @@ export function startServer(opts: ServerOpts): { http: HttpServer; wss: WebSocke
 
       try {
         handleMessage(rooms, state, ws, msg);
-      } catch {
+      } catch (e) {
         // Never leak internals/stack traces to the client.
+        if (process.env.TAKES_DEBUG) console.error(e);
         send(ws, { t: 'error', code: 'bad_message', message: 'internal error' });
       }
     });

@@ -20,6 +20,7 @@ export function openDb(path: string): {
   seatsFor(room: string): Array<{ color: string; token_hash: string; setup: string | null }>;
   movesFor(room: string): Array<{ ply: number; uci: string }>;
   resultFor(room: string): { result: string; reason: string } | undefined;
+  updateSeatToken(room: string, color: string, tokenHash: string): void;
   close(): void;
 } {
   const db = new Database(path);
@@ -64,6 +65,9 @@ export function openDb(path: string): {
     },
     insertSeat(room: string, color: string, tokenHash: string) {
       db.prepare('INSERT INTO seats (room, color, token_hash, setup) VALUES (?, ?, ?, NULL)').run(room, color, tokenHash);
+    },
+    updateSeatToken(room: string, color: string, tokenHash: string) {
+      db.prepare('UPDATE seats SET token_hash = ? WHERE room = ? AND color = ?').run(tokenHash, room, color);
     },
     setSeatSetup(room: string, color: string, setup: string) {
       db.prepare('UPDATE seats SET setup = ? WHERE room = ? AND color = ?').run(setup, room, color);
