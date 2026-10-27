@@ -18,6 +18,9 @@
     },
     {
       "path": "tools/betza"
+    },
+    {
+      "path": "tools/artgen"
     }
   ]
 }
