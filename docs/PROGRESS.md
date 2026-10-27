@@ -16,7 +16,10 @@ Gate: `pnpm check && pnpm test` (Node 22, pnpm 9).
 | B validator | validator (~/Work/takes-wt/validator) | M2 piece/profile validation, king safety | dispatched |
 | C art | art (~/Work/takes-wt/art) | procedural SVG + badges, tools/artgen codex candidates | dispatched |
 
+| D betza | main | Betza exporter, variants.ini gen, FSF batch driver; Betza round-trip vs FSF (every piece, every square, blocker rings) | done on main (FSF built at ~/programs/Fairy-Stockfish/src/stockfish) |
+| protocol | main | typed WS messages + untrusted-input parser | done on main |
+
 ## Next wave (after A/B merge)
-- D tools/betza + variants.ini generator + FSF perft parity (needs engine)
+- D2 FSF perft parity on random profile pairs (needs engine + random profile generator)
 - E apps/web: library, builder, profiles, hotseat game (M3; needs engine+validator+art)
 - F packages/protocol + apps/server invite rooms (M4; needs engine+validator)
