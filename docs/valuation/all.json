@@ -1,0 +1,494 @@
+[
+  {
+    "piece": "knight",
+    "referenceId": "bishop",
+    "referenceValuePawns": 3,
+    "iterations": [
+      {
+        "iteration": 0,
+        "injectedMg": null,
+        "injectedEg": null,
+        "estimate": 3.785067050593563,
+        "lo": 3.688056566990107,
+        "hi": 3.88174680445138,
+        "games": 150,
+        "wins": 46,
+        "draws": 56,
+        "losses": 48,
+        "parityBugs": 1
+      },
+      {
+        "iteration": 1,
+        "injectedMg": 476.9184483747889,
+        "injectedEg": 787.293946523461,
+        "estimate": 3.970590669623266,
+        "lo": 3.8920326983332556,
+        "hi": 4.058712507857606,
+        "games": 150,
+        "wins": 52,
+        "draws": 80,
+        "losses": 18,
+        "parityBugs": 1
+      },
+      {
+        "iteration": 2,
+        "injectedMg": 500.29442437253147,
+        "injectedEg": 825.8828592816393,
+        "estimate": 3.3358529668464887,
+        "lo": 3.227273848914409,
+        "hi": 3.4361581851986527,
+        "games": 150,
+        "wins": 8,
+        "draws": 53,
+        "losses": 89,
+        "parityBugs": 4
+      }
+    ],
+    "finalEstimate": 3.3358529668464887,
+    "finalLo": 3.227273848914409,
+    "finalHi": 3.4361581851986527,
+    "calibration": [
+      {
+        "label": "+1 pawn",
+        "deltaPawns": 1,
+        "p": 0.5555555555555556
+      },
+      {
+        "label": "+2 pawns",
+        "deltaPawns": 2,
+        "p": 1
+      },
+      {
+        "label": "+knight",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+bishop",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+rook",
+        "deltaPawns": 5,
+        "p": 1
+      }
+    ],
+    "calibrationFit": {
+      "a": -2.091761453454889,
+      "b": 2.630467301883807
+    },
+    "parityBugs": 6,
+    "elapsedS": 59.287
+  },
+  {
+    "piece": "bishop",
+    "referenceId": "knight",
+    "referenceValuePawns": 3,
+    "iterations": [
+      {
+        "iteration": 0,
+        "injectedMg": null,
+        "injectedEg": null,
+        "estimate": 4.254557567401077,
+        "lo": 4.160561166075882,
+        "hi": 4.363136685333156,
+        "games": 150,
+        "wins": 88,
+        "draws": 55,
+        "losses": 7,
+        "parityBugs": 0
+      },
+      {
+        "iteration": 1,
+        "injectedMg": 536.0742534925357,
+        "injectedEg": 884.9479740194241,
+        "estimate": 3.790136384169063,
+        "lo": 3.7495311347154376,
+        "hi": 3.830712712900247,
+        "games": 150,
+        "wins": 9,
+        "draws": 131,
+        "losses": 10,
+        "parityBugs": 0
+      },
+      {
+        "iteration": 2,
+        "injectedMg": 477.55718440530194,
+        "injectedEg": 788.3483679071651,
+        "estimate": 4.199455245386164,
+        "lo": 4.09937909188074,
+        "hi": 4.314348647761981,
+        "games": 150,
+        "wins": 86,
+        "draws": 51,
+        "losses": 13,
+        "parityBugs": 1
+      }
+    ],
+    "finalEstimate": 4.199455245386164,
+    "finalLo": 4.09937909188074,
+    "finalHi": 4.314348647761981,
+    "calibration": [
+      {
+        "label": "+1 pawn",
+        "deltaPawns": 1,
+        "p": 0.5555555555555556
+      },
+      {
+        "label": "+2 pawns",
+        "deltaPawns": 2,
+        "p": 1
+      },
+      {
+        "label": "+knight",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+bishop",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+rook",
+        "deltaPawns": 5,
+        "p": 1
+      }
+    ],
+    "calibrationFit": {
+      "a": -2.091761453454889,
+      "b": 2.630467301883807
+    },
+    "parityBugs": 1,
+    "elapsedS": 62.483
+  },
+  {
+    "piece": "wraith",
+    "referenceId": "knight",
+    "referenceValuePawns": 3,
+    "iterations": [
+      {
+        "iteration": 0,
+        "injectedMg": null,
+        "injectedEg": null,
+        "estimate": 4.355325065529586,
+        "lo": 4.260934565889553,
+        "hi": 4.457623971984095,
+        "games": 150,
+        "wins": 92,
+        "draws": 52,
+        "losses": 6,
+        "parityBugs": 0
+      },
+      {
+        "iteration": 1,
+        "injectedMg": 548.7709582567278,
+        "injectedEg": 905.9076136301538,
+        "estimate": 3.9479434027588463,
+        "lo": 3.845668487504458,
+        "hi": 4.047857028903221,
+        "games": 150,
+        "wins": 60,
+        "draws": 44,
+        "losses": 46,
+        "parityBugs": 0
+      },
+      {
+        "iteration": 2,
+        "injectedMg": 497.4408687476146,
+        "injectedEg": 821.1722277738401,
+        "estimate": 4.084150943334241,
+        "lo": 4.0023444471512,
+        "hi": 4.160036344748101,
+        "games": 150,
+        "wins": 55,
+        "draws": 81,
+        "losses": 14,
+        "parityBugs": 0
+      }
+    ],
+    "finalEstimate": 4.084150943334241,
+    "finalLo": 4.0023444471512,
+    "finalHi": 4.160036344748101,
+    "calibration": [
+      {
+        "label": "+1 pawn",
+        "deltaPawns": 1,
+        "p": 0.5
+      },
+      {
+        "label": "+2 pawns",
+        "deltaPawns": 2,
+        "p": 1
+      },
+      {
+        "label": "+knight",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+bishop",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+rook",
+        "deltaPawns": 5,
+        "p": 1
+      }
+    ],
+    "calibrationFit": {
+      "a": -2.4136703390271674,
+      "b": 2.7437100923386772
+    },
+    "parityBugs": 4,
+    "elapsedS": 60.964
+  },
+  {
+    "piece": "lancer",
+    "referenceId": "knight",
+    "referenceValuePawns": 3,
+    "iterations": [
+      {
+        "iteration": 0,
+        "injectedMg": null,
+        "injectedEg": null,
+        "estimate": -4.980842162881374,
+        "lo": -5.8577695680518165,
+        "hi": -4.201297709896325,
+        "games": 150,
+        "wins": 1,
+        "draws": 69,
+        "losses": 80,
+        "parityBugs": 1
+      },
+      {
+        "iteration": 1,
+        "injectedMg": -627.5861125230531,
+        "injectedEg": -1036.0151698793259,
+        "estimate": -7.372531661826189,
+        "lo": -8.654912940486733,
+        "hi": -6.4329112437733755,
+        "games": 150,
+        "wins": 0,
+        "draws": 42,
+        "losses": 108,
+        "parityBugs": 1
+      },
+      {
+        "iteration": 2,
+        "injectedMg": -928.9389893900998,
+        "injectedEg": -1533.4865856598474,
+        "estimate": -11.07355999198237,
+        "lo": -13.538076248290889,
+        "hi": -9.222574982938147,
+        "games": 150,
+        "wins": 3,
+        "draws": 11,
+        "losses": 136,
+        "parityBugs": 0
+      }
+    ],
+    "finalEstimate": -11.07355999198237,
+    "finalLo": -13.538076248290889,
+    "finalHi": -9.222574982938147,
+    "calibration": [
+      {
+        "label": "+1 pawn",
+        "deltaPawns": 1,
+        "p": 0.5
+      },
+      {
+        "label": "+2 pawns",
+        "deltaPawns": 2,
+        "p": 1
+      },
+      {
+        "label": "+knight",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+bishop",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+rook",
+        "deltaPawns": 5,
+        "p": 0.7222222222222222
+      }
+    ],
+    "calibrationFit": {
+      "a": 0.9787521206441082,
+      "b": 0.26936934765552095
+    },
+    "parityBugs": 2,
+    "elapsedS": 53.389
+  },
+  {
+    "piece": "berolina",
+    "referenceId": "knight",
+    "referenceValuePawns": 3,
+    "iterations": [
+      {
+        "iteration": 0,
+        "injectedMg": null,
+        "injectedEg": null,
+        "estimate": 1.9892574307476347,
+        "lo": 1.6702264796896085,
+        "hi": 2.205980644929368,
+        "games": 150,
+        "wins": 1,
+        "draws": 31,
+        "losses": 118,
+        "parityBugs": 4
+      },
+      {
+        "iteration": 1,
+        "injectedMg": 250.646436274202,
+        "injectedEg": 413.765545595508,
+        "estimate": 3.063251932288816,
+        "lo": 2.9459614426900433,
+        "hi": 3.1752677946813272,
+        "games": 150,
+        "wins": 1,
+        "draws": 105,
+        "losses": 44,
+        "parityBugs": 4
+      },
+      {
+        "iteration": 2,
+        "injectedMg": 385.96974346839085,
+        "injectedEg": 637.1564019160737,
+        "estimate": 2.0596064385207358,
+        "lo": 1.8001373399817249,
+        "hi": 2.2808543511685766,
+        "games": 150,
+        "wins": 1,
+        "draws": 34,
+        "losses": 115,
+        "parityBugs": 4
+      }
+    ],
+    "finalEstimate": 2.0596064385207358,
+    "finalLo": 1.8001373399817249,
+    "finalHi": 2.2808543511685766,
+    "calibration": [
+      {
+        "label": "+1 pawn",
+        "deltaPawns": 1,
+        "p": 0.7222222222222222
+      },
+      {
+        "label": "+2 pawns",
+        "deltaPawns": 2,
+        "p": 0.7777777777777778
+      },
+      {
+        "label": "+knight",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+bishop",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+rook",
+        "deltaPawns": 5,
+        "p": 1
+      }
+    ],
+    "calibrationFit": {
+      "a": -0.6782543059054436,
+      "b": 1.3974743262996494
+    },
+    "parityBugs": 12,
+    "elapsedS": 64.472
+  },
+  {
+    "piece": "warden",
+    "referenceId": "knight",
+    "referenceValuePawns": 3,
+    "iterations": [
+      {
+        "iteration": 0,
+        "injectedMg": null,
+        "injectedEg": null,
+        "estimate": 3.399370481131622,
+        "lo": 3.215024916516558,
+        "hi": 3.580894892487564,
+        "games": 150,
+        "wins": 39,
+        "draws": 63,
+        "losses": 48,
+        "parityBugs": 0
+      },
+      {
+        "iteration": 1,
+        "injectedMg": 428.32068062258435,
+        "injectedEg": 707.0690600753774,
+        "estimate": 2.522794823367692,
+        "lo": 2.3336667522226877,
+        "hi": 2.686423147877774,
+        "games": 150,
+        "wins": 2,
+        "draws": 58,
+        "losses": 90,
+        "parityBugs": 1
+      },
+      {
+        "iteration": 2,
+        "injectedMg": 317.8721477443292,
+        "injectedEg": 524.7413232604799,
+        "estimate": 3.5617436160060256,
+        "lo": 3.399370481131622,
+        "hi": 3.7261146222367714,
+        "games": 150,
+        "wins": 41,
+        "draws": 76,
+        "losses": 33,
+        "parityBugs": 0
+      }
+    ],
+    "finalEstimate": 3.5617436160060256,
+    "finalLo": 3.399370481131622,
+    "finalHi": 3.7261146222367714,
+    "calibration": [
+      {
+        "label": "+1 pawn",
+        "deltaPawns": 1,
+        "p": 0.7222222222222222
+      },
+      {
+        "label": "+2 pawns",
+        "deltaPawns": 2,
+        "p": 0.7777777777777778
+      },
+      {
+        "label": "+knight",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+bishop",
+        "deltaPawns": 3,
+        "p": 1
+      },
+      {
+        "label": "+rook",
+        "deltaPawns": 5,
+        "p": 1
+      }
+    ],
+    "calibrationFit": {
+      "a": -0.6782543059054436,
+      "b": 1.3974743262996494
+    },
+    "parityBugs": 1,
+    "elapsedS": 72.776
+  }
+]
