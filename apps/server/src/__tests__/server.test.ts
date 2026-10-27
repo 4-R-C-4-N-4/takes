@@ -194,7 +194,7 @@ describe('bot room (Fairy-Stockfish, D12)', () => {
     const s = await server();
     const client = new TestClient(s.port);
     await client.ready();
-    client.send({ t: 'create_room', ruleset: '2026.1#bot:easy', color: 'w' });
+    client.send({ t: 'create_room', ruleset: '2026.1', color: 'w', bot: 'easy' });
     const created = await client.waitFor((m) => m.t === 'room_created') as { code: string };
     client.send({ t: 'submit_setup', setup: VANILLA });
     await client.waitFor((m) => m.t === 'game_start');
@@ -230,7 +230,7 @@ describe('bot room (Fairy-Stockfish, D12)', () => {
       const s = await server();
       const client = new TestClient(s.port);
       await client.ready();
-      client.send({ t: 'create_room', ruleset: '2026.1#bot:easy' });
+      client.send({ t: 'create_room', ruleset: '2026.1', bot: 'easy' });
       const resp = await client.waitFor((m) => m.t === 'room_created' || m.t === 'error');
       expect(resp.t).toBe('error');
       client.close();

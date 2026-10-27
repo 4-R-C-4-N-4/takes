@@ -37,12 +37,9 @@ Per DECISIONS D12, the bot is native Fairy-Stockfish running on the server, behi
 end; every bot move is validated with `game.parseUci` before being applied, with a deterministic
 legal-move fallback on rejection (logged as a parity bug via `RoomManager.rejectedBotMoves`).
 
-**Protocol stopgap:** `packages/protocol`'s `create_room.ruleset` has no bot field yet. This
-server treats a ruleset string with the suffix `#bot:<level>` (`easy|medium|hard`) as a request
-for a bot room, e.g. `"2026.1#bot:easy"`. The human gets the opposite color from any requested
-`color`, and the bot's seat uses a shipped profile from `bots/profiles.json`. **This is a
-workaround pending a proper protocol field** (e.g. `create_room.bot?: 'easy'|'medium'|'hard'`) —
-see the final report for the proposed addition.
+**Bot rooms:** `create_room` accepts a `bot?: 'easy'|'medium'|'hard'` field (protocol field, no
+hack suffix). The human gets the opposite color from any requested `color`, and the bot's seat
+uses a shipped profile from `bots/profiles.json`.
 
 Difficulty maps to Fairy-Stockfish `Skill Level` + `movetime`:
 - easy: Skill 0, 100ms

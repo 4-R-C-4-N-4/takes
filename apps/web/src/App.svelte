@@ -5,6 +5,7 @@
   import Builder from './components/Builder.svelte';
   import Profiles from './components/Profiles.svelte';
   import Lobby from './components/Lobby.svelte';
+  import Join from './components/Join.svelte';
   import Game from './components/Game.svelte';
   import { seedIfEmpty } from './lib/profiles.js';
 
@@ -35,6 +36,10 @@
     <Profiles />
   {:else if route.screen === 'lobby'}
     <Lobby />
+  {:else if route.screen === 'join'}
+    {#key route.param}
+      <Join code={route.param} />
+    {/key}
   {:else if route.screen === 'game'}
     {#key route.param}
       <Game gameParam={route.param} />

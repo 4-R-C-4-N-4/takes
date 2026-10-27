@@ -107,12 +107,12 @@ function handleMessage(rooms: RoomManager, state: ConnState, ws: WebSocket, msg:
       send(ws, { t: 'pong' });
       return;
     case 'create_room': {
-      const result = rooms.createRoom(msg.ruleset, msg.color);
+      const result = rooms.createRoom(msg.ruleset, msg.color, msg.bot ?? null);
       if ('error' in result) { send(ws, { t: 'error', code: 'no_room', message: result.error }); return; }
       const { room, seat } = result;
       state.room = room; state.seat = seat;
       rooms.onConnect(room, seat, ws);
-      send(ws, { t: 'room_created', code: room.code, token: seat.token, color: seat.color, ruleset: msg.ruleset });
+      send(ws, { t: 'room_created', code: room.code, token: seat.token, color: seat.color, ruleset: msg.ruleset, ...(msg.bot ? { bot: msg.bot } : {}) });
       return;
     }
     case 'join_room': {

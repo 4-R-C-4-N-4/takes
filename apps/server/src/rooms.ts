@@ -26,16 +26,6 @@ export interface SeatInfo {
 
 function otherColor(c: Color): Color { return c === 'w' ? 'b' : 'w'; }
 
-/** Parses a ruleset request string that may carry a bot suffix: "<version>#bot:<level>". */
-export function parseRulesetRequest(raw: string): { version: string; bot: Difficulty | null } {
-  const idx = raw.indexOf('#bot:');
-  if (idx === -1) return { version: raw, bot: null };
-  const version = raw.slice(0, idx);
-  const level = raw.slice(idx + 5);
-  const bot: Difficulty | null = level === 'easy' || level === 'medium' || level === 'hard' ? level : null;
-  return { version, bot };
-}
-
 export class Room {
   code: string;
   rulesetVersion: string;
@@ -129,7 +119,8 @@ export class RoomManager {
         ready: !!row.setup, isBot: false, disconnectedAt: Date.now(), forfeitTimer: null,
       });
       const seats = { w: mkSeat('w', wRow), b: mkSeat('b', bRow) };
-      const { version, bot } = parseRulesetRequest(r.ruleset);
+      const { version } = { version: r.ruleset };
+      const bot = (r.bot === 'easy' || r.bot === 'medium' || r.bot === 'hard' ? r.bot : null) as Difficulty | null;
       const room = new Room(r.code, version, bot, seats);
       const movesRows = this.db.movesFor(r.code);
       if (seats.w.ready && seats.b.ready) {
@@ -160,8 +151,8 @@ export class RoomManager {
 
   get(code: string): Room | undefined { return this.rooms.get(code); }
 
-  createRoom(rulesetRaw: string, hostColor: Color | undefined): { room: Room; seat: SeatInfo } | { error: string } {
-    const { version, bot } = parseRulesetRequest(rulesetRaw);
+  createRoom(rulesetRaw: string, hostColor: Color | undefined, bot: Difficulty | null = null): { room: Room; seat: SeatInfo } | { error: string } {
+    const version = rulesetRaw;
     const ruleset = getRuleset(version);
     if (!ruleset) return { error: `unknown ruleset version '${version}'` };
     if (bot && !FsfBot.available()) return { error: 'bot engine unavailable: Fairy-Stockfish binary not found' };
