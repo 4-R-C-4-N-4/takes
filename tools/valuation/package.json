@@ -9,8 +9,11 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "value": "node --experimental-strip-types scripts/value.ts",
-    "run-all": "node --experimental-strip-types scripts/run-all.ts"
+    "value": "tsx scripts/value.ts",
+    "run-all": "tsx scripts/run-all.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.0"
   },
   "dependencies": {
     "@takes/library": "workspace:*",

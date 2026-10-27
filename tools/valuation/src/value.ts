@@ -8,6 +8,22 @@ import { calibrationPairings, swapColors, targetPairing, randomTargetPairing, ty
 import { runBatch, type GameJob } from './worker-pool.js';
 import { fitLogistic, scoreWithCi, bootstrapValueCi, type LogisticFit } from './logistic.js';
 
+/**
+ * FSF's promotionPieceTypes option is variant-wide, but the Takes engine's promotion targets are
+ * 'own-set' [D6] — restricted to pieces actually present in that color's own army. To keep FSF and
+ * Takes in agreement (no parity bugs) we build the ini's promotion lists as exactly the officer ids
+ * that can appear across every army used in this run (the classic officers plus the target/reference
+ * pair), and we restrict randomProfile() to the same officer pool so no out-of-set promotion is ever
+ * offered to FSF. This is an approximation of true per-position own-set promotion, documented here.
+ */
+function restrictedRuleset(ruleset: Ruleset, officerIds: string[]): Ruleset {
+  const keep = new Set([...officerIds, 'pawn']);
+  const pieces = Object.fromEntries(Object.entries(ruleset.pieces).filter(([id]) => keep.has(id)));
+  const costs = Object.fromEntries(Object.entries(ruleset.costs).filter(([id]) => keep.has(id)));
+  const maxCount = Object.fromEntries(Object.entries(ruleset.maxCount).filter(([id]) => keep.has(id)));
+  return { ...ruleset, pieces, costs, maxCount };
+}
+
 export interface ValueOptions {
   piece: string;
   games: number;
@@ -88,8 +104,13 @@ export async function runCalibration(ruleset: Ruleset, ini: string, variant: str
 export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<{ result: ValueResult; parityBugs: number }> {
   const maxIterations = opts.maxIterations ?? 3;
   const variant = variantName(ruleset);
-  const baseIni = variantIni(ruleset);
   const { pairing: classicPairing, referenceId, referenceValuePawns } = targetPairing(ruleset, opts.piece);
+  // Officers that can legally appear in ANY army used by this run (classic test armies + random-profile
+  // armies, which are restricted below to the same pool). Promotion lists in the ini are built from this
+  // closed set so FSF never offers a promotion the Takes engine's own-set rule would reject.
+  const officerIds = [...new Set(['knight', 'bishop', 'rook', 'queen', opts.piece, referenceId])];
+  const baseIni = variantIni(ruleset, { promotion: { w: officerIds, b: officerIds } });
+  const randomRuleset = restrictedRuleset(ruleset, [opts.piece, referenceId]);
 
   const calibGames = Math.max(10, Math.round(opts.games * 0.3));
   const { calibration, fit, parityBugs: calibBugs } = await runCalibration(ruleset, baseIni, variant, opts.nodes, opts.workers, Math.max(2, Math.round(calibGames / 5)));
@@ -112,30 +133,39 @@ export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<
       ini = withPieceValues(baseIni, ruleset, [{ pieceId: opts.piece, mg, eg }]);
     }
 
-    const jobs: GameJob[] = [];
+    const classicJobs: GameJob[] = [];
     const half = Math.max(2, Math.floor(opts.games / 2));
     for (let i = 0; i < half; i++) {
       const classic = i % 2 === 0 ? classicPairing : swapColors(classicPairing);
-      jobs.push({ white: classic.white, black: classic.black, nodes: opts.nodes });
+      classicJobs.push({ white: classic.white, black: classic.black, nodes: opts.nodes });
     }
     // Mix in Takes-style blind randomProfile games (spec: "measure from Takes-style blind setups, not only vanilla swaps").
+    // These armies only ever contain {pawn, target, referenceId}, so they need their own ini with a
+    // matching (narrower) promotion list — reusing the classic ini's wider list (queen/rook/bishop
+    // included) would let FSF offer a promotion the Takes engine's own-set rule rejects.
+    const randomJobs: GameJob[] = [];
     const randomGames = opts.games - half;
-    const sideFlags: boolean[] = new Array(half).fill(true); // classic games: piece T is always White here (pre-swap handled below correctly)
+    const randomSideFlags: boolean[] = [];
     for (let i = 0; i < randomGames; i++) {
-      const profile = randomProfile(ruleset, rand);
+      const profile = randomProfile(randomRuleset, rand);
       const rp = randomTargetPairing(ruleset, opts.piece, referenceId, profile);
       const useSwap = i % 2 === 1;
       const pp = useSwap ? swapColors(rp) : rp;
-      jobs.push({ white: pp.white, black: pp.black, nodes: opts.nodes });
-      sideFlags.push(!useSwap);
+      randomJobs.push({ white: pp.white, black: pp.black, nodes: opts.nodes });
+      randomSideFlags.push(!useSwap);
     }
-    // Recompute the correct "T is White" flags for the classic half (odd i used swapColors -> T is black).
-    for (let i = 0; i < half; i++) sideFlags[i] = i % 2 === 0;
+    const randomOfficerIds = [...new Set([opts.piece, referenceId])];
+    const randomIni = iter > 0
+      ? withPieceValues(variantIni(ruleset, { promotion: { w: randomOfficerIds, b: randomOfficerIds } }), ruleset, [{ pieceId: opts.piece, mg: injectedMg!, eg: injectedEg! }])
+      : variantIni(ruleset, { promotion: { w: randomOfficerIds, b: randomOfficerIds } });
 
-    const batch = await runBatch(ini, variant, ruleset, jobs, opts.workers);
-    totalParityBugs += batch.parityBugCount;
+    const classicBatch = await runBatch(ini, variant, ruleset, classicJobs, opts.workers);
+    const randomBatch = randomJobs.length > 0 ? await runBatch(randomIni, variant, ruleset, randomJobs, opts.workers) : { outcomes: [], parityBugCount: 0 };
+    totalParityBugs += classicBatch.parityBugCount + randomBatch.parityBugCount;
 
-    const outcomes: Array<-1 | 0 | 1> = batch.outcomes.map((o, i) => toOutcome(o.result, sideFlags[i]!));
+    const sideFlags = [...Array(half).fill(true).map((_, i) => i % 2 === 0), ...randomSideFlags];
+    const outcomesAll = [...classicBatch.outcomes, ...randomBatch.outcomes];
+    const outcomes: Array<-1 | 0 | 1> = outcomesAll.map((o, i) => toOutcome(o.result, sideFlags[i]!));
     const wins = outcomes.filter((v) => v === 1).length;
     const draws = outcomes.filter((v) => v === 0).length;
     const losses = outcomes.filter((v) => v === -1).length;
@@ -156,7 +186,7 @@ export async function valuePiece(ruleset: Ruleset, opts: ValueOptions): Promise<
       wins,
       draws,
       losses,
-      parityBugs: batch.parityBugCount,
+      parityBugs: classicBatch.parityBugCount + randomBatch.parityBugCount,
     });
 
     const halfWidth = (hi - lo) / 2;
