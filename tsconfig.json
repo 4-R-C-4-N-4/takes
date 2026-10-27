@@ -24,6 +24,9 @@
     },
     {
       "path": "tools/perft"
+    },
+    {
+      "path": "tools/valuation"
     }
   ]
 }

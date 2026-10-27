@@ -1,0 +1,106 @@
+/** Setup construction for calibration games and target-piece substitution experiments [spec "Valuation"]. */
+import type { Ruleset } from '@takes/library';
+import { serializeSetup, parseSetup, type Setup } from '@takes/library';
+
+function emptyRanks(): Array<Array<string | null>> {
+  return [Array(8).fill(null), Array(8).fill(null), Array(8).fill(null)];
+}
+
+/** A plain back-rank-and-pawns army, using only classic ids (pawn/knight/bishop/rook/queen/king). */
+export function classicSetup(version: string): Setup {
+  const ranks = emptyRanks();
+  ranks[0] = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'];
+  ranks[1] = Array(8).fill('pawn');
+  return { version, ranks };
+}
+
+function clone(s: Setup): Setup {
+  return { version: s.version, ranks: s.ranks.map((row) => row.slice()) };
+}
+
+/** Adds `count` copies of `id` to empty squares of the setup's third rank (back of the army, owner POV). */
+export function addExtra(s: Setup, id: string, count: number): Setup {
+  const out = clone(s);
+  let placed = 0;
+  for (let f = 0; f < 8 && placed < count; f++) {
+    if (out.ranks[2]![f] === null) { out.ranks[2]![f] = id; placed++; }
+  }
+  if (placed < count) throw new Error('no room to add extra pieces');
+  return out;
+}
+
+/** Removes one copy of `id` from the setup (first occurrence), leaving the square empty. */
+export function removeOne(s: Setup, id: string): Setup {
+  const out = clone(s);
+  for (const row of out.ranks) {
+    const i = row.indexOf(id);
+    if (i >= 0) { row[i] = null; return out; }
+  }
+  throw new Error(`no '${id}' found to remove`);
+}
+
+/** Replaces the first occurrence of `fromId` with `toId`. */
+export function substitute(s: Setup, fromId: string, toId: string): Setup {
+  const out = clone(s);
+  for (const row of out.ranks) {
+    const i = row.indexOf(fromId);
+    if (i >= 0) { row[i] = toId; return out; }
+  }
+  throw new Error(`no '${fromId}' found to substitute`);
+}
+
+export function str(s: Setup): string { return serializeSetup(s); }
+
+export interface Pairing {
+  /** Nominal material delta for white, in pawns (positive = white favored); used only for calibration x-axis / substitution bookkeeping. */
+  deltaPawns: number;
+  white: string;
+  black: string;
+  label: string;
+}
+
+/** Calibration pairings: White has a known nominal material edge over a classic Black army. Both orientations are produced by the caller via swap(). */
+export function calibrationPairings(r: Ruleset): Pairing[] {
+  const base = classicSetup(r.version);
+  const mk = (label: string, deltaPawns: number, whiteSetup: Setup): Pairing => ({ label, deltaPawns, white: str(whiteSetup), black: str(base) });
+  return [
+    mk('+1 pawn', 1, addExtra(base, 'pawn', 1)),
+    mk('+2 pawns', 2, addExtra(base, 'pawn', 2)),
+    mk('+knight', 3, addExtra(base, 'knight', 1)),
+    mk('+bishop', 3, addExtra(base, 'bishop', 1)),
+    mk('+rook', 5, addExtra(base, 'rook', 1)),
+  ];
+}
+
+/** Returns the color-swapped pairing (same opening, opposite colors) so each opening is played twice. */
+export function swapColors(p: Pairing): Pairing {
+  return { label: p.label + ' (swapped)', deltaPawns: -p.deltaPawns, white: p.black, black: p.white };
+}
+
+/**
+ * Builds the substitution pairing used to value a target piece T relative to a reference piece
+ * (knight by default, or bishop when T is itself the knight, giving a self-consistency control).
+ * White gets T in place of one copy of the reference piece; Black keeps the reference piece.
+ */
+export function targetPairing(r: Ruleset, targetId: string): { pairing: Pairing; referenceId: string; referenceValuePawns: number } {
+  const referenceId = targetId === 'knight' ? 'bishop' : 'knight';
+  const referenceValuePawns = 3;
+  const base = classicSetup(r.version);
+  const white = substitute(base, referenceId, targetId);
+  return { pairing: { label: `${targetId} vs ${referenceId}`, deltaPawns: NaN, white: str(white), black: str(base) }, referenceId, referenceValuePawns };
+}
+
+/** Random (Takes-style blind) variant of the substitution experiment, mixed in alongside the classic one per spec.
+ * White = a randomly generated valid profile with one reference-piece copy swapped for the target piece.
+ * Black = the same random profile, unchanged. Falls back to appending the target piece on an empty square
+ * if the reference piece isn't present in the random profile (documented limitation: less directly comparable). */
+export function randomTargetPairing(r: Ruleset, targetId: string, referenceId: string, randomSetupStr: string): Pairing {
+  const base = parseSetup(randomSetupStr);
+  let white: Setup;
+  try {
+    white = substitute(base, referenceId, targetId);
+  } catch {
+    white = addExtra(base, targetId, 1);
+  }
+  return { label: `${targetId} vs ${referenceId} (random profile)`, deltaPawns: NaN, white: str(white), black: str(base) };
+}
