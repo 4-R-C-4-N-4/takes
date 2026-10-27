@@ -11,7 +11,8 @@
     "check:web": "pnpm --filter @takes/web check",
     "test": "vitest run",
     "build:rulesets": "node --experimental-strip-types packages/library/scripts/build-rulesets.ts",
-    "server:start": "pnpm --filter @takes/server start"
+    "server:start": "pnpm --filter @takes/server start",
+    "serve": "pnpm --filter @takes/web build && WEB_DIST=$PWD/apps/web/dist pnpm --filter @takes/server start"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
