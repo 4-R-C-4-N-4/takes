@@ -42,6 +42,12 @@ const out = __dirname;
       const rank1 = await page.locator('.rank-label').filter({ hasText: /^1$/ }).boundingBox();
       assert(rank3.y < rank1.y);
       assert.equal(await page.locator('.budget').textContent(), 'Cost: 1 / 39');
+      assert(await page.getByTitle('Pawn (1 pts)', { exact: true }).evaluate(el => el.classList.contains('selected')));
+      await click(square(17)); // same selected pawn, no second palette tap
+      await exists(17);
+      assert.equal(await page.locator('.budget').textContent(), 'Cost: 2 / 39');
+      await click(page.getByTitle('Pawn (1 pts)', { exact: true }));
+      assert.equal(await page.locator('.palette-piece.selected').count(), 0);
       assert(await page.locator('.issues li').count());
       assert(await page.getByRole('button', { name: 'Save profile', exact: true }).isDisabled());
       await drag(page.getByTitle('Knight (3 pts)', { exact: true }), square(17));

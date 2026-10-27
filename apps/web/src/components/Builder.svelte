@@ -9,7 +9,7 @@
   import { computeCastlingHints } from '../lib/castling.js';
   import { loadProfiles, addProfile, type StoredProfile } from '../lib/profiles.js';
   import { routeHref } from '../lib/router.js';
-  import { idle, startDrag, moveDrag, tapSelect, consumeSelection, cancel, type DragState, type DragSource } from '../lib/drag.js';
+  import { idle, startDrag, moveDrag, tapSelect, consumeSelection, afterTapPlacement, cancel, type DragState, type DragSource } from '../lib/drag.js';
 
   let { profileId = undefined }: { profileId?: string | undefined } = $props();
 
@@ -117,7 +117,7 @@
     const source = consumeSelection(drag);
     if (source) {
       applySource(source, sq);
-      drag = idle();
+      drag = afterTapPlacement(source);
       return;
     }
     const current = pieceAt(sq);

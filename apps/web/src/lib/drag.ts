@@ -30,4 +30,9 @@ export function consumeSelection(state: DragState): DragSource | null {
   return null;
 }
 
+/** Palette taps paint repeatedly; board-piece moves consume their source once. */
+export function afterTapPlacement(source: DragSource): DragState {
+  return source.kind === 'palette' ? tapSelect(source) : idle();
+}
+
 export function cancel(): DragState { return idle(); }
