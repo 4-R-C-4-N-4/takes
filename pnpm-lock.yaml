@@ -72,6 +72,21 @@ importers:
         specifier: workspace:*
         version: link:../../packages/library
 
+  tools/perft:
+    dependencies:
+      '@takes/betza':
+        specifier: workspace:*
+        version: link:../betza
+      '@takes/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
+      '@takes/library':
+        specifier: workspace:*
+        version: link:../../packages/library
+      '@takes/validator':
+        specifier: workspace:*
+        version: link:../../packages/validator
+
 packages:
 
   '@babel/runtime@7.29.10':
