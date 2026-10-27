@@ -21,12 +21,16 @@ Gate: `pnpm check && pnpm test` (Node 22, pnpm 9).
 | E web | web | M3: Svelte app, 5 screens, hotseat, online client | merged — hotseat verified in browser (castle/ep/promo). Orchestrator fixed art.svg override glob (was silently broken) + svelte-check now in root gate |
 | F server | server | M4: WS rooms, SQLite, reconnect, FSF bot (D12) | merged — 10 server tests; zero FSF moves rejected |
 | protocol bot field | main | create_room.bot ('easy'/'medium'/'hard') | merged |
-| H online | online | wire web online flow + bot to server, server serves web, real-browser 2-player verification | dispatched |
-| I rules-review | rules-review | adversarial engine/validator review vs spec; pinning tests | dispatched |
+| H online | online | web online flow + bot, server serves web (`pnpm serve`) | merged — 2-player invite game, mid-game reload/resume, bot game verified in real browser (docs/screens) |
+| I rules-review | rules-review | adversarial engine/validator review | merged — fixed fromFEN KQkq → closest partner (D2); +18 pinning tests |
+| J web-polish | web-polish | Builder reactivity bug (orchestrator found: placing pieces does nothing), drag&drop, responsive board, phone | dispatched |
+| K art-v2 | art-v2 | procedural art: bigger, distinct silhouettes, king, documented grammar | dispatched |
 | G valuation | valuation | M6: FSF self-play value harness | pass 1 NOT merged: 1% games had FSF moves rejected (shared promotion-set approximation, scored as draws), lancer fit diverged, wrong-tier slots. Pass 2 dispatched: per-game variants, same-tier slots, wider calibration, ≥600 games/slot |
 
-Gate on main: `pnpm check && pnpm test` (check = tsc -b + svelte-check) → 157 passed; `pnpm --filter @takes/web build` ok (2026-10-27).
+Gate on main: `pnpm check && pnpm test` (check = tsc -b + svelte-check) → 178 passed; `pnpm --filter @takes/web build` ok (2026-10-27).
 
 ## Open for Ivy
 - Codex art candidates (docs/art/candidates-40.png) read as fairly classical chess silhouettes; procedural (docs/art/procedural-40.png) is clean but samey for rook/warden/wraith. Pick a direction before promoting any art.svg.
 - All DECISIONS.md defaults stand unless overridden.
+
+- Risk noted by rules review: fromFEN recomputes own-set promotion targets from the current board; resume paths must replay moves from setups (server does), never resume from a mid-game FEN.
