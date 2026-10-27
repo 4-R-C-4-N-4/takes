@@ -850,13 +850,15 @@ export function fromFEN(ruleset: Ruleset, fen: string): Game {
       for (const c of chars) {
         let partnerSq = -1;
         if (c.toUpperCase() === 'K' || c.toUpperCase() === 'Q') {
+          // D2: the partner is the CLOSEST rook-tier piece to the king on that side,
+          // so scan outward starting right next to the king, not inward from the board edge.
           if (c.toUpperCase() === 'K') {
-            for (let f = 7; f > kingFile; f--) {
+            for (let f = kingFile + 1; f <= 7; f++) {
               const bp = board[sq(f, rank)];
               if (bp && bp.color === color && isRookTierOf(ruleset, bp.pieceId)) { partnerSq = sq(f, rank); break; }
             }
           } else {
-            for (let f = 0; f < kingFile; f++) {
+            for (let f = kingFile - 1; f >= 0; f--) {
               const bp = board[sq(f, rank)];
               if (bp && bp.color === color && isRookTierOf(ruleset, bp.pieceId)) { partnerSq = sq(f, rank); break; }
             }
