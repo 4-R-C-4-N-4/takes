@@ -34,3 +34,12 @@ Gate on main: `pnpm check && pnpm test` (check = tsc -b + svelte-check) → 178 
 - All DECISIONS.md defaults stand unless overridden.
 
 - Risk noted by rules review: fromFEN recomputes own-set promotion targets from the current board; resume paths must replay moves from setups (server does), never resume from a mid-game FEN.
+
+## Integrated recovery — 2026-10-27
+
+- Procedural art redesign merged, with king, direction/range signatures and bitmap checks; docs/art/procedural-labeled.png.
+- Builder tap/drag fixes, profile navigation/import and hotseat reactivity merged. Desktop and phone Playwright checks passed on integrated main; docs/screens/polish/VERIFIED.md. Palette tap selection now persists across placements (Ivy requested); same palette toggles off.
+- Rank labels added; validator corrected to allow pawns on setup rank 3 (promotion rank is 8).
+- Valuation recovery merged as EXPERIMENTAL tooling, not pricing authority. Eight fresh 700-game piece/slot runs, calibration and null-control data preserved. Zero fresh parity/exclusion events; confidence ranges are conditional and not overall CIs. No price/tier changes made. Details docs/valuation/results.md.
+- Final integrated gate: pnpm check → zero errors/warnings; pnpm test → 216 tests, 27 files; web build succeeds.
+- No active implementation workers remain. Previous dispatched entries above are historical. Remaining work: valuation methodology (independent openings, cluster/calibration uncertainty, color-mixture model), physical touch-drag validation, final art approval, production deployment/hardening. Current local run: pnpm serve.
