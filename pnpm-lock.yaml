@@ -50,6 +50,12 @@ importers:
         specifier: workspace:*
         version: link:../library
 
+  tools/betza:
+    dependencies:
+      '@takes/library':
+        specifier: workspace:*
+        version: link:../../packages/library
+
 packages:
 
   '@jridgewell/resolve-uri@3.1.2':
