@@ -118,6 +118,7 @@
   .highlight { pointer-events: none; }
   .highlight.quiet { fill: rgba(70, 150, 230, 0.4); }
   .highlight.capture { fill: rgba(220, 70, 70, 0.45); }
+  .highlight.both { fill: rgba(160, 90, 220, 0.5); }
   .highlight.select { fill: rgba(240, 220, 90, 0.5); }
   .highlight.lastmove { fill: rgba(240, 220, 90, 0.3); }
   .highlight.error { fill: rgba(220, 40, 40, 0.5); }

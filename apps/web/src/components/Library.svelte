@@ -1,24 +1,26 @@
 <script lang="ts">
-  import { getRuleset, CURRENT_RULESET_VERSION, expandPiece, canMove, canCapture } from '@takes/library';
+  import { getRuleset, CURRENT_RULESET_VERSION } from '@takes/library';
   import type { Piece } from '@takes/library';
   import Board from './Board.svelte';
   import PieceIcon from './PieceIcon.svelte';
   import { artFor, tierOrder } from '../lib/pieceArt.js';
   import { sqOf } from '../lib/board.js';
   import { KING_PIECE } from '../lib/king.js';
+  import { previewMarks, type PreviewMode } from '../lib/preview.js';
 
   const ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
   const pieces: Piece[] = [KING_PIECE, ...Object.values(ruleset.pieces)];
 
-  let selected: Piece | null = null;
-  let previewFromSq: number | null = null;
+  let selected = $state<Piece | null>(null);
+  let previewFromSq = $state<number>(sqOf(4, 1));
+  let mode = $state<PreviewMode>('all');
 
-  function grouped() {
+  const grouped = $derived.by(() => {
     const byTier = new Map<string, Piece[]>();
     for (const t of tierOrder()) byTier.set(t, []);
     for (const p of pieces) byTier.get(p.tier)?.push(p);
     return byTier;
-  }
+  });
 
   function costOf(p: Piece): number {
     return p.id === 'king' ? 0 : ruleset.costs[p.id] ?? 0;
@@ -26,43 +28,22 @@
 
   function selectPiece(p: Piece): void {
     selected = p;
-    previewFromSq = sqOf(4, 1); // default preview origin, rank 2, e-file
+    previewFromSq = sqOf(3, 3); // d4: central, shows every direction
   }
 
-  function highlightsFor(): Map<number, string> {
-    const map = new Map<number, string>();
-    if (!selected || previewFromSq === null) return map;
-    const vectors = expandPiece(selected, 'w');
-    const fromFile = previewFromSq % 8;
-    const fromRank = Math.floor(previewFromSq / 8);
-    for (const v of vectors) {
-      for (let step = 1; step <= Math.min(v.range, 8); step++) {
-        const f = fromFile + v.dx * step;
-        const r = fromRank + v.dy * step;
-        if (f < 0 || f > 7 || r < 0 || r > 7) break;
-        const sq = r * 8 + f;
-        if (canCapture(v) && !canMove(v)) map.set(sq, 'capture');
-        else map.set(sq, map.has(sq) ? map.get(sq)! : 'quiet');
-        if (v.path === 'slide') continue; // sliders show full ray; leaps handled by loop bound
-      }
-    }
-    return map;
-  }
-
-  function onSquareClick(sq: number): void {
-    previewFromSq = sq;
-  }
+  const highlights = $derived(selected ? (previewMarks(selected, previewFromSq, mode) as Map<number, string>) : new Map<number, string>());
+  const previewPieces = $derived(selected ? new Map([[previewFromSq, { svg: artFor(ruleset, selected.id), color: 'w' as const }]]) : new Map());
 </script>
 
 <h1>Library — {CURRENT_RULESET_VERSION}</h1>
 
-{#each [...grouped()] as [tier, list] (tier)}
+{#each [...grouped] as [tier, list] (tier)}
   {#if list.length}
     <section>
       <h2>{tier}</h2>
       <div class="palette">
         {#each list as p (p.id)}
-          <button class="piece-card" class:selected={selected?.id === p.id} on:click={() => selectPiece(p)}>
+          <button class="piece-card" class:selected={selected?.id === p.id} onclick={() => selectPiece(p)}>
             <PieceIcon svg={artFor(ruleset, p.id)} size={40} />
             <span class="glyph">{p.glyph}</span>
             <span class="cost">{costOf(p)}</span>
@@ -76,13 +57,23 @@
 {#if selected}
   <section>
     <h2>Preview: {selected.name}</h2>
-    <p>Click a square to move the preview origin. Blue = quiet move, red = capture.</p>
+    <div class="modes" role="group" aria-label="Preview">
+      <button class:active={mode === 'all'} onclick={() => (mode = 'all')}>Moves + attacks</button>
+      <button class:active={mode === 'moves'} onclick={() => (mode = 'moves')}>Moves</button>
+      <button class:active={mode === 'captures'} onclick={() => (mode = 'captures')}>Attacks</button>
+    </div>
+    <p class="legend">
+      <span class="key quiet"></span> move only
+      <span class="key capture"></span> capture only
+      <span class="key both"></span> move or capture
+      — tap a square to move the piece.
+    </p>
     <Board
       ranks={8}
       cellSize={40}
-      pieces={new Map([[previewFromSq!, { svg: artFor(ruleset, selected.id), color: 'w' }]])}
-      highlights={highlightsFor()}
-      onSquareClick={onSquareClick}
+      pieces={previewPieces}
+      {highlights}
+      onSquareClick={(sq) => (previewFromSq = sq)}
     />
   </section>
 {/if}
@@ -97,4 +88,12 @@
   .piece-card.selected { border-color: #6ab0f3; }
   .glyph { font-weight: bold; }
   .cost { font-size: 12px; opacity: 0.7; }
+  .modes { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .modes button { background: #2d2d33; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+  .modes button.active { border-color: #6ab0f3; box-shadow: 0 0 0 2px #6ab0f3; }
+  .legend { font-size: 13px; }
+  .key { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-left: 8px; vertical-align: middle; }
+  .key.quiet { background: rgba(70, 150, 230, 0.8); }
+  .key.capture { background: rgba(220, 70, 70, 0.85); }
+  .key.both { background: rgba(160, 90, 220, 0.85); }
 </style>
