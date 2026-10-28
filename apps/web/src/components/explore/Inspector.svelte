@@ -46,7 +46,6 @@
       <h2 class:mono-title={title !== undefined}>{title ?? piece.name}</h2>
       <p class="muted meta">
         {#if title !== undefined && title !== piece.name}<span class="nickname">{piece.name}</span>{/if}
-        <span class="mono">{piece.glyph}</span>
         <span class="eyebrow tier">{piece.tier}</span>
         {#if cost !== undefined}<span class="num cost">{cost} pt{cost === 1 ? '' : 's'}</span>{/if}
       </p>
@@ -61,11 +60,12 @@
 
   <Board ranks={8} {cellSize} {pieces} {highlights} onSquareClick={(sq) => (from = sq)} />
 
+  <!-- Keys mirror Board.svelte's marks: dot = quiet move, ring = capture, dot in ring = either. -->
   <p class="legend muted">
-    <span class="key quiet"></span> move
-    <span class="key capture"></span> capture
-    <span class="key both"></span> move or capture
-    — tap a square to move the piece.
+    <span class="item"><span class="key quiet" aria-hidden="true"></span>move</span>
+    <span class="item"><span class="key capture" aria-hidden="true"></span>capture</span>
+    <span class="item"><span class="key both" aria-hidden="true"></span>move or capture</span>
+    <span class="item hint">Tap a square to move the piece.</span>
   </p>
 
   <p class="description">{description}</p>
@@ -83,9 +83,14 @@
   .nickname { color: var(--text-muted); }
   .cost { color: var(--text); font-weight: 600; }
   .legend { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; font-size: var(--fs-xs); margin-top: var(--s-1); }
-  .key { display: inline-block; width: 11px; height: 11px; border-radius: var(--r-1); margin-right: 3px; vertical-align: middle; }
-  .key.quiet { background: var(--mark-move); border: 1px solid var(--line-strong); }
-  .key.capture { background: transparent; border: 2px solid var(--mark-capture); }
-  .key.both { background: var(--mark-both); }
+  .item { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .item.hint { white-space: normal; }
+  /* Drawn on a light-square swatch so the translucent board marks look exactly as on the board. */
+  .key { position: relative; display: inline-block; width: 16px; height: 16px; border-radius: 50%; flex: none; background: var(--sq-light); }
+  .key.quiet::after, .key.both::after {
+    content: ''; position: absolute; inset: 5px; border-radius: 50%; background: var(--mark-move);
+  }
+  .key.capture, .key.both { border: 2px solid var(--mark-capture); }
+  .key.both::after { inset: 3px; }
   .description { color: var(--text-muted); max-width: 48ch; }
 </style>
