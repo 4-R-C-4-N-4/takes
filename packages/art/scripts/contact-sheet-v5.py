@@ -5,7 +5,7 @@ for the hand-drawn v3 piece overrides, plus a pairwise IoU distinctness report.
 import os, subprocess, tempfile, itertools, json
 from PIL import Image
 
-REPO = "/home/ivy/Work/takes-wt/art-v5"
+REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
 PIECES_DIR = os.path.join(REPO, "packages/library/pieces")
 OUT_DIR = os.path.join(REPO, "docs/art")
 os.makedirs(OUT_DIR, exist_ok=True)

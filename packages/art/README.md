@@ -87,55 +87,34 @@ across white/black pieces on light/dark squares), `docs/art/set-v3-board.png`
 40px silhouette IoU; the closest pair should stay inspected visually — IoU
 alone does not capture color/detail distinctness).
 
-## Hand-drawn set v5 (2026.3 new pieces)
+## Set v5: Codex concept silhouettes (current, all 2026.3 pieces + king)
 
-`packages/library/pieces/{id}/art.svg` also covers the 20 new 2026.3 pieces.
-A first attempt (set v4) encoded movement as small notches on shared boxy
-bodies and failed review: the forward pawns were indistinguishable and most
-minors read as "box + small topper". Set v5 instead draws each piece as a
-bold, memorable silhouette taken from the designer's own nickname — the art's
-job is instant recognition on the board; the in-game UI already shows the
-Betza shorthand in the palette and legal-move dots. Every v5 piece still uses
-the same plinth, baseline and tier-footprint grammar as the classics, and
-pawn-tier pieces reuse the pawn's collar/shoulders so they read as a pawn
-family while differing above the collar.
+Every override in `packages/library/pieces/{id}/art.svg` (classics, king and the 20 keepers) is a
+traced Codex concept silhouette on the shared plinth. Two hand-drawn attempts for the new pieces
+failed review: v4 encoded movement as notches on boxy bodies (forward pawns indistinguishable), and
+a geometric v5 draft still read as small motifs on stubby bodies. The board's job is instant
+recognition; the UI already shows the movement shorthand (e.g. `B3N`) and legal-move dots.
 
-Motif per piece:
+Motifs follow the designer's nicknames: Triton trident, Sai dagger, Worm coil, Rose bloom, Vine
+leaf tendril, Broom, Coroner hooded figure with staff, Bullseye target, Impact starburst, Octopus,
+Scarab beetle, Seal balancing a ball, Halo robed figure with halo, Jester cap, Turtle shell, Prince
+crown with **no cross** (never confusable with the King), Dancer, Azazel horned winged figure,
+Hierophant papal triple crown, Bane spiked skull crown. Classics are a matching illustrated
+Staunton-style set.
 
-| Piece | Tier | Motif |
-| --- | --- | --- |
-| Triton | pawn | Three-pronged trident head |
-| Sai | pawn | Sai dagger: central blade with two curved side prongs |
-| Worm | pawn | Coiled S-curve worm body |
-| Rose | pawn | Layered rose-bloom petals |
-| Vine | pawn | Curling vine tendril with a leaf |
-| Broom | pawn | Fan-bristled broom head on a shaft |
-| Coroner | minor | Hooded cloak silhouette with a hanging toe-tag |
-| Bullseye | minor | Concentric target rings |
-| Impact | minor | Jagged starburst/meteor spikes |
-| Octopus | minor | Bulbous head with four dangling tentacle lines |
-| Scarab | minor | Split-shell beetle body with leg ticks each side |
-| Seal | minor | Asymmetric rounded seal-animal blob with a flipper |
-| Halo | minor | Head with a free-floating ring above it |
-| Jester | minor | Three-point jester cap tipped with bells |
-| Turtle | minor | Domed shell with a lattice shell pattern |
-| Prince | minor | Small three-point crown, deliberately no cross (unlike the king) |
-| Dancer | minor | Curved flowing body with one raised, sweeping arm |
-| Azazel | rook | Rook tower with curved horns and swept wing tips |
-| Hierophant | major | Stacked triple-tiered crown (papal-tiara silhouette) |
-| Bane | major | Tall body under a jagged spiked crown, the most imposing silhouette |
+Pipeline (concept sheets are not committed):
 
-Regenerate with:
-
-```sh
-python packages/art/scripts/contact-sheet-v5.py
-```
-
-This writes `docs/art/set-v5-40.png`, `docs/art/set-v5-96.png`,
-`docs/art/set-v5-board.png` (mixed 2026.3 army lineup) and
-`docs/art/set-v5-distinctness.json`. Current minimum pairwise 40px silhouette
-IoU is ~0.41 (dancer/azazel), far below the set-v3 era's tight pawn/berolina
-pairing, reflecting the deliberately bold, differentiated silhouettes.
+1. Codex generates one grid sheet per batch: bold flat black silhouettes on white, all on the same
+   round plinth (prompts recorded in the commit message).
+2. `python packages/art/scripts/split_sheet.py sheet.png crops/ id1,id2,...` finds grid cells,
+   cuts every cell at the median plinth height and saves padded figure masks.
+3. Thicken thin-stroked figures (Pillow `MinFilter(5..9)`) if they vanish at 40px.
+4. `tools/artgen/scripts/trace-concepts.ts crops/ id ...` potraces each mask and fits it into the
+   tier box above the classic plinth (pawn top 30 / minor 17 / rook 15 / major 8; plinth widths
+   42/48/58/54, y 86-92), with `var(--piece-fill)` / `var(--piece-stroke)` and even-odd holes.
+   Run it with tsx from a package that has tsx (e.g. copy into `apps/server` temporarily).
+5. `python packages/art/scripts/contact-sheet-v5.py` renders `docs/art/set-v5-{40,96,board}.png`
+   and `set-v5-distinctness.json` (pairwise 40px silhouette IoU; min pair broom/seal ≈ 0.33).
 
 ## Review and regeneration
 
