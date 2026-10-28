@@ -45,6 +45,9 @@ importers:
       '@takes/protocol':
         specifier: workspace:*
         version: link:../../packages/protocol
+      '@takes/room':
+        specifier: workspace:*
+        version: link:../../packages/room
       '@takes/validator':
         specifier: workspace:*
         version: link:../../packages/validator
@@ -130,6 +133,21 @@ importers:
       '@takes/library':
         specifier: workspace:*
         version: link:../library
+
+  packages/room:
+    dependencies:
+      '@takes/engine':
+        specifier: workspace:*
+        version: link:../engine
+      '@takes/library':
+        specifier: workspace:*
+        version: link:../library
+      '@takes/protocol':
+        specifier: workspace:*
+        version: link:../protocol
+      '@takes/validator':
+        specifier: workspace:*
+        version: link:../validator
 
   packages/validator:
     dependencies:

@@ -10,6 +10,7 @@
   "include": ["src"],
   "references": [
     { "path": "../../packages/protocol" },
+    { "path": "../../packages/room" },
     { "path": "../../packages/engine" },
     { "path": "../../packages/validator" },
     { "path": "../../packages/library" },

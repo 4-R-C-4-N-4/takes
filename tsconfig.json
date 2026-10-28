@@ -17,6 +17,9 @@
       "path": "packages/protocol"
     },
     {
+      "path": "packages/room"
+    },
+    {
       "path": "tools/betza"
     },
     {
