@@ -139,12 +139,28 @@ function serve() {
       await noOverflow();
 
       // vs-CPU: Easy game, one human move, CPU replies.
-      await click(page.getByLabel('Opponent'));
+      await click(page.getByLabel('Opponent', { exact: true }));
       await page.selectOption('#cpu-side', 'w');
       await click(page.locator('#cpu-level button', { hasText: 'Easy' }));
+      await page.selectOption('#cpu-army', '2026.3:R{halo}B1KB{jester}R/PPPPPPPP/8');
       await click(page.getByRole('button', { name: 'Play', exact: true }));
       await page.locator('.piece-cell[data-sq="60"]').waitFor(); // both armies revealed
       assert.equal(JSON.parse(await page.evaluate(() => sessionStorage.getItem('takes.hotseat'))).cpu, 'b');
+      const payload = JSON.parse(await page.evaluate(() => sessionStorage.getItem('takes.hotseat')));
+      assert.notEqual(payload.white.split(':')[1].split('/')[0], payload.black.split(':')[1].split('/')[0], `${name}: CPU starting rank mirrors player`);
+      assert.equal(await page.locator('.piece-cell[data-sq="59"]').count(), 0, `${name}: non-mirror Black rank missing`);
+      assert.equal(await page.locator('.piece-cell[data-sq="3"]').count(), 1);
+      const blackPawn = page.locator('.piece-cell[data-sq="52"]');
+      await blackPawn.scrollIntoViewIfNeeded();
+      const pawnBox = await blackPawn.boundingBox();
+      await page.mouse.click(pawnBox.x + pawnBox.width / 2, pawnBox.y + pawnBox.height / 2);
+      await page.getByTestId('piece-inspector').waitFor();
+      assert(await page.locator('.mark-dot').count() > 0, `${name}: inspect moves missing`);
+      assert(await page.locator('.mark-ring').count() > 0, `${name}: inspect attacks missing`);
+      await noOverflow();
+      await click(page.getByRole('button', { name: 'Clear piece inspection' }));
+      assert.equal(await page.getByTestId('piece-inspector').count(), 0);
+      assert.equal(await page.locator('.mark-dot, .mark-ring').count(), 0);
       await drag(page.locator('.piece-cell[data-sq="12"]'), page.locator('rect[data-sq="28"]')); // e2-e4
       await page.locator('.piece-cell[data-sq="28"]').waitFor();
       await page.waitForFunction(() => {

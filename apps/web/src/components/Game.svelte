@@ -16,6 +16,7 @@
   } from '../net/p2p-session.js';
   import { onDestroy } from 'svelte';
   import { routeHref } from '../lib/router.js';
+  import { inspectMarks, INSPECT_KING } from '../lib/inspect.js';
   import { pieceLabel } from '../lib/pieceLabel.js';
 
   export let gameParam: string | undefined = undefined;
@@ -30,6 +31,9 @@
   let cpuColor: 'w' | 'b' | null = null;
   let cpuLevel: SparringLevel = 'easy';
   let cpuThinking = false;
+  let cpuArmyName = '';
+  let inspectedSq: number | null = null;
+  let resultDismissed = false;
   let whiteSetup = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
   let blackSetup = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
   if (!isOnline && gameParam === 'hotseat') {
@@ -43,6 +47,7 @@
         blackSetup = parsed.black;
         // Candidate test drive: a sandbox ruleset carrying one unpublished catalog piece.
         if (parsed.candidate) ruleset = sandboxRuleset(ruleset, restoreInfinity([parsed.candidate])[0]!);
+        if (typeof parsed.cpuArmyName === 'string') cpuArmyName = parsed.cpuArmyName;
         if (parsed.cpu === 'w' || parsed.cpu === 'b') cpuColor = parsed.cpu;
         if (parsed.cpuLevel === 'easy' || parsed.cpuLevel === 'medium' || parsed.cpuLevel === 'hard') cpuLevel = parsed.cpuLevel;
       }
@@ -273,7 +278,7 @@
     return game ? game.legalMoves().filter((m) => m.from === sq) : [];
   }
 
-  function highlights(game: Game | null, selectedSq: number | null, lastMove: Move | null): Map<number, string> {
+  function highlights(game: Game | null, selectedSq: number | null, lastMove: Move | null, inspectedSq: number | null): Map<number, string> {
     const map = new Map<number, string>();
     if (!game) return map;
     if (lastMove) { map.set(lastMove.from, 'lastmove'); map.set(lastMove.to, 'lastmove'); }
@@ -285,24 +290,29 @@
       const board = game.board();
       for (let sq = 0; sq < 64; sq++) if (board[sq]?.pieceId === 'king' && board[sq]!.color === game.sideToMove()) map.set(sq, 'check');
     }
+    if (inspectedSq !== null) {
+      for (const [sq, mark] of inspectMarks(ruleset, game.board(), inspectedSq)) map.set(sq, mark);
+      map.set(inspectedSq, 'select');
+    }
     return map;
   }
 
   function onSquareClick(sq: number): void {
     if (promoChoice || !game) return;
-    if (isOnline && game.sideToMove() !== myColor) return; // not our turn, no local preview moves
-    if (cpuColor !== null && (game.sideToMove() === cpuColor || cpuThinking)) return; // CPU's turn
-    if (selectedSq === null) {
-      if (pieceColorAt(sq) === game.sideToMove()) selectedSq = sq;
-      return;
-    }
-    const candidates = legalDestsFrom(selectedSq).filter((m) => m.to === sq);
+    inspectedSq = null;
+    const canAct = !effectiveResult && (!isOnline || game.sideToMove() === myColor)
+      && (cpuColor === null || (game.sideToMove() !== cpuColor && !cpuThinking));
+    const candidates = canAct && selectedSq !== null ? legalDestsFrom(selectedSq).filter(m => m.to === sq) : [];
     if (candidates.length === 0) {
-      selectedSq = pieceColorAt(sq) === game.sideToMove() ? sq : null;
+      selectedSq = null;
+      if (pieceColorAt(sq)) {
+        if (canAct && pieceColorAt(sq) === game.sideToMove()) selectedSq = sq;
+        else inspectedSq = sq;
+      }
       return;
     }
     if (candidates.length > 1 && candidates[0]!.promo) {
-      promoChoice = { from: selectedSq, to: sq, targets: candidates.map((m) => m.promo!) };
+      promoChoice = { from: candidates[0]!.from, to: sq, targets: candidates.map((m) => m.promo!) };
       selectedSq = null;
       return;
     }
@@ -311,6 +321,7 @@
   }
 
   function recordMove(m: Move, mover: 'w' | 'b'): void {
+    inspectedSq = null;
     const uci = m.promo ? `${sq(m.from)}${sq(m.to)}${m.promo}` : `${sq(m.from)}${sq(m.to)}`;
     history = [...history, uci];
     if (m.captured) {
@@ -388,7 +399,7 @@
 
   function playerLabel(color: 'w' | 'b'): string {
     if (isOnline) return myColor === color ? 'You' : 'Opponent';
-    if (cpuColor === color) return `CPU · ${levelLabel[cpuLevel]}`;
+    if (cpuColor === color) return `CPU · ${levelLabel[cpuLevel]}${cpuArmyName ? ` · ${cpuArmyName}` : ''}`;
     if (cpuColor !== null) return 'You';
     return '';
   }
@@ -415,6 +426,10 @@
   $: topColor = (boardFlipped ? 'w' : 'b') as 'w' | 'b';
   $: bottomColor = (boardFlipped ? 'b' : 'w') as 'w' | 'b';
 </script>
+
+<svelte:window onclick={(event) => {
+  if (!(event.target instanceof Element) || !event.target.closest('[data-board-root], [data-testid="piece-inspector"]')) inspectedSq = null;
+}} />
 
 <div class="page game-page">
   {#if isOnline && !online}
@@ -473,7 +488,7 @@
 
         <div class="board-wrap">
           {#key renderTick}
-            <Board ranks={8} cellSize={90} coordinates flipped={boardFlipped} pieces={boardPieces(game)} highlights={highlights(game, selectedSq, lastMove)} onSquareClick={onSquareClick} />
+            <Board ranks={8} cellSize={90} coordinates flipped={boardFlipped} pieces={boardPieces(game)} highlights={highlights(game, selectedSq, lastMove, inspectedSq)} onSquareClick={onSquareClick} />
           {/key}
           {#if promoChoice}
             <div class="promo-popover panel" role="dialog" aria-label="Choose promotion piece">
@@ -527,6 +542,15 @@
       </div>
 
       <aside class="rail stack">
+        {#if inspectedSq !== null && game.board()[inspectedSq]}
+          {@const bp = game.board()[inspectedSq]!}
+          {@const label = pieceLabel(bp.pieceId === 'king' ? INSPECT_KING : ruleset.pieces[bp.pieceId]!)}
+          <div class="panel inspect-panel" data-testid="piece-inspector" aria-live="polite">
+            <div class="row"><strong class:mono={label.primaryIsNotation}>{label.primary}</strong><button class="btn sm ghost" onclick={() => inspectedSq = null} aria-label="Clear piece inspection">Close</button></div>
+            {#if label.secondary}<p class="muted">{label.secondary}</p>{/if}
+            <p class="muted">● Can move · ◯ Can capture</p>
+          </div>
+        {/if}
         <div class="panel players">
           <div class="player" class:tomove={game.sideToMove() === 'b' && !effectiveResult}>
             <span class="dot" aria-hidden="true"></span>
@@ -581,13 +605,14 @@
       </aside>
     </div>
 
-    {#if effectiveResult}
+    {#if effectiveResult && !resultDismissed}
       <div class="result-overlay" role="alertdialog" aria-label="Game over">
         <div class="panel result-dialog">
           <p class="eyebrow">Game over</p>
           <h2>{effectiveResult.result}</h2>
           <p class="muted">{effectiveResult.reason ?? 'unknown'}</p>
           <div class="row">
+            <button class="btn ghost" onclick={() => resultDismissed = true}>Inspect board</button>
             <button class="btn primary" onclick={playAgain}>Play again</button>
             <button class="btn ghost" onclick={backToLobby}>Back to lobby</button>
           </div>
@@ -612,6 +637,9 @@
   .player-bar {
     display: none; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-1);
   }
+  .inspect-panel { overflow-wrap: anywhere; }
+  .inspect-panel .row { justify-content: space-between; }
+  .player-bar { flex-wrap: wrap; }
   .player-bar .who { font-weight: 650; }
   .player-bar .eyebrow.side { color: var(--text-faint); }
   .player-bar .tray { margin-left: auto; }

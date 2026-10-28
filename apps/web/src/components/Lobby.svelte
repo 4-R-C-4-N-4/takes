@@ -1,6 +1,6 @@
 <script lang="ts">
   import { loadProfiles, type StoredProfile } from '../lib/profiles.js';
-  import { cpuColorFor } from '../lib/sides.js';
+  import { CPU_ARMY_KEY, opponentArmies, cpuArmyPayload } from '../lib/cpuArmy.js';
   import { routeHref } from '../lib/router.js';
   import { isStatic } from '../lib/target.js';
   import { generateP2PCode } from '../net/p2p-session.js';
@@ -14,10 +14,10 @@
   const profiles: StoredProfile[] = loadProfiles();
   const ruleset = getRuleset(CURRENT_RULESET_VERSION);
 
-  function summarize(p: StoredProfile): { cost: number; valid: boolean } {
+  function summarize(p: { setup: string }): { cost: number; valid: boolean } {
     try {
       const setup = parseSetup(p.setup);
-      const cost = ruleset ? setupCost(setup, ruleset) : 0;
+      const cost = setupCost(setup, getRuleset(p.setup.split(':')[0]!)!);
       return { cost, valid: true };
     } catch {
       return { cost: 0, valid: false };
@@ -51,6 +51,11 @@
   let cpuLevel: SparringLevel = 'easy';
   /** The colour the player takes against the in-browser CPU ("You play"); the CPU gets the other. */
   let playerSide: 'w' | 'b' = 'w';
+  let opponentChoice = 'mirror';
+  try { opponentChoice = localStorage.getItem(CPU_ARMY_KEY) ?? 'mirror'; } catch { /* unavailable */ }
+  $: opponents = opponentArmies(profiles.find(p => p.id === armyId)?.setup ?? '', profiles);
+  $: if (!['mirror', 'random', ...opponents.map(p => p.setup)].includes(opponentChoice)) opponentChoice = 'mirror';
+  $: { try { localStorage.setItem(CPU_ARMY_KEY, opponentChoice); } catch { /* unavailable */ } }
 
   function startVsCpu(): void {
     const army = profiles.find((p) => p.id === armyId);
@@ -58,7 +63,7 @@
     try {
       sessionStorage.setItem(
         'takes.hotseat',
-        JSON.stringify({ white: army.setup, black: army.setup, cpu: cpuColorFor(playerSide), cpuLevel }),
+        JSON.stringify({ ...cpuArmyPayload(army, playerSide, opponentChoice, opponents), cpuLevel }),
       );
     } catch { /* ignore */ }
     location.hash = routeHref('game', 'hotseat');
@@ -160,6 +165,17 @@
                 <option value="b">Black — CPU plays White</option>
               </select>
             </div>
+            <div class="field opponent-field">
+              <label for="cpu-army">Opponent army</label>
+              <select id="cpu-army" class="select" bind:value={opponentChoice}>
+                <option value="mirror">Same as mine (mirror)</option>
+                <option value="random">Random preset</option>
+                {#each opponents as p}
+                  {@const summary = summarize(p)}
+                  <option value={p.setup}>{p.name} · Cost {summary.cost}{summary.valid ? '' : ' · needs review'}</option>
+                {/each}
+              </select>
+            </div>
             <div class="field">
               <label for="cpu-level">Difficulty</label>
               <div class="segmented" id="cpu-level">
@@ -257,6 +273,8 @@
   .modes-col { max-width: 560px; }
   .mode-panel.secondary { background: none; border: none; box-shadow: none; padding: 0; }
   .mode-panel.compact { padding: var(--s-3); gap: var(--s-2); }
+  .opponent-field { min-width: 0; max-width: 100%; }
+  .opponent-field select { min-width: 0; max-width: 100%; }
   .field label { color: var(--text-muted); font-size: var(--fs-sm); }
   .field { display: grid; gap: var(--s-1); }
   .muted.sm { font-size: var(--fs-sm); }
