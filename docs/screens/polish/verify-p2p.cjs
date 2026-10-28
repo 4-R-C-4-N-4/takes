@@ -14,7 +14,7 @@ const path = require('node:path');
 
 const DIST = path.join(__dirname, '..', '..', '..', 'apps', 'web', 'dist-static');
 const PORT = Number(process.env.STATIC_PORT || 43198);
-const BASE = `http://127.0.0.1:${PORT}/takes`;
+const BASE = (process.env.TAKES_URL || `http://127.0.0.1:${PORT}/takes`).replace(/\/$/, '');
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };
 
 function serve() {
@@ -138,6 +138,9 @@ async function withTapHelpers(page, name) {
     t0 = now();
     await Promise.all([waitConnected(hostPage, 'host'), waitConnected(guestPage, 'guest')]);
     mark('both: relay connect -> both boards revealed', t0);
+    for (const page of [hostPage, guestPage]) {
+      assert(!/hotseat: you play both sides/.test(await page.locator('body').innerText()), 'P2P game must not be labelled hotseat');
+    }
 
     await hostPage.screenshot({ path: path.join(__dirname, 'p2p-host-ingame.png') });
     await guestPage.screenshot({ path: path.join(__dirname, 'p2p-guest-ingame.png') });

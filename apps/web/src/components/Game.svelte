@@ -554,7 +554,7 @@
             <span class="chip">Game over</span>
           {:else}
             <span class="chip {game.inCheck() ? 'bad' : 'accent'}">To move: {game.sideToMove() === 'w' ? 'White' : 'Black'}{game.inCheck() ? ' — in check' : ''}</span>
-            <span class="status-sub"> · {cpuColor !== null ? `CPU plays ${cpuColor === 'w' ? 'White' : 'Black'}` : 'hotseat: you play both sides'}</span>
+            <span class="status-sub"> · {isOnline ? `online: you play ${myColor === 'w' ? 'White' : 'Black'}` : cpuColor !== null ? `CPU plays ${cpuColor === 'w' ? 'White' : 'Black'}` : 'hotseat: you play both sides'}</span>
           {/if}
           {#if cpuThinking}<span class="chip warn">CPU thinking…</span>{/if}
         </p>
