@@ -1,10 +1,15 @@
-/** Room lifecycle, persistence and bot wiring [impl.md "Server"; DECISIONS D9, D12]. */
+/** Room lifecycle, persistence and bot wiring [impl.md "Server"; DECISIONS D9, D12].
+ * Per-room game logic lives in @takes/room's pure RoomCore; this file is the thin node/ws/sqlite
+ * adapter: creation, joining, invite codes, tokens, resume-by-token and bot seats.
+ */
 import type { WebSocket } from 'ws';
 import type { Color } from '@takes/library';
-import { getRuleset, CURRENT_RULESET_VERSION } from '@takes/library';
-import { createGame, type Game } from '@takes/engine';
-import { validateProfile, hasErrors, type Issue } from '@takes/validator';
+import { getRuleset } from '@takes/library';
+import type { Game } from '@takes/engine';
+import { createGame } from '@takes/engine';
+import type { Issue } from '@takes/validator';
 import type { ServerMsg, GameStateWire, WireResult, WireReason } from '@takes/protocol';
+import { RoomCore, realTimeScheduler, type RoomPersistence } from '@takes/room';
 import { openDb, hashToken, type DB } from './db.js';
 import { generateInviteCode, generateToken } from './ids.js';
 import { DIFFICULTY_OPTS, FsfBot, writeGameVariantIni, type Difficulty } from './bot/fsf-bot.js';
@@ -18,32 +23,36 @@ export interface SeatInfo {
   token: string;
   tokenHash: string;
   ws: WebSocket | null;
-  setup?: string;
-  ready: boolean;
   isBot: boolean;
-  disconnectedAt: number | null;
-  forfeitTimer: NodeJS.Timeout | null;
 }
 
 function otherColor(c: Color): Color { return c === 'w' ? 'b' : 'w'; }
+
+function send(ws: WebSocket | null, msg: ServerMsg): void {
+  if (!ws || ws.readyState !== ws.OPEN) return;
+  ws.send(JSON.stringify(msg));
+}
 
 export class Room {
   code: string;
   rulesetVersion: string;
   botDifficulty: Difficulty | null;
   seats: { w: SeatInfo; b: SeatInfo };
-  phase: 'setup' | 'playing' | 'over' = 'setup';
-  game: Game | null = null;
-  moves: string[] = [];
-  drawOfferBy: Color | null = null;
-  result: { result: WireResult; reason: WireReason } | null = null;
+  core: RoomCore;
 
-  constructor(code: string, rulesetVersion: string, botDifficulty: Difficulty | null, seats: { w: SeatInfo; b: SeatInfo }) {
+  constructor(code: string, rulesetVersion: string, botDifficulty: Difficulty | null, seats: { w: SeatInfo; b: SeatInfo }, core: RoomCore) {
     this.code = code;
     this.rulesetVersion = rulesetVersion;
     this.botDifficulty = botDifficulty;
     this.seats = seats;
+    this.core = core;
   }
+
+  get phase() { return this.core.phase; }
+  get game(): Game | null { return this.core.game; }
+  get moves() { return this.core.moves; }
+  get drawOfferBy() { return this.core.drawOfferBy; }
+  get result() { return this.core.result; }
 
   ruleset() { return getRuleset(this.rulesetVersion)!; }
 
@@ -57,33 +66,9 @@ export class Room {
 
   opponentOf(c: Color): SeatInfo { return this.seats[otherColor(c)]; }
 
-  bothReady(): boolean { return this.seats.w.ready && this.seats.b.ready; }
+  bothReady(): boolean { return this.core.bothReady(); }
 
-  stateFor(color: Color): GameStateWire {
-    const mine = this.seats[color];
-    const opp = this.opponentOf(color);
-    const setups: { w?: string; b?: string } = {};
-    if (mine.setup) setups[color] = mine.setup;
-    if (this.phase !== 'setup' && opp.setup) setups[otherColor(color)] = opp.setup;
-    const out: GameStateWire = {
-      code: this.code,
-      ruleset: this.rulesetVersion,
-      you: color,
-      phase: this.phase,
-      setups,
-      ready: { w: this.seats.w.ready, b: this.seats.b.ready },
-      moves: [...this.moves],
-    };
-    if (this.game) out.fen = this.game.toFEN();
-    if (this.drawOfferBy) out.drawOfferBy = this.drawOfferBy;
-    if (this.result) out.result = this.result;
-    return out;
-  }
-}
-
-function send(ws: WebSocket | null, msg: ServerMsg): void {
-  if (!ws || ws.readyState !== ws.OPEN) return;
-  ws.send(JSON.stringify(msg));
+  stateFor(color: Color): GameStateWire { return this.core.stateFor(color); }
 }
 
 export interface RoomManagerOpts {
@@ -107,6 +92,34 @@ export class RoomManager {
 
   getDb(): DB { return this.db; }
 
+  private persistenceFor(code: string): RoomPersistence {
+    return {
+      onSetup: (color, setup) => this.db.setSeatSetup(code, color, setup),
+      onGameStart: () => this.db.updateRoomStatus(code, 'playing'),
+      onMove: (ply, uci) => this.db.insertMove(code, ply, uci),
+      onGameOver: (result, reason) => { this.db.setResult(code, result, reason); this.db.updateRoomStatus(code, 'over'); },
+    };
+  }
+
+  /** Builds a Room backed by a fresh RoomCore wired to this room's seats/db/bot. */
+  private makeRoom(code: string, rulesetVersion: string, botDifficulty: Difficulty | null, seats: { w: SeatInfo; b: SeatInfo }, coreSeats: { w: { setup?: string; ready: boolean; connected?: boolean }; b: { setup?: string; ready: boolean; connected?: boolean } }, moves?: string[]): Room {
+    const roomRef: { room: Room | null } = { room: null };
+    const core = new RoomCore({
+      code,
+      rulesetVersion,
+      rulesetFor: getRuleset,
+      send: (color, msg) => send(roomRef.room!.seats[color].ws, msg),
+      scheduler: realTimeScheduler,
+      forfeitMs: this.forfeitMs,
+      persistence: this.persistenceFor(code),
+      seats: coreSeats,
+      moves,
+    });
+    const room = new Room(code, rulesetVersion, botDifficulty, seats, core);
+    roomRef.room = room;
+    return room;
+  }
+
   /** Rebuild in-memory rooms from SQLite by replaying moves [impl.md "Persistence"]. */
   private reloadFromDb(): void {
     for (const r of this.db.allRooms()) {
@@ -115,38 +128,25 @@ export class RoomManager {
       const wRow = seatsRows.find((s) => s.color === 'w');
       const bRow = seatsRows.find((s) => s.color === 'b');
       if (!wRow || !bRow) continue;
-      const mkSeat = (color: Color, row: { token_hash: string; setup: string | null }): SeatInfo => ({
-        color, token: '', tokenHash: row.token_hash, ws: null, setup: row.setup ?? undefined,
-        ready: !!row.setup, isBot: false, disconnectedAt: Date.now(), forfeitTimer: null,
+      const mkSeat = (color: Color, row: { token_hash: string }): SeatInfo => ({
+        color, token: '', tokenHash: row.token_hash, ws: null, isBot: false,
       });
       const seats = { w: mkSeat('w', wRow), b: mkSeat('b', bRow) };
-      const { version } = { version: r.ruleset };
+      const version = r.ruleset;
       const bot = (r.bot === 'easy' || r.bot === 'medium' || r.bot === 'hard' ? r.bot : null) as Difficulty | null;
-      const room = new Room(r.code, version, bot, seats);
       const movesRows = this.db.movesFor(r.code);
-      if (seats.w.ready && seats.b.ready) {
-        room.phase = 'playing';
-        try {
-          const game = createGame(room.ruleset(), seats.w.setup!, seats.b.setup!);
-          for (const mv of movesRows) {
-            const parsed = game.parseUci(mv.uci);
-            if (!parsed) { room.phase = 'over'; break; }
-            game.make(parsed);
-            room.moves.push(mv.uci);
-          }
-          room.game = game;
-          const status = game.status();
-          if (status.result !== '*') {
-            room.phase = 'over';
-            room.result = { result: status.result, reason: status.reason ?? 'move-cap' };
-          }
-        } catch {
-          room.phase = 'over';
-        }
-      }
+      const coreSeats = {
+        w: { setup: wRow.setup ?? undefined, ready: !!wRow.setup, connected: false },
+        b: { setup: bRow.setup ?? undefined, ready: !!bRow.setup, connected: false },
+      };
+      const room = this.makeRoom(r.code, version, bot, seats, coreSeats, movesRows.map((m) => m.uci));
       this.rooms.set(r.code, room);
-      this.armForfeitTimer(room, 'w');
-      this.armForfeitTimer(room, 'b');
+      // Reload leaves every seat without a live connection: treat each as freshly disconnected
+      // so the forfeit window starts now, matching the pre-crash behavior.
+      room.core.seedDisconnected('w');
+      room.core.seedDisconnected('b');
+      room.core.armForfeitTimer('w');
+      room.core.armForfeitTimer('b');
     }
   }
 
@@ -165,32 +165,30 @@ export class RoomManager {
 
     const color: Color = hostColor ?? (Math.random() < 0.5 ? 'w' : 'b');
     const token = generateToken();
-    const hostSeat: SeatInfo = {
-      color, token, tokenHash: hashToken(token), ws: null, ready: false, isBot: false,
-      disconnectedAt: null, forfeitTimer: null,
-    };
+    const hostSeat: SeatInfo = { color, token, tokenHash: hashToken(token), ws: null, isBot: false };
     const otherC = otherColor(color);
     let otherSeat: SeatInfo;
     if (bot) {
       const botToken = generateToken();
-      otherSeat = {
-        color: otherC, token: botToken, tokenHash: hashToken(botToken), ws: null, ready: true, isBot: true,
-        setup: botSetup!, disconnectedAt: null, forfeitTimer: null,
-      };
+      otherSeat = { color: otherC, token: botToken, tokenHash: hashToken(botToken), ws: null, isBot: true };
     } else {
-      otherSeat = {
-        color: otherC, token: '', tokenHash: '', ws: null, ready: false, isBot: false,
-        disconnectedAt: null, forfeitTimer: null,
-      };
+      otherSeat = { color: otherC, token: '', tokenHash: '', ws: null, isBot: false };
     }
     const seats = color === 'w' ? { w: hostSeat, b: otherSeat } : { w: otherSeat, b: hostSeat };
-    const room = new Room(code, version, bot, seats);
+
+    const coreSeats = {
+      w: { ready: false } as { setup?: string; ready: boolean; connected?: boolean },
+      b: { ready: false } as { setup?: string; ready: boolean; connected?: boolean },
+    };
+    if (bot) coreSeats[otherC] = { setup: botSetup!, ready: true, connected: true };
+
+    const room = this.makeRoom(code, version, bot, seats, coreSeats);
     this.rooms.set(code, room);
 
     this.db.insertRoom(code, rulesetRaw, 'setup', bot);
     this.db.insertSeat(code, hostSeat.color, hostSeat.tokenHash);
     if (!bot) this.db.insertSeat(code, otherSeat.color, otherSeat.tokenHash);
-    else { this.db.insertSeat(code, otherSeat.color, otherSeat.tokenHash); this.db.setSeatSetup(code, otherSeat.color, otherSeat.setup!); }
+    else { this.db.insertSeat(code, otherSeat.color, otherSeat.tokenHash); this.db.setSeatSetup(code, otherSeat.color, botSetup!); }
 
     return { room, seat: hostSeat };
   }
@@ -219,117 +217,42 @@ export class RoomManager {
   }
 
   submitSetup(room: Room, seat: SeatInfo, setup: string): Issue[] | null {
-    const issues = validateProfile(setup, room.ruleset(), { color: seat.color });
-    if (hasErrors(issues)) return issues;
-    seat.setup = setup;
-    seat.ready = true;
-    this.db.setSeatSetup(room.code, seat.color, setup);
-    const opp = room.opponentOf(seat.color);
-    send(opp.ws, { t: 'opponent_ready' });
-    if (room.bothReady()) this.startGame(room);
-    return null;
-  }
-
-  private startGame(room: Room): void {
-    room.phase = 'playing';
-    room.game = createGame(room.ruleset(), room.seats.w.setup!, room.seats.b.setup!);
-    this.db.updateRoomStatus(room.code, 'playing');
-    const msg: ServerMsg = { t: 'game_start', setups: { w: room.seats.w.setup!, b: room.seats.b.setup! }, fen: room.game.toFEN() };
-    send(room.seats.w.ws, msg);
-    send(room.seats.b.ws, msg);
-    this.maybeTriggerBot(room);
+    return room.core.submitSetup(seat.color, setup);
   }
 
   /** Applies a legal move, persists, broadcasts, checks for game end. Returns null on success or an error reason. */
   applyMove(room: Room, color: Color, uci: string, ply: number): string | null {
-    if (room.phase !== 'playing' || !room.game) return 'wrong_phase';
-    if (room.game.sideToMove() !== color) return 'not_your_turn';
-    if (room.game.ply() !== ply) return 'stale_ply';
-    const move = room.game.parseUci(uci);
-    if (!move) return 'illegal_move';
-    room.game.make(move);
-    room.moves.push(uci);
-    room.drawOfferBy = null;
-    this.db.insertMove(room.code, room.game.ply() - 1, uci);
-    const made: ServerMsg = { t: 'move_made', uci, ply: room.game.ply(), hash: room.game.hash() };
-    send(room.seats.w.ws, made);
-    send(room.seats.b.ws, made);
-    this.checkGameEnd(room);
-    if (room.phase === 'playing') this.maybeTriggerBot(room);
-    return null;
-  }
-
-  private checkGameEnd(room: Room): void {
-    if (!room.game || room.phase !== 'playing') return;
-    const status = room.game.status();
-    if (status.result !== '*') {
-      this.finishGame(room, status.result, status.reason ?? 'move-cap');
-    }
+    const err = room.core.applyMove(color, uci, ply);
+    if (!err && room.phase === 'playing') this.maybeTriggerBot(room);
+    return err;
   }
 
   finishGame(room: Room, result: WireResult, reason: WireReason): void {
-    room.phase = 'over';
-    room.result = { result, reason };
-    this.db.setResult(room.code, result, reason);
-    this.db.updateRoomStatus(room.code, 'over');
-    const msg: ServerMsg = { t: 'game_over', result, reason };
-    send(room.seats.w.ws, msg);
-    send(room.seats.b.ws, msg);
-    for (const c of ['w', 'b'] as Color[]) {
-      const seat = room.seats[c];
-      if (seat.forfeitTimer) { clearTimeout(seat.forfeitTimer); seat.forfeitTimer = null; }
-    }
+    room.core.finishGame(result, reason);
   }
 
   resign(room: Room, color: Color): void {
-    if (room.phase !== 'playing') return;
-    this.finishGame(room, color === 'w' ? '0-1' : '1-0', 'resign');
+    room.core.resign(color);
   }
 
   offerDraw(room: Room, color: Color): void {
-    if (room.phase !== 'playing') return;
-    room.drawOfferBy = color;
-    send(room.opponentOf(color).ws, { t: 'draw_offered', by: color });
+    room.core.offerDraw(color);
   }
 
   acceptDraw(room: Room, color: Color): void {
-    if (room.phase !== 'playing' || !room.drawOfferBy || room.drawOfferBy === color) return;
-    this.finishGame(room, '1/2-1/2', 'agreement');
+    room.core.acceptDraw(color);
   }
 
   onConnect(room: Room, seat: SeatInfo, ws: WebSocket): void {
     seat.ws = ws;
-    seat.disconnectedAt = null;
-    if (seat.forfeitTimer) { clearTimeout(seat.forfeitTimer); seat.forfeitTimer = null; }
-    const opp = room.opponentOf(seat.color);
-    send(opp.ws, { t: 'opponent_connection', connected: true });
+    room.core.onConnect(seat.color);
   }
 
   onDisconnect(room: Room, seat: SeatInfo): void {
     if (this.closed) return;
     seat.ws = null;
     if (seat.isBot) return;
-    seat.disconnectedAt = Date.now();
-    const opp = room.opponentOf(seat.color);
-    send(opp.ws, { t: 'opponent_connection', connected: false, forfeitInMs: this.forfeitMs });
-    this.armForfeitTimer(room, seat.color);
-  }
-
-  private armForfeitTimer(room: Room, color: Color): void {
-    if (this.closed) return;
-    const seat = room.seats[color];
-    if (seat.isBot || seat.ws) return;
-    if (room.phase === 'over') return;
-    if (seat.forfeitTimer) clearTimeout(seat.forfeitTimer);
-    const remaining = seat.disconnectedAt ? Math.max(0, this.forfeitMs - (Date.now() - seat.disconnectedAt)) : this.forfeitMs;
-    seat.forfeitTimer = setTimeout(() => {
-      if (room.phase === 'over') return;
-      if (room.phase === 'setup') {
-        this.finishGame(room, color === 'w' ? '0-1' : '1-0', 'abandon');
-      } else {
-        this.finishGame(room, color === 'w' ? '0-1' : '1-0', 'abandon');
-      }
-    }, remaining);
+    room.core.onDisconnect(seat.color);
   }
 
   // ---- Bot wiring [DECISIONS D12] ----
@@ -376,12 +299,7 @@ export class RoomManager {
   disposeBot(): void { this.bot.dispose(); }
   close(): void {
     this.closed = true;
-    for (const room of this.rooms.values()) {
-      for (const c of ['w', 'b'] as Color[]) {
-        const seat = room.seats[c];
-        if (seat.forfeitTimer) { clearTimeout(seat.forfeitTimer); seat.forfeitTimer = null; }
-      }
-    }
+    for (const room of this.rooms.values()) room.core.close();
     this.disposeBot();
     this.db.close();
   }
@@ -395,6 +313,6 @@ function fallbackMove(game: Game): string {
 /** The FEN the game started from (ply 0), reconstructed by unmaking the in-memory move list is
  * unnecessary: engine FENs are deterministic from setups, so we recompute via a parallel game. */
 function startFenForRoom(room: Room): string {
-  const fresh = createGame(room.ruleset(), room.seats.w.setup!, room.seats.b.setup!);
+  const fresh = createGame(room.ruleset(), room.core.setupOf('w')!, room.core.setupOf('b')!);
   return fresh.toFEN();
 }
