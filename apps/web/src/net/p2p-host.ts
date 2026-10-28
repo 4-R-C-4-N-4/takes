@@ -10,6 +10,7 @@
  * the guest — i.e. only once the guest's army is already locked in, so neither side can adjust
  * its army after seeing the other's.
  */
+import { validateProfile, hasErrors } from '@takes/validator';
 import type { Color, Ruleset } from '@takes/library';
 import type { ClientMsg, ServerMsg, WireReason, WireResult } from '@takes/protocol';
 import { RoomCore, noopScheduler, type InitialSeatState, type RoomPersistence } from '@takes/room';
@@ -41,6 +42,23 @@ export interface P2PStoredState {
   result?: { result: WireResult; reason: WireReason } | null;
 }
 
+/** Storage is fallible and may contain old/corrupt data; never trust JSON casts. */
+export function readStoredP2PState(storage: P2PStorageLike, code: string): P2PStoredState | null {
+  try {
+    const raw = storage.getItem(storageKey(code));
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s || (s.role !== 'host' && s.role !== 'guest')) return null;
+    if (!parsePeerFrame({ v: 1, t: 'resync', moves: s.moves, result: s.result })) return null;
+    for (const key of ['mySetup', 'hostSetup', 'peerSetup']) {
+      if (s[key] !== undefined && (typeof s[key] !== 'string' || s[key].length > 512)) return null;
+    }
+    if (s.salt !== undefined && (typeof s.salt !== 'string' || !/^[0-9a-f]{32}$/.test(s.salt))) return null;
+    if (s.opponentCommit !== undefined && (typeof s.opponentCommit !== 'string' || !/^[0-9a-f]{64}$/.test(s.opponentCommit))) return null;
+    return s;
+  } catch { return null; }
+}
+
 export interface HostSessionOpts {
   code: string;
   ruleset: string;
@@ -69,6 +87,7 @@ export class HostSession {
   private guestCommitHash: string | null = null;
   private guestSetup: string | null = null;
   private closed = false;
+  private handshake: 'pending' | 'accepted' | 'rejected' = 'pending';
   /** Serializes frame handling so e.g. a commit always finishes being applied before the next frame. */
   private frameQueue: Promise<void> = Promise.resolve();
 
@@ -105,31 +124,40 @@ export class HostSession {
       onStatus: (cb) => { this.statusListeners.add(cb); cb('open'); return () => this.statusListeners.delete(cb); },
       close: () => {},
     };
-    this.unsubFrame = this.link.onFrame((raw) => { this.frameQueue = this.frameQueue.then(() => this.onFrame(raw)); });
-    this.unsubPeer = this.link.onPeer((event) => { if (event === 'join') this.onGuestJoin(); });
+    this.unsubFrame = this.link.onFrame((raw) => { this.frameQueue = this.frameQueue.then(() => this.onFrame(raw)).catch(() => this.sendTo('w', { t: 'error', code: 'bad_message', message: 'Could not process peer data.' })); });
+    this.unsubPeer = this.link.onPeer((event) => { this.frameQueue = this.frameQueue.then(() => {
+      if (event === 'leave') { this.handshake = 'pending'; return; }
+      return this.onGuestJoin();
+    }).catch(() => this.sendTo('w', { t: 'error', code: 'bad_message', message: 'Could not reconnect to peer.' })); });
   }
 
   /** Rebuilds a HostSession from localStorage after a page reload mid-game. */
   static fromStorage(opts: Omit<HostSessionOpts, 'seats' | 'moves' | 'resumeCommit'> & { storage: P2PStorageLike }): HostSession | null {
-    const raw = opts.storage.getItem(storageKey(opts.code));
-    if (!raw) return null;
-    let s: P2PStoredState;
-    try { s = JSON.parse(raw); } catch { return null; }
-    if (s.role !== 'host') return null;
+    const s = readStoredP2PState(opts.storage, opts.code);
+    if (!s || s.role !== 'host') return null;
     const seats = {
       w: { setup: s.mySetup, ready: !!s.mySetup, connected: true },
       b: { setup: s.peerSetup, ready: !!s.peerSetup, connected: false },
     };
-    return new HostSession({
+    const host = new HostSession({
       ...opts,
       seats,
       moves: s.moves,
       resumeCommit: s.mySetup && s.salt ? { setup: s.mySetup, salt: s.salt, guestCommitHash: s.opponentCommit, guestSetup: s.peerSetup } : undefined,
     });
+    if (s.result) { host.core.phase = 'over'; host.core.result = s.result; }
+    return host;
   }
 
-  private onGuestJoin(): void {
+  private async onGuestJoin(): Promise<void> {
+    if (this.closed) return;
     this.link.send({ v: 1, t: 'hello', app: 'takes', protocol: PEER_PROTOCOL_VERSION, ruleset: this.ruleset });
+    if (this.mySetup && this.mySalt) {
+      const hash = await commitSetup(this.mySetup, this.mySalt);
+      if (this.closed) return;
+      this.link.send({ v: 1, t: 'commit', hash });
+      if (this.core.phase !== 'setup') this.link.send({ v: 1, t: 'host-reveal', setup: this.mySetup, salt: this.mySalt });
+    }
     if (this.core.phase !== 'setup') {
       this.link.send({ v: 1, t: 'resync', moves: [...this.core.moves], result: this.core.result ?? null });
     }
@@ -148,11 +176,15 @@ export class HostSession {
   }
 
   private handleHostClientMsg(msg: ClientMsg): void {
-    if (msg.t === 'submit_setup') { void this.hostSubmitSetup(msg.setup); return; }
+    if (this.closed) return;
+    if (msg.t === 'submit_setup') { void this.hostSubmitSetup(msg.setup).catch(() => this.sendTo('w', { t: 'error', code: 'bad_message', message: 'Could not commit army.' })); return; }
     this.applyColorMsg('w', msg);
   }
 
   private async hostSubmitSetup(setup: string): Promise<void> {
+    if (this.mySetup || this.core.phase !== 'setup') return;
+    const validation = validateProfile(setup, this.core.ruleset(), { color: 'w' });
+    if (hasErrors(validation)) { this.sendTo('w', { t: 'setup_rejected', issues: validation }); return; }
     this.mySetup = setup;
     this.mySalt = randomSaltHex();
     const hash = await commitSetup(setup, this.mySalt);
@@ -164,6 +196,10 @@ export class HostSession {
   }
 
   private applyColorMsg(color: Color, msg: ClientMsg): void {
+    if ('ply' in msg && msg.ply !== (this.core.game?.ply() ?? 0)) {
+      this.sendTo(color, { t: 'error', code: 'stale_ply', message: 'Game position changed; wait for synchronization.' });
+      return;
+    }
     switch (msg.t) {
       case 'move': {
         const err = this.core.applyMove(color, msg.uci, msg.ply);
@@ -184,24 +220,34 @@ export class HostSession {
   }
 
   private async onFrame(raw: unknown): Promise<void> {
+    if (this.closed) return;
     const f: PeerFrame | null = parsePeerFrame(raw);
     if (!f) return; // malformed frame: ignored, host keeps running
+    if (this.handshake === 'rejected' || (f.t !== 'hello' && this.handshake !== 'accepted')) return;
     switch (f.t) {
       case 'hello':
-        if (f.app !== 'takes' || f.protocol !== PEER_PROTOCOL_VERSION) {
+        if (f.app !== 'takes' || f.protocol !== PEER_PROTOCOL_VERSION || f.ruleset !== this.ruleset) {
+          this.handshake = 'rejected';
           this.link.send({ v: 1, t: 'server', msg: { t: 'error', code: 'bad_message', message: 'protocol version mismatch' } });
+        } else {
+          this.handshake = 'accepted';
         }
         return;
       case 'commit':
+        if (this.guestCommitHash && this.guestCommitHash !== f.hash) return;
         this.guestCommitHash = f.hash;
         return;
       case 'guest-setup': {
+        if (this.guestSetup || this.core.phase !== 'setup') return;
         if (!this.guestCommitHash) return; // no commit on file: ignore (guest must commit first)
         const ok = await verifyCommit(f.setup, f.salt, this.guestCommitHash);
+        if (this.closed) return;
         if (!ok) {
           this.link.send({ v: 1, t: 'server', msg: { t: 'error', code: 'bad_message', message: "opponent's client cheated (setup mismatch)" } });
           return;
         }
+        const validation = validateProfile(f.setup, this.core.ruleset(), { color: 'b' });
+        if (hasErrors(validation)) { this.sendTo('b', { t: 'setup_rejected', issues: validation }); return; }
         this.guestSetup = f.setup;
         this.persist();
         const issues = this.core.submitSetup('b', f.setup);
@@ -233,7 +279,10 @@ export class HostSession {
   }
 
   close(): void {
+    if (this.closed) return;
     this.closed = true;
+    this.serverListeners.clear();
+    this.statusListeners.clear();
     this.unsubFrame();
     this.unsubPeer();
     this.core.close();

@@ -4,7 +4,7 @@
  * connection-lifecycle status the UI needs to show (relay connect -> waiting for a peer ->
  * connected, plus a could-not-connect timeout when a peer never opens a data channel).
  *
- * Trystero (and its WebRTC/BitTorrent-tracker signalling) is only ever pulled in via the
+ * Trystero (and its WebRTC/Nostr relay signalling) is only ever pulled in via the
  * dynamic import inside joinTrysteroLink — nothing here imports it eagerly, so vs-CPU/hotseat/
  * Builder/Library routes never load it.
  */
@@ -13,7 +13,7 @@ import type { Color } from '@takes/library';
 import { getRuleset, type Ruleset } from '@takes/library';
 import { createGame, type Game } from '@takes/engine';
 import { GuestSession } from './p2p-guest.js';
-import { HostSession, storageKey, type P2PStorageLike, type P2PStoredState } from './p2p-host.js';
+import { HostSession, readStoredP2PState, storageKey, type P2PStorageLike } from './p2p-host.js';
 import { joinTrysteroLink } from './peer-link.js';
 import type { OnlineTransport } from './transport.js';
 
@@ -51,7 +51,7 @@ function wrapTransport(inner: OnlineTransport): OnlineTransport & { connect(): v
 }
 
 function trackStatus(
-  onPeer: (cb: (ok: boolean) => void) => void,
+  onPeer: (cb: (ok: boolean) => void) => () => void,
 ): { getStatus: () => P2PStatus; onStatus: (cb: (s: P2PStatus) => void) => () => void; stop: () => void } {
   let status: P2PStatus = 'connecting';
   const listeners = new Set<(s: P2PStatus) => void>();
@@ -59,14 +59,14 @@ function trackStatus(
   const set = (s: P2PStatus) => { status = s; listeners.forEach((f) => f(s)); };
   set('waiting');
   const timer = setTimeout(() => { if (status === 'waiting') set('could-not-connect'); }, NO_PEER_TIMEOUT_MS);
-  onPeer((joined) => {
+  const unsubPeer = onPeer((joined) => {
     if (joined) { everConnected = true; clearTimeout(timer); set('connected'); }
     else if (everConnected) set('peer-left');
   });
   return {
     getStatus: () => status,
     onStatus: (cb) => { listeners.add(cb); cb(status); return () => listeners.delete(cb); },
-    stop: () => clearTimeout(timer),
+    stop: () => { clearTimeout(timer); unsubPeer(); listeners.clear(); },
   };
 }
 
@@ -80,18 +80,20 @@ export interface HostP2POpts {
 
 export async function createHostSession(opts: HostP2POpts): Promise<P2PHandle> {
   const link = await joinTrysteroLink(opts.code);
-  const storage = opts.storage ?? (typeof localStorage !== 'undefined' ? localStorage : undefined);
-  const host = new HostSession({ code: opts.code, ruleset: opts.ruleset, rulesetFor, link, forfeitMs: opts.forfeitMs, storage });
-  const tracking = trackStatus((cb) => link.onPeer((ev) => cb(ev === 'join')));
-  const handle: P2PHandle = {
-    code: opts.code,
-    role: 'host',
-    transport: wrapTransport(host.transport),
-    getStatus: tracking.getStatus,
-    onStatus: tracking.onStatus,
-    close: () => { tracking.stop(); host.close(); },
-  };
-  return handle;
+  try {
+    const storage = opts.storage ?? (typeof localStorage !== 'undefined' ? localStorage : undefined);
+    const host = new HostSession({ code: opts.code, ruleset: opts.ruleset, rulesetFor, link, forfeitMs: opts.forfeitMs, storage });
+    const tracking = trackStatus((cb) => link.onPeer((ev) => cb(ev === 'join')));
+    const handle: P2PHandle = {
+      code: opts.code,
+      role: 'host',
+      transport: wrapTransport(host.transport),
+      getStatus: tracking.getStatus,
+      onStatus: tracking.onStatus,
+      close: () => { tracking.stop(); host.close(); },
+    };
+    return handle;
+  } catch (error) { link.close(); throw error; }
 }
 
 export interface GuestP2POpts {
@@ -103,18 +105,20 @@ export interface GuestP2POpts {
 
 export async function createGuestSession(opts: GuestP2POpts): Promise<P2PHandle> {
   const link = await joinTrysteroLink(opts.code);
-  const storage = opts.storage ?? (typeof localStorage !== 'undefined' ? localStorage : undefined);
-  const guest = new GuestSession({ code: opts.code, ruleset: opts.ruleset, rulesetFor, link, storage });
-  const tracking = trackStatus((cb) => link.onPeer((ev) => cb(ev === 'join')));
-  const handle: P2PHandle = {
-    code: opts.code,
-    role: 'guest',
-    transport: wrapTransport(guest.transport),
-    getStatus: tracking.getStatus,
-    onStatus: tracking.onStatus,
-    close: () => { tracking.stop(); guest.close(); },
-  };
-  return handle;
+  try {
+    const storage = opts.storage ?? (typeof localStorage !== 'undefined' ? localStorage : undefined);
+    const guest = new GuestSession({ code: opts.code, ruleset: opts.ruleset, rulesetFor, link, storage });
+    const tracking = trackStatus((cb) => link.onPeer((ev) => cb(ev === 'join')));
+    const handle: P2PHandle = {
+      code: opts.code,
+      role: 'guest',
+      transport: wrapTransport(guest.transport),
+      getStatus: tracking.getStatus,
+      onStatus: tracking.onStatus,
+      close: () => { tracking.stop(); guest.close(); },
+    };
+    return handle;
+  } catch (error) { link.close(); throw error; }
 }
 
 /** True if there is a resumable P2P session recorded locally for this code. */
@@ -123,12 +127,7 @@ export function hasStoredP2PSession(code: string, storage: P2PStorageLike = loca
 }
 
 export function storedP2PRole(code: string, storage: P2PStorageLike = localStorage): 'host' | 'guest' | null {
-  try {
-    const raw = storage.getItem(storageKey(code));
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as { role?: 'host' | 'guest' };
-    return parsed.role ?? null;
-  } catch { return null; }
+  return readStoredP2PState(storage, code)?.role ?? null;
 }
 
 /** Snapshot fields the UI needs right after a reload, read straight out of localStorage without
@@ -136,16 +135,13 @@ export function storedP2PRole(code: string, storage: P2PStorageLike = localStora
  *  joinTrysteroLink reconnects to the relay in the background. */
 export interface P2PResumeSnapshot {
   code: string; color: Color; ruleset: string; mySetup: string | null; opponentReady: boolean;
-  game: Game | null; result: { result: string; reason: string } | null;
+  moves: string[]; game: Game | null; result: { result: string; reason: string } | null;
   phase: 'setup-wait' | 'playing' | 'over';
 }
 
 export function buildResumeSnapshot(code: string, ruleset: string, storage: P2PStorageLike = localStorage): P2PResumeSnapshot | null {
-  let raw: string | null;
-  try { raw = storage.getItem(storageKey(code)); } catch { raw = null; }
-  if (!raw) return null;
-  let s: P2PStoredState;
-  try { s = JSON.parse(raw); } catch { return null; }
+  const s = readStoredP2PState(storage, code);
+  if (!s) return null;
   const color: Color = s.role === 'host' ? 'w' : 'b';
   const whiteSetup = s.role === 'host' ? s.mySetup : s.hostSetup;
   const blackSetup = s.role === 'host' ? s.peerSetup : s.mySetup;
@@ -163,7 +159,7 @@ export function buildResumeSnapshot(code: string, ruleset: string, storage: P2PS
     } catch { game = null; }
   }
   const phase: 'setup-wait' | 'playing' | 'over' = s.result ? 'over' : game ? 'playing' : 'setup-wait';
-  return { code, color, ruleset, mySetup: s.mySetup ?? null, opponentReady, game, result: s.result ?? null, phase };
+  return { code, color, ruleset, moves: [...s.moves], mySetup: s.mySetup ?? null, opponentReady, game, result: s.result ?? null, phase };
 }
 
 export interface ResumeP2POpts {
@@ -178,21 +174,25 @@ export async function resumeP2PSession(opts: ResumeP2POpts): Promise<P2PHandle |
   const role = storedP2PRole(opts.code, storage);
   if (!role) return null;
   const link = await joinTrysteroLink(opts.code);
-  const tracking = trackStatus((cb) => link.onPeer((ev) => cb(ev === 'join')));
-  if (role === 'host') {
-    const host = HostSession.fromStorage({ code: opts.code, ruleset: opts.ruleset, rulesetFor, link, storage });
-    if (!host) return null;
+  let stopTracking = () => {};
+  try {
+    const tracking = trackStatus((cb) => link.onPeer((ev) => cb(ev === 'join')));
+    stopTracking = tracking.stop;
+    if (role === 'host') {
+      const host = HostSession.fromStorage({ code: opts.code, ruleset: opts.ruleset, rulesetFor, link, storage });
+      if (!host) { tracking.stop(); link.close(); return null; }
+      return {
+        code: opts.code, role: 'host', transport: wrapTransport(host.transport),
+        getStatus: tracking.getStatus, onStatus: tracking.onStatus,
+        close: () => { tracking.stop(); host.close(); },
+      };
+    }
+    const guest = GuestSession.fromStorage({ code: opts.code, ruleset: opts.ruleset, rulesetFor, link, storage });
+    if (!guest) { tracking.stop(); link.close(); return null; }
     return {
-      code: opts.code, role: 'host', transport: wrapTransport(host.transport),
+      code: opts.code, role: 'guest', transport: wrapTransport(guest.transport),
       getStatus: tracking.getStatus, onStatus: tracking.onStatus,
-      close: () => { tracking.stop(); host.close(); },
+      close: () => { tracking.stop(); guest.close(); },
     };
-  }
-  const guest = GuestSession.fromStorage({ code: opts.code, ruleset: opts.ruleset, rulesetFor, link, storage });
-  if (!guest) return null;
-  return {
-    code: opts.code, role: 'guest', transport: wrapTransport(guest.transport),
-    getStatus: tracking.getStatus, onStatus: tracking.onStatus,
-    close: () => { tracking.stop(); guest.close(); },
-  };
+  } catch (error) { stopTracking(); link.close(); throw error; }
 }

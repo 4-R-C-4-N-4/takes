@@ -6,13 +6,14 @@
  * commit, illegal move, wrong hash, unknown ruleset — becomes a terminal 'error' ServerMsg;
  * the guest never applies a move optimistically or otherwise without this verification.
  */
+import { validateProfile, hasErrors } from '@takes/validator';
 import { createGame, type Game } from '@takes/engine';
 import type { Color, Ruleset } from '@takes/library';
 import type { ClientMsg, ServerMsg, WireReason, WireResult } from '@takes/protocol';
 import { commitSetup, randomSaltHex, verifyCommit } from './commit-reveal.js';
 import { parsePeerFrame, PEER_PROTOCOL_VERSION, type PeerFrame } from './p2p-protocol.js';
 import type { PeerLink } from './peer-link.js';
-import { storageKey, type P2PStorageLike, type P2PStoredState } from './p2p-host.js';
+import { readStoredP2PState, storageKey, type P2PStorageLike, type P2PStoredState } from './p2p-host.js';
 import type { OnlineTransport, TransportStatus } from './transport.js';
 
 export interface GuestSessionOpts {
@@ -24,7 +25,7 @@ export interface GuestSessionOpts {
   /** For reload/resume: restore a verified in-flight game instead of starting fresh. */
   resume?: {
     mySetup: string; mySalt: string; myCommit: string;
-    hostCommitHash: string; hostSetup: string; moves: string[];
+    hostCommitHash: string | null; hostSetup: string | null; moves: string[];
     result?: { result: WireResult; reason: WireReason } | null;
   };
 }
@@ -47,6 +48,10 @@ export class GuestSession {
   private moves: string[] = [];
   private result: { result: WireResult; reason: WireReason } | null = null;
   private terminal = false;
+  private terminalMessage: string | null = null;
+  private closed = false;
+  private readonly unsubFrame: () => void;
+  private readonly unsubPeer: () => void;
   /** Serializes frame handling so e.g. a host-reveal always finishes verifying before game_start is processed. */
   private frameQueue: Promise<void> = Promise.resolve();
 
@@ -64,13 +69,13 @@ export class GuestSession {
       this.pendingSetup = opts.resume.mySetup;
       this.mySalt = opts.resume.mySalt;
       this.myCommitSent = true;
-      this.revealed = true;
+      this.revealed = !!opts.resume.hostSetup;
       this.hostCommitHash = opts.resume.hostCommitHash;
       this.hostSetup = opts.resume.hostSetup;
       this.moves = [...opts.resume.moves];
       this.result = opts.resume.result ?? null;
       const rs = this.rulesetFor(this.ruleset);
-      if (rs) {
+      if (rs && opts.resume.hostSetup && this.validArmies(rs, opts.resume.hostSetup, opts.resume.mySetup)) {
         this.game = createGame(rs, opts.resume.hostSetup, opts.resume.mySetup);
         for (const uci of opts.resume.moves) {
           const move = this.game.parseUci(uci);
@@ -82,17 +87,22 @@ export class GuestSession {
 
     this.transport = {
       send: (msg) => this.handleGuestClientMsg(msg),
-      onMessage: (cb) => { this.serverListeners.add(cb); return () => this.serverListeners.delete(cb); },
+      onMessage: (cb) => { this.serverListeners.add(cb); if (this.terminalMessage) cb({ t: 'error', code: 'bad_message', message: this.terminalMessage }); return () => this.serverListeners.delete(cb); },
       onStatus: (cb) => { this.statusListeners.add(cb); cb('open'); return () => this.statusListeners.delete(cb); },
       close: () => {},
     };
-    this.link.onFrame((raw) => { this.frameQueue = this.frameQueue.then(() => this.onFrame(raw)); });
-    this.link.onPeer((event) => {
-      if (event === 'join') {
-        this.link.send({ v: 1, t: 'hello', app: 'takes', protocol: PEER_PROTOCOL_VERSION, ruleset: this.ruleset });
-        if (opts.resume && this.pendingSetup && this.mySalt) {
-          void commitSetup(this.pendingSetup, this.mySalt).then((hash) => this.link.send({ v: 1, t: 'commit', hash }));
-        }
+    this.unsubFrame = this.link.onFrame((raw) => { this.frameQueue = this.frameQueue.then(() => this.onFrame(raw)).catch(() => this.terminalError('Could not process peer data.')); });
+    this.unsubPeer = this.link.onPeer((event) => {
+      if (event !== 'join' || this.closed || this.terminal) return;
+      this.link.send({ v: 1, t: 'hello', app: 'takes', protocol: PEER_PROTOCOL_VERSION, ruleset: this.ruleset });
+      if (this.pendingSetup && this.mySalt) {
+        void commitSetup(this.pendingSetup, this.mySalt).then((hash) => {
+          if (this.closed || this.terminal) return;
+          this.link.send({ v: 1, t: 'commit', hash });
+          this.myCommitSent = true;
+          if (!this.game) this.revealed = false;
+          return this.revealIfReady();
+        }).catch(() => this.terminalError('Could not commit army.'));
       }
     });
   }
@@ -101,36 +111,40 @@ export class GuestSession {
 
   /** Rebuilds a GuestSession from localStorage after a page reload mid-game. */
   static fromStorage(opts: Omit<GuestSessionOpts, 'resume'> & { storage: P2PStorageLike }): GuestSession | null {
-    const raw = opts.storage.getItem(storageKey(opts.code));
-    if (!raw) return null;
-    let s: P2PStoredState;
-    try { s = JSON.parse(raw); } catch { return null; }
-    if (s.role !== 'guest' || !s.mySetup || !s.salt || !s.opponentCommit || !s.hostSetup) return null;
+    const s = readStoredP2PState(opts.storage, opts.code);
+    if (!s || s.role !== 'guest' || !s.mySetup || !s.salt) return null;
     return new GuestSession({
       ...opts,
       resume: {
-        mySetup: s.mySetup, mySalt: s.salt, myCommit: '', hostCommitHash: s.opponentCommit,
-        hostSetup: s.hostSetup, moves: s.moves, result: s.result ?? null,
+        mySetup: s.mySetup, mySalt: s.salt, myCommit: '', hostCommitHash: s.opponentCommit ?? null,
+        hostSetup: s.hostSetup ?? null, moves: s.moves, result: s.result ?? null,
       },
     });
   }
 
   private terminalError(message: string): void {
-    if (this.terminal) return;
+    if (this.closed || this.terminal) return;
     this.terminal = true;
+    this.terminalMessage = message;
     this.serverListeners.forEach((f) => f({ t: 'error', code: 'bad_message', message }));
   }
 
   private handleGuestClientMsg(msg: ClientMsg): void {
-    if (this.terminal) return;
-    if (msg.t === 'submit_setup') { void this.guestSubmitSetup(msg.setup); return; }
+    if (this.closed || this.terminal) return;
+    if (msg.t === 'submit_setup') { void this.guestSubmitSetup(msg.setup).catch(() => this.terminalError('Could not commit army.')); return; }
     this.link.send({ v: 1, t: 'client', msg });
   }
 
   private async guestSubmitSetup(setup: string): Promise<void> {
+    if (this.pendingSetup) return;
+    const rs = this.rulesetFor(this.ruleset);
+    if (!rs) { this.terminalError('Unknown ruleset.'); return; }
+    const issues = validateProfile(setup, rs, { color: 'b' });
+    if (hasErrors(issues)) { this.serverListeners.forEach(f => f({ t: 'setup_rejected', issues })); return; }
     this.pendingSetup = setup;
     this.mySalt = randomSaltHex();
     const hash = await commitSetup(setup, this.mySalt);
+    if (this.closed) return;
     this.link.send({ v: 1, t: 'commit', hash });
     this.myCommitSent = true;
     this.persist();
@@ -138,20 +152,21 @@ export class GuestSession {
   }
 
   private async revealIfReady(): Promise<void> {
-    if (this.revealed || !this.myCommitSent || !this.pendingSetup || !this.mySalt || !this.hostCommitHash) return;
+    if (this.closed || this.terminal || this.revealed || !this.myCommitSent || !this.pendingSetup || !this.mySalt || !this.hostCommitHash) return;
     this.revealed = true;
     this.link.send({ v: 1, t: 'guest-setup', setup: this.pendingSetup, salt: this.mySalt });
   }
 
   private async onFrame(raw: unknown): Promise<void> {
-    if (this.terminal) return;
+    if (this.closed || this.terminal) return;
     const f: PeerFrame | null = parsePeerFrame(raw);
     if (!f) return; // malformed frame from host: ignored
     switch (f.t) {
       case 'hello':
-        if (f.app !== 'takes' || f.protocol !== PEER_PROTOCOL_VERSION) this.terminalError('protocol version mismatch');
+        if (f.app !== 'takes' || f.protocol !== PEER_PROTOCOL_VERSION || f.ruleset !== this.ruleset) this.terminalError('protocol version mismatch');
         return;
       case 'commit':
+        if (this.hostCommitHash && this.hostCommitHash !== f.hash) { this.terminalError('Host changed its setup commitment.'); return; }
         this.hostCommitHash = f.hash;
         this.persist();
         await this.revealIfReady();
@@ -160,6 +175,12 @@ export class GuestSession {
         if (!this.hostCommitHash || !(await verifyCommit(f.setup, f.salt, this.hostCommitHash))) {
           this.terminalError("opponent's client cheated (setup mismatch)");
           return;
+        }
+        if (this.closed) return;
+        const rs = this.rulesetFor(this.ruleset);
+        if (!rs) { this.terminalError('unknown ruleset'); return; }
+        if (hasErrors(validateProfile(f.setup, rs, { color: 'w' }))) {
+          this.terminalError("opponent's client cheated (invalid army)"); return;
         }
         this.hostSetup = f.setup;
         this.persist();
@@ -179,12 +200,14 @@ export class GuestSession {
   private handleServerMsg(msg: ServerMsg): void {
     switch (msg.t) {
       case 'game_start': {
-        if (!this.hostSetup || msg.setups.w !== this.hostSetup) {
+        if (this.game) { this.terminalError('Unexpected game restart.'); return; }
+        if (!this.hostSetup || msg.setups.w !== this.hostSetup || msg.setups.b !== this.pendingSetup) {
           this.terminalError("opponent's client cheated (setup mismatch)");
           return;
         }
         const rs = this.rulesetFor(this.ruleset);
         if (!rs) { this.terminalError('unknown ruleset'); return; }
+        if (!this.validArmies(rs, msg.setups.w, msg.setups.b)) return;
         try {
           this.game = createGame(rs, msg.setups.w, msg.setups.b);
         } catch {
@@ -198,6 +221,7 @@ export class GuestSession {
       }
       case 'move_made': {
         if (!this.game) return;
+        if (msg.ply !== this.game.ply() + 1) { this.terminalError('Unexpected move ply.'); return; }
         const move = this.game.parseUci(msg.uci);
         if (!move) { this.terminalError("opponent's client cheated (illegal move)"); return; }
         this.game.make(move);
@@ -225,6 +249,7 @@ export class GuestSession {
     if (!this.game && this.hostSetup && this.pendingSetup) {
       const rs = this.rulesetFor(this.ruleset);
       if (!rs) { this.terminalError('unknown ruleset'); return; }
+      if (!this.validArmies(rs, this.hostSetup, this.pendingSetup)) return;
       this.game = createGame(rs, this.hostSetup, this.pendingSetup);
     }
     if (!this.game) return;
@@ -236,7 +261,20 @@ export class GuestSession {
     this.moves = [...moves];
     if (result) this.result = result as { result: WireResult; reason: WireReason };
     this.persist();
-    this.serverListeners.forEach((f) => f({ t: 'move_made', uci: moves[moves.length - 1] ?? '', ply: this.game!.ply(), hash: this.game!.hash() }));
+    this.serverListeners.forEach((f) => f({ t: 'state', state: {
+      code: this.code, ruleset: this.ruleset, you: 'b', phase: this.result ? 'over' : 'playing',
+      setups: { w: this.hostSetup!, b: this.pendingSetup! }, ready: { w: true, b: true },
+      moves: [...this.moves], ...(this.result ? { result: this.result } : {}),
+    } }));
+  }
+
+  private validArmies(rs: Ruleset, white: string, black: string): boolean {
+    if (hasErrors(validateProfile(white, rs, { color: 'w' })) ||
+        hasErrors(validateProfile(black, rs, { color: 'b' }))) {
+      this.terminalError("opponent's client cheated (invalid army)");
+      return false;
+    }
+    return true;
   }
 
   private persist(): void {
@@ -253,5 +291,11 @@ export class GuestSession {
     try { this.storage.setItem(storageKey(this.code), JSON.stringify(state)); } catch { /* ignore */ }
   }
 
-  close(): void { this.link.close(); }
+  close(): void {
+    if (this.closed) return;
+    this.closed = true;
+    this.unsubFrame(); this.unsubPeer();
+    this.serverListeners.clear(); this.statusListeners.clear();
+    this.link.close();
+  }
 }

@@ -86,7 +86,7 @@ export function createLinkPair(): LinkPair {
   };
 }
 
-// ---- Real transport: Trystero (WebRTC, BitTorrent-tracker signalling), dynamic-imported. ----
+// ---- Real transport: Trystero (WebRTC, Nostr relay signalling), dynamic-imported. ----
 
 const TRYSTERO_APP_ID = 'io.github.4-r-c-4-n-4.takes';
 
@@ -99,32 +99,38 @@ export async function joinTrysteroLink(code: string): Promise<PeerLink> {
   const frameListeners = new Set<(raw: unknown) => void>();
   const peerListeners = new Set<(event: PeerEvent) => void>();
   const peers = new Set<string>();
+  const waitingPeers = new Set<string>();
   let closed = false;
+  let sendQueue: Promise<unknown> = Promise.resolve();
 
-  frameAction.onMessage = (data: unknown) => { if (!closed) frameListeners.forEach((cb) => cb(data)); };
+  frameAction.onMessage = (data: unknown, { peerId }) => { if (!closed && peers.has(peerId)) frameListeners.forEach((cb) => cb(data)); };
 
   room.onPeerJoin = (peerId: string) => {
     if (closed) return;
-    if (peers.size >= 1) {
-      // Already have one peer: refuse a third party by dropping this connection immediately.
-      void room.leave();
-      closed = true;
-      peerListeners.forEach((cb) => cb('leave'));
-      return;
-    }
+    if (peers.size >= 1) { waitingPeers.add(peerId); return; } // Keep extra peers isolated from game frames.
     peers.add(peerId);
     peerListeners.forEach((cb) => cb('join'));
   };
 
   room.onPeerLeave = (peerId: string) => {
-    peers.delete(peerId);
+    waitingPeers.delete(peerId);
+    if (closed || !peers.delete(peerId)) return;
     peerListeners.forEach((cb) => cb('leave'));
+    // A reloaded tab may connect before the old tab's leave event arrives.
+    const next = waitingPeers.values().next().value;
+    if (next) { waitingPeers.delete(next); peers.add(next); peerListeners.forEach(cb => cb('join')); }
   };
 
   return {
-    send: (data) => { if (!closed) void frameAction.send(data as never); },
+    send: (data) => {
+      if (closed || !peers.size) return;
+      const target = [...peers];
+      sendQueue = sendQueue.then(() => closed ? undefined : frameAction.send(data as never, { target })).catch((error: unknown) => {
+        if (!closed) console.warn('P2P frame send failed', error);
+      });
+    },
     onFrame: (cb) => { frameListeners.add(cb); return () => frameListeners.delete(cb); },
-    onPeer: (cb) => { peerListeners.add(cb); return () => peerListeners.delete(cb); },
-    close: () => { if (!closed) { closed = true; void room.leave(); } },
+    onPeer: (cb) => { peerListeners.add(cb); if (peers.size) cb('join'); return () => peerListeners.delete(cb); },
+    close: () => { if (!closed) { closed = true; void room.leave().catch((error: unknown) => console.warn('P2P leave failed', error)); } },
   };
 }

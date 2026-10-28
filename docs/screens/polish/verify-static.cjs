@@ -4,7 +4,7 @@
 // browser contexts here talk to anything but this local server.
 //
 // Checks: no Lab nav / no Lab route, server-bot + invite/join replaced by an
-// "Online play — coming soon" placeholder, vs-CPU + hotseat + Builder + Library
+// P2P opt-in controls, vs-CPU + hotseat + Builder + Library
 // all work, zero cross-origin requests, no console errors, no horizontal
 // overflow on desktop (1280x800) and phone (390x844) viewports.
 //
@@ -65,6 +65,7 @@ function serve() {
       const offOriginRequests = [];
       page.on('pageerror', (e) => errors.push(e.message));
       page.on('console', (msg) => { if (msg.type() === 'error') errors.push(msg.text()); });
+      page.on('websocket', (ws) => offOriginRequests.push(ws.url()));
       page.on('request', (req) => {
         const u = new URL(req.url());
         if (u.host !== `127.0.0.1:${PORT}`) offOriginRequests.push(req.url());
@@ -142,10 +143,14 @@ function serve() {
       await page.selectOption('#cpu-side', 'w');
       await click(page.locator('#cpu-level button', { hasText: 'Easy' }));
       await click(page.getByRole('button', { name: 'Play', exact: true }));
-      await page.waitForFunction(() => document.querySelectorAll('.piece-cell').length > 0);
-      const moved = await anyLegalMove();
-      assert(moved, `${name}: vs-CPU move did not change board state`);
-      await page.waitForTimeout(600); // let the in-browser CPU reply
+      await page.locator('.piece-cell[data-sq="60"]').waitFor(); // both armies revealed
+      assert.equal(JSON.parse(await page.evaluate(() => sessionStorage.getItem('takes.hotseat'))).cpu, 'b');
+      await drag(page.locator('.piece-cell[data-sq="12"]'), page.locator('rect[data-sq="28"]')); // e2-e4
+      await page.locator('.piece-cell[data-sq="28"]').waitFor();
+      await page.waitForFunction(() => {
+        const blackMoved = [48, 49, 50, 51, 52, 53, 54, 55, 57, 62].some(s => !document.querySelector(`.piece-cell[data-sq="${s}"]`));
+        return blackMoved && /To move: White/.test(document.body.innerText);
+      }, undefined, { timeout: 5000 });
       await noOverflow();
       await page.evaluate(() => { location.hash = '#/lobby'; });
       await page.waitForFunction(() => location.hash.includes('lobby'));
@@ -153,10 +158,11 @@ function serve() {
 
       // Hotseat: a couple of plies, both sides human, same device.
       await click(page.getByRole('button', { name: 'Hotseat (play both sides)', exact: true }));
-      await page.waitForFunction(() => document.querySelectorAll('.piece-cell').length > 0);
-      await page.waitForTimeout(150);
-      const ok = await anyLegalMove();
-      assert(ok, `${name}: hotseat first ply did not change board state`);
+      await page.locator('.piece-cell[data-sq="60"]').waitFor(); // both armies revealed
+      await drag(page.locator('.piece-cell[data-sq="12"]'), page.locator('rect[data-sq="28"]'));
+      await page.locator('.piece-cell[data-sq="28"]').waitFor();
+      await drag(page.locator('.piece-cell[data-sq="52"]'), page.locator('rect[data-sq="36"]'));
+      await page.locator('.piece-cell[data-sq="36"]').waitFor();
       await noOverflow();
       await page.evaluate(() => { location.hash = '#/lobby'; });
 

@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { commitSetup } from '../commit-reveal.js';
 import { createLinkPair } from '../peer-link.js';
 import { parsePeerFrame, type PeerFrame } from '../p2p-protocol.js';
 import { HostSession, storageKey, type P2PStorageLike } from '../p2p-host.js';
@@ -220,7 +221,7 @@ describe('P2P core: persistence + resume', () => {
     const guestMsgs2 = collect(guest2!.transport);
     await flush(15);
     // Guest rejoining a reloaded host should receive a resync extending its own (empty) history.
-    expect(guestMsgs2.some((m) => m.t === 'move_made' && m.uci === 'e2e4')).toBe(true);
+    expect(guestMsgs2.some((m) => m.t === 'state' && m.state.moves.join(',') === 'e2e4')).toBe(true);
   });
 
   it('guest reload mid-game restores its verified engine and accepts a resync that extends it', async () => {
@@ -241,5 +242,173 @@ describe('P2P core: persistence + resume', () => {
     guest1.transport.send({ t: 'move', uci: 'e7e5', ply: 1 });
     await flush(10);
     expect(guestMsgs2.some((m) => m.t === 'move_made' && m.uci === 'e7e5')).toBe(true);
+  });
+});
+
+describe('P2P browser ordering regressions', () => {
+  it('resends the host commitment when the guest arrives after setup', async () => {
+    const link = createLinkPair();
+    let joined: (() => void) | undefined;
+    const host = new HostSession({ code: 'LATEJOIN', ruleset: RULESET, rulesetFor, link: {
+      ...link.host,
+      send: (frame) => link.host.send(frame),
+      onFrame: (cb) => link.host.onFrame(cb),
+      onPeer: (cb) => { joined = () => cb('join'); return () => {}; },
+      close: () => link.host.close(),
+    } });
+    host.transport.send({ t: 'submit_setup', setup: VANILLA });
+    await flush(); // Original commit was sent with no guest listener.
+    const guest = new GuestSession({ code: 'LATEJOIN', ruleset: RULESET, rulesetFor, link: link.guest });
+    const msgs = collect(guest.transport);
+    // This delayed in-memory listener missed the pair's initial join event.
+    // Real PeerLink.onPeer replays join for an already connected peer.
+    link.guest.send({ v: 1, t: 'hello', app: 'takes', protocol: 1, ruleset: RULESET });
+    guest.transport.send({ t: 'submit_setup', setup: VANILLA });
+    joined!();
+    await flush(15);
+    expect(msgs.some(m => m.t === 'game_start')).toBe(true);
+    host.close(); guest.close();
+  });
+
+  it('ignores queued frames and pending setup after close', async () => {
+    const { link, host, guest } = makeSession();
+    const msgs = collect(guest.transport);
+    guest.transport.send({ t: 'submit_setup', setup: VANILLA });
+    link.deliverRawToGuest({ v: 1, t: 'server', msg: { t: 'game_over', result: '1-0', reason: 'resign' } });
+    guest.close();
+    await flush();
+    expect(msgs).toEqual([]);
+    host.close();
+  });
+
+  it('reports asynchronous crypto failures without an unhandled rejection', async () => {
+    const { host, guest } = makeSession();
+    const hostMsgs = collect(host.transport);
+    const guestMsgs = collect(guest.transport);
+    const digest = vi.spyOn(crypto.subtle, 'digest').mockRejectedValue(new Error('digest unavailable'));
+    try {
+      host.transport.send({ t: 'submit_setup', setup: VANILLA });
+      guest.transport.send({ t: 'submit_setup', setup: VANILLA });
+      await flush();
+      expect(hostMsgs.some(m => m.t === 'error' && /commit army/.test(m.message))).toBe(true);
+      expect(guestMsgs.some(m => m.t === 'error' && /commit army/.test(m.message))).toBe(true);
+    } finally { digest.mockRestore(); host.close(); guest.close(); }
+  });
+
+  it('resumes a guest still waiting for the host commitment', async () => {
+    const link = createLinkPair();
+    const host = new HostSession({ code: 'WAITGAME', ruleset: RULESET, rulesetFor, link: link.host });
+    const storage = new MemoryStorage();
+    storage.setItem(storageKey('WAITGAME'), JSON.stringify({ role: 'guest', mySetup: VANILLA, salt: 'a'.repeat(32), moves: [] }));
+    const guest = GuestSession.fromStorage({ code: 'WAITGAME', ruleset: RULESET, rulesetFor, link: link.guest, storage });
+    expect(guest).not.toBeNull();
+    const msgs = collect(guest!.transport);
+    host.transport.send({ t: 'submit_setup', setup: VANILLA });
+    await flush(15);
+    expect(msgs.some(m => m.t === 'game_start')).toBe(true);
+    host.close(); guest!.close();
+  });
+
+  it('rejects malformed nested server messages and results', () => {
+    for (const msg of [{ t: 'game_start' }, { t: 'move_made', uci: 7 }, { t: 'setup_rejected', issues: [null] }, { t: 'state', state: {} }]) {
+      expect(parsePeerFrame({ v: 1, t: 'server', msg })).toBeNull();
+    }
+    expect(parsePeerFrame({ v: 1, t: 'resync', moves: ['bad'] })).toBeNull();
+    expect(parsePeerFrame({ v: 1, t: 'resync', moves: [], result: { result: 'oops', reason: 'resign' } })).toBeNull();
+  });
+
+  it('resync publishes the entire history and a result, preserving a resigned host reload', async () => {
+    const storage = new MemoryStorage();
+    const { link, host, guest } = makeSession();
+    const guestMsgs = collect(guest.transport);
+    await playBothSetups(host, guest);
+    host.transport.send({ t: 'move', uci: 'e2e4', ply: 0 });
+    await flush();
+    link.deliverRawToGuest({ v: 1, t: 'resync', moves: ['e2e4', 'e7e5', 'g1f3'], result: { result: '1-0', reason: 'resign' } });
+    await flush();
+    expect(guestMsgs.some(m => m.t === 'state' && m.state.moves.length === 3 && m.state.phase === 'over')).toBe(true);
+    host.close(); guest.close();
+    storage.setItem(storageKey('OVERGAME'), JSON.stringify({ role: 'host', mySetup: VANILLA, peerSetup: VANILLA, moves: [], result: { result: '1-0', reason: 'resign' } }));
+    const pair = createLinkPair();
+    const resumed = HostSession.fromStorage({ code: 'OVERGAME', ruleset: RULESET, rulesetFor, link: pair.host, storage });
+    const frames: unknown[] = [];
+    pair.guest.onFrame(f => frames.push(f));
+    await flush();
+    expect(frames).toContainEqual({ v: 1, t: 'resync', moves: [], result: { result: '1-0', reason: 'resign' } });
+    resumed!.close(); pair.guest.close();
+  });
+});
+
+
+describe('P2P reviewed security regressions', () => {
+  const illegal = '2026.1:QQQQKQQQ/PPPPPPPP/8';
+  const salt = 'a'.repeat(32);
+  it('rejects a commitment-consistent illegal host army terminally', async () => {
+    const link = createLinkPair();
+    const guest = new GuestSession({ code: 'BADARMY1', ruleset: RULESET, rulesetFor, link: link.guest });
+    const msgs = collect(guest.transport);
+    guest.transport.send({ t: 'submit_setup', setup: VANILLA });
+    await flush();
+    link.deliverRawToGuest({ v: 1, t: 'commit', hash: await commitSetup(illegal, salt) });
+    link.deliverRawToGuest({ v: 1, t: 'host-reveal', setup: illegal, salt });
+    link.deliverRawToGuest({ v: 1, t: 'server', msg: { t: 'game_start', setups: { w: illegal, b: VANILLA }, fen: '' } });
+    link.deliverRawToGuest({ v: 1, t: 'resync', moves: [] });
+    await flush();
+    expect(msgs.some(m => m.t === 'error' && /invalid army/.test(m.message))).toBe(true);
+    expect(msgs.some(m => m.t === 'game_start' || m.t === 'state')).toBe(false);
+    guest.close();
+  });
+
+  it.each(['w', 'b'])('rejects an illegal stored %s army before reconstruction/resync', async color => {
+    const storage = new MemoryStorage();
+    storage.setItem(storageKey('BADSTORE'), JSON.stringify({ role: 'guest', mySetup: color === 'b' ? illegal : VANILLA,
+      hostSetup: color === 'w' ? illegal : VANILLA, salt, moves: [] }));
+    const link = createLinkPair();
+    const guest = GuestSession.fromStorage({ code: 'BADSTORE', ruleset: RULESET, rulesetFor, link: link.guest, storage });
+    const msgs = collect(guest!.transport);
+    link.deliverRawToGuest({ v: 1, t: 'resync', moves: [] });
+    await flush();
+    expect(msgs.some(m => m.t === 'error' && /invalid army/.test(m.message))).toBe(true);
+    expect(msgs.some(m => m.t === 'state')).toBe(false);
+    guest!.close();
+  });
+
+  it.each([{ protocol: 2, ruleset: RULESET }, { protocol: 1, ruleset: '2026.2' }])('terminally rejects incompatible hello %j before setup', async mismatch => {
+    const link = createLinkPair();
+    const host = new HostSession({ code: 'BADHELLO', ruleset: RULESET, rulesetFor, link: link.host });
+    const msgs = collect(host.transport);
+    await flush();
+    host.transport.send({ t: 'submit_setup', setup: VANILLA });
+    await flush();
+    link.deliverRawToHost({ v: 1, t: 'hello', app: 'takes', ...mismatch });
+    link.deliverRawToHost({ v: 1, t: 'hello', app: 'takes', protocol: 1, ruleset: RULESET });
+    link.deliverRawToHost({ v: 1, t: 'commit', hash: await commitSetup(VANILLA, salt) });
+    link.deliverRawToHost({ v: 1, t: 'guest-setup', setup: VANILLA, salt });
+    await flush();
+    expect(msgs.some(m => m.t === 'game_start')).toBe(false);
+    host.close();
+  });
+
+  it('gates moves until hello on reconnect and resets rejection on a real leave/join', async () => {
+    const link = createLinkPair();
+    let peer!: (event: 'join' | 'leave') => void;
+    const host = new HostSession({ code: 'REGATE01', ruleset: RULESET, rulesetFor,
+      link: { send: f => link.host.send(f), onFrame: cb => link.host.onFrame(cb), close: () => link.host.close(), onPeer: cb => { peer = cb; return () => {}; } } });
+    const guest = new GuestSession({ code: 'REGATE01', ruleset: RULESET, rulesetFor, link: link.guest });
+    const { hostMsgs } = await playBothSetups(host, guest);
+    host.transport.send({ t: 'move', uci: 'e2e4', ply: 0 });
+    await flush();
+    peer('leave'); peer('join');
+    link.deliverRawToHost({ v: 1, t: 'client', msg: { t: 'move', uci: 'e7e5', ply: 1 } });
+    link.deliverRawToHost({ v: 1, t: 'hello', app: 'takes', protocol: 2, ruleset: RULESET });
+    link.deliverRawToHost({ v: 1, t: 'client', msg: { t: 'move', uci: 'e7e5', ply: 1 } });
+    await flush();
+    expect(hostMsgs.some(m => m.t === 'move_made' && m.uci === 'e7e5')).toBe(false);
+    peer('leave'); peer('join');
+    link.deliverRawToHost({ v: 1, t: 'hello', app: 'takes', protocol: 1, ruleset: RULESET });
+    link.deliverRawToHost({ v: 1, t: 'client', msg: { t: 'move', uci: 'e7e5', ply: 1 } });
+    await flush();
+    expect(hostMsgs.some(m => m.t === 'move_made' && m.uci === 'e7e5')).toBe(true);
+    host.close(); guest.close();
   });
 });
