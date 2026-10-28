@@ -10,9 +10,11 @@
     type StoredProfile,
   } from '../lib/profiles.js';
   import { routeHref } from '../lib/router.js';
+  import { artFor } from '../lib/pieceArt.js';
+  import PieceIcon from './PieceIcon.svelte';
 
   const ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
-  let profiles: StoredProfile[] = loadProfiles();
+  let profiles: StoredProfile[] = $state(loadProfiles());
 
   function refresh(next: StoredProfile[]): void { profiles = next; }
 
@@ -24,6 +26,20 @@
     try { return !hasErrors(validateProfile(p.setup, ruleset, { color: 'w' })); } catch { return false; }
   }
 
+  function thumbPieces(p: StoredProfile): Array<{ sq: number; svg: string }> {
+    try {
+      const setup = parseSetup(p.setup);
+      const out: Array<{ sq: number; svg: string }> = [];
+      for (let r = 0; r < 3; r++) {
+        for (let f = 0; f < 8; f++) {
+          const id = setup.ranks[r]?.[f];
+          if (id) out.push({ sq: r * 8 + f, svg: artFor(ruleset, id) });
+        }
+      }
+      return out;
+    } catch { return []; }
+  }
+
   function rename(p: StoredProfile): void {
     const name = prompt('New name', p.name);
     if (name) refresh(renameProfile(p.id, name));
@@ -33,7 +49,11 @@
     navigator.clipboard?.writeText(p.setup).catch(() => {});
   }
 
-  let pasteText = '';
+  function remove(p: StoredProfile): void {
+    if (confirm(`Delete "${p.name}"? This cannot be undone.`)) refresh(deleteProfile(p.id));
+  }
+
+  let pasteText = $state('');
   function pasteNew(): void {
     try {
       parseSetup(pasteText); // validates it parses
@@ -49,41 +69,89 @@
   }
 </script>
 
-<h1>Profiles</h1>
+<div class="page">
+  <div class="page-head">
+    <div>
+      <h1>Armies</h1>
+      <p>Setups you've built. Edit, duplicate or bring in a setup string.</p>
+    </div>
+    <a class="btn primary" href={routeHref('builder')}>New army</a>
+  </div>
 
-<ul class="profile-list">
-  {#each profiles as p (p.id)}
-    <li>
-      <div class="row">
-        <strong>{p.name}</strong>
-        <span class="cost">{costOf(p) ?? '?'} pts</span>
-        <span class={isValid(p) ? 'ok' : 'bad'}>{isValid(p) ? 'valid' : 'invalid'}</span>
-        {#if profileNeedsReview(p)}<span class="review">needs review</span>{/if}
-      </div>
-      <div class="actions">
-        <a href={routeHref('builder', p.id)}>Edit</a>
-        <button on:click={() => rename(p)}>Rename</button>
-        <button on:click={() => refresh(duplicateProfile(p.id))}>Duplicate</button>
-        <button on:click={() => copy(p)}>Copy setup string</button>
-        <button on:click={() => refresh(deleteProfile(p.id))}>Delete</button>
-      </div>
-      <code class="setup-str">{p.setup}</code>
-    </li>
-  {/each}
-</ul>
+  {#if profiles.length === 0}
+    <div class="panel empty">
+      <p class="muted">No armies yet. Build one, or paste a setup string below.</p>
+      <a class="btn primary" href={routeHref('builder')}>New army</a>
+    </div>
+  {:else}
+    <ul class="army-list stack">
+      {#each profiles as p (p.id)}
+        {@const valid = isValid(p)}
+        {@const needsReview = profileNeedsReview(p)}
+        <li class="panel army-row">
+          <svg class="thumb" viewBox="0 0 80 30" aria-hidden="true">
+            {#each Array(24) as _, sq}
+              {@const f = sq % 8}
+              {@const r = Math.floor(sq / 8)}
+              <rect x={f * 10} y={(2 - r) * 10} width="10" height="10" class={(f + r) % 2 === 0 ? 'lt' : 'dk'} />
+            {/each}
+            {#each thumbPieces(p) as piece (piece.sq)}
+              {@const f = piece.sq % 8}
+              {@const r = Math.floor(piece.sq / 8)}
+              <foreignObject x={f * 10} y={(2 - r) * 10} width="10" height="10">
+                <PieceIcon svg={piece.svg} size={10} />
+              </foreignObject>
+            {/each}
+          </svg>
+          <div class="army-info">
+            <div class="row">
+              <strong class="army-name">{p.name}</strong>
+              <span class="chip accent">{costOf(p) ?? '?'} pts</span>
+              <span class="chip {valid ? 'good' : 'bad'}">{valid ? 'valid' : 'invalid'}</span>
+              {#if needsReview}<span class="chip warn">needs review</span>{/if}
+            </div>
+            <code class="mono faint setup-str">{p.setup}</code>
+          </div>
+          <div class="army-actions row">
+            <a class="btn sm" href={routeHref('builder', p.id)}>Edit</a>
+            <button class="btn sm ghost" onclick={() => refresh(duplicateProfile(p.id))}>Duplicate</button>
+            <button class="btn sm ghost" onclick={() => rename(p)}>Rename</button>
+            <button class="btn sm ghost" onclick={() => copy(p)}>Copy string</button>
+            <button class="btn sm danger ghost" onclick={() => remove(p)}>Delete</button>
+          </div>
+        </li>
+      {/each}
+    </ul>
+  {/if}
 
-<div class="paste-row">
-  <input placeholder="Paste a setup string to check it" bind:value={pasteText} />
-  <button on:click={pasteNew}>Open in builder</button>
+  <div class="panel stack import-panel">
+    <h3>Import from string</h3>
+    <div class="row">
+      <input class="input mono" placeholder="Paste a setup string to check it" bind:value={pasteText} />
+      <button class="btn" onclick={pasteNew}>Open in builder</button>
+    </div>
+  </div>
 </div>
 
 <style>
-  .profile-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-  .profile-list li { background: #26262b; border-radius: 8px; padding: 8px; }
-  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-  .ok { color: #6c6; } .bad { color: #e55; } .review { color: #e9a93c; }
-  .actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-  .setup-str { display: block; font-size: 11px; opacity: 0.7; margin-top: 4px; word-break: break-all; }
-  .paste-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-  .paste-row input { flex: 1; min-width: 0; }
+  .empty { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-4); padding: var(--s-5); }
+  .army-list { list-style: none; padding: 0; margin: 0; }
+  .army-row {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--s-4);
+    padding: var(--s-3) var(--s-4);
+  }
+  .thumb { width: 80px; height: 30px; flex-shrink: 0; border-radius: var(--r-1); overflow: hidden; }
+  .thumb .lt { fill: var(--sq-light); }
+  .thumb .dk { fill: var(--sq-dark); }
+  .army-info { display: grid; gap: 4px; min-width: 0; }
+  .army-name { font: 600 var(--fs-md)/1.2 var(--font-ui); }
+  .setup-str { display: block; font-size: var(--fs-xs); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .army-actions { flex-wrap: nowrap; justify-content: flex-end; }
+  @media (max-width: 720px) {
+    .army-row { grid-template-columns: auto 1fr; }
+    .army-actions { grid-column: 1 / -1; justify-content: flex-start; }
+  }
+  .import-panel { padding: var(--s-4); }
+  .import-panel .row { flex-wrap: nowrap; }
+  .import-panel input { flex: 1; }
 </style>
