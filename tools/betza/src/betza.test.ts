@@ -21,6 +21,11 @@ describe('pieceToBetza', () => {
     expect(pieceToBetza(current.pieces.dragon!)).toBe('RBDA');
   });
   it('limited sliders and rejections', () => {
+    // FSF keeps one range per direction and move type: overlapping same-direction terms must be merged.
+    expect(pieceToBetza({ id: 'x', name: 'x', glyph: 'Z', tier: 'minor', components: [
+      { vec: [0, 1], sym: ['f'], range: 3, path: 'slide', mode: 'move' },
+      { vec: [0, 1], sym: ['f', 'b'], range: 2, path: 'slide', mode: 'both' },
+    ] })).toBe('mfR3cfR2bR2');
     expect(componentToBetza({ vec: [1, 0], sym: ['f'], range: 3, path: 'slide', mode: 'move' })).toBe('mfR3');
     expect(() => componentToBetza({ vec: [1, 2], sym: 'all', range: Infinity, path: 'slide', mode: 'both' })).toThrow(BetzaUnsupported);
     expect(() => componentToBetza({ vec: [0, 1], sym: ['f'], range: 2, path: 'slide', mode: 'move', cond: 'rank2' })).toThrow(BetzaUnsupported);
