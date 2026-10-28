@@ -23,6 +23,8 @@
   let setup = $state<Setup>(emptySetup());
   let drag = $state<DragState>(idle());
   let saveName = $state('');
+  let hoverIssue = $state<Issue | null>(null);
+  let showSetupIo = $state(false);
 
   $effect(() => {
     const existing = loadProfiles().find((p: StoredProfile) => p.id === profileId);
@@ -75,6 +77,9 @@
         if (!map.has(f + 56)) map.set(f + 56, 'quiet');
       }
     }
+    if (hoverIssue) {
+      for (const sq of hoverIssue.squares) if (sq < 24) map.set(sq, hoverIssue.severity);
+    }
     return map;
   });
 
@@ -83,6 +88,12 @@
   const selectedPreviewSvg = $derived.by(() => {
     const id = selectedPaletteId ?? (selectedBoardCell !== null ? setup.ranks[Math.floor(selectedBoardCell / 8)]![selectedBoardCell % 8] : null);
     return id ? badgeFor(ruleset, id) : null;
+  });
+  const selectedPreviewLabel = $derived.by(() => {
+    const id = selectedPaletteId ?? (selectedBoardCell !== null ? setup.ranks[Math.floor(selectedBoardCell / 8)]![selectedBoardCell % 8] : null);
+    if (!id) return null;
+    if (id === KING_ID) return 'King';
+    return ruleset.pieces[id]?.name ?? id;
   });
 
   function cellIndex(sq: number): [number, number] { return [Math.floor(sq / 8), sq % 8]; } // [rankIdx, file]
@@ -229,67 +240,148 @@
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   });
-  const cellSize = $derived(Math.floor(Math.min(viewportWidth * 0.9, viewportHeight * 0.8, 640) / 8));
+  const isNarrow = $derived(viewportWidth < 960);
+  const cellSize = $derived.by(() => {
+    const railW = isNarrow ? 0 : 320;
+    const available = Math.min(viewportWidth - railW - 96, viewportHeight * 0.62, 560);
+    return Math.max(32, Math.floor(available / 8));
+  });
+
+  function squareName(sq: number): string {
+    return `${'abcdefgh'[sq % 8]}${Math.floor(sq / 8) + 1}`;
+  }
 </script>
 
-<h1>Builder</h1>
-
-<div class="palette-wrap">
-  {#each tierOrder() as tier (tier)}
-    <div class="tier-row">
-      <span class="tier-label">{tier}</span>
-      {#each Object.values(ruleset.pieces).filter((p) => p.tier === tier) as p (p.id)}
-        <button
-          class="palette-piece"
-          class:selected={selectedPaletteId === p.id}
-          onclick={() => selectPalette(p.id)}
-          onpointerdown={(ev) => onPalettePointerDown(p.id, ev)}
-          title="{p.name} ({ruleset.costs[p.id]} pts)"
-        >
-          <PieceIcon svg={artFor(ruleset, p.id)} size={32} />
-          <span class="piece-label">{p.name} · {ruleset.costs[p.id]}</span>
-        </button>
-      {/each}
+<div class="page builder-page">
+  <div class="page-head">
+    <div>
+      <h1>Builder</h1>
+      <p>Place pieces on the first three ranks. Tap or drag from the palette; drag a piece off the board to remove it.</p>
     </div>
-  {/each}
-  <div class="tier-row">
-    <span class="tier-label">king</span>
-    <button
-      class="palette-piece"
-      class:selected={selectedPaletteId === KING_ID}
-      onclick={() => selectPalette(KING_ID)}
-      onpointerdown={(ev) => onPalettePointerDown(KING_ID, ev)}
-      title="King (0 pts)"
-    >
-      <PieceIcon svg={artFor(ruleset, 'king')} size={32} />
-      <span class="piece-label">King · 0</span>
-    </button>
+  </div>
+
+  <div class="builder-grid">
+    <div class="board-zone panel">
+      <div class="board-center">
+        <Board
+          ranks={3}
+          cellSize={cellSize}
+          fileLabels={true}
+          pieces={boardPieces}
+          highlights={issueHighlights}
+          onSquareClick={onBoardSquareClick}
+          onPieceDown={onBoardPieceDown}
+        />
+      </div>
+
+      <div class="budget-wrap">
+        <div class="row budget-row">
+          <p class="budget num" class:over={cost > ruleset.pool}>Cost: {cost} / {ruleset.pool}</p>
+          {#if cost > ruleset.pool}<span class="chip bad">over budget</span>{/if}
+        </div>
+        <div class="budget-bar" role="meter" aria-valuenow={cost} aria-valuemin={0} aria-valuemax={ruleset.pool}>
+          <div class="budget-fill" class:over={cost > ruleset.pool} style="width: {Math.min(100, (cost / ruleset.pool) * 100)}%"></div>
+        </div>
+      </div>
+
+      <p class="hint muted">
+        Castling partners (rook-tier near king): files
+        {#if castlingFiles.size}
+          <span class="mono">{[...castlingFiles].map((f) => 'abcdefgh'[f]).join(', ')}</span>
+        {:else}
+          none
+        {/if}
+      </p>
+
+      {#if issues.length}
+        <ul class="issues stack">
+          {#each issues as issue}
+            <li
+              class={issue.severity}
+              onmouseenter={() => (hoverIssue = issue)}
+              onmouseleave={() => (hoverIssue = null)}
+            >
+              <span class="chip {issue.severity === 'error' ? 'bad' : 'warn'}">{issue.severity}</span>
+              <span class="issue-msg">{issue.message}{#if issue.squares.length} — {issue.squares.filter((s) => s < 24).map(squareName).join(', ')}{/if}</span>
+            </li>
+          {/each}
+        </ul>
+      {/if}
+
+      <div class="toolbar row">
+        <button class="btn sm" onclick={loadVanilla}>Load vanilla</button>
+        <button class="btn sm ghost" onclick={clearBoard}>Clear board</button>
+        <button class="btn sm ghost" onclick={() => (showSetupIo = !showSetupIo)} aria-expanded={showSetupIo}>
+          Import / Export
+        </button>
+      </div>
+
+      {#if showSetupIo}
+        <div class="setup-io row">
+          <input class="input mono" aria-label="Setup string" bind:value={setupTextDraft} />
+          <button class="btn sm" onclick={onPasteSetup}>Load from text</button>
+        </div>
+      {/if}
+
+      <div class="divider"></div>
+
+      <div class="save-row row">
+        <input class="input" placeholder="Profile name" bind:value={saveName} />
+        <button class="btn primary" disabled={hasErrors(issues)} onclick={save}>Save profile</button>
+      </div>
+    </div>
+
+    <aside class="palette-rail panel">
+      {#if selectedPreviewSvg}
+        <div class="selection-preview">
+          <PieceIcon svg={selectedPreviewSvg} size={40} />
+          <div>
+            <span class="eyebrow">Selected</span>
+            <p>{selectedPreviewLabel}</p>
+          </div>
+        </div>
+        <div class="divider"></div>
+      {/if}
+
+      {#each tierOrder() as tier (tier)}
+        <div class="tier-group">
+          <span class="eyebrow">{tier}</span>
+          <div class="tier-pieces">
+            {#each Object.values(ruleset.pieces).filter((p) => p.tier === tier) as p (p.id)}
+              <button
+                class="palette-piece"
+                class:selected={selectedPaletteId === p.id}
+                onclick={() => selectPalette(p.id)}
+                onpointerdown={(ev) => onPalettePointerDown(p.id, ev)}
+                title="{p.name} ({ruleset.costs[p.id]} pts)"
+              >
+                <PieceIcon svg={artFor(ruleset, p.id)} size={28} />
+                <span class="piece-label">{p.name}</span>
+                <span class="piece-cost num">{ruleset.costs[p.id]}</span>
+              </button>
+            {/each}
+          </div>
+        </div>
+      {/each}
+      <div class="tier-group">
+        <span class="eyebrow">king</span>
+        <div class="tier-pieces">
+          <button
+            class="palette-piece"
+            class:selected={selectedPaletteId === KING_ID}
+            onclick={() => selectPalette(KING_ID)}
+            onpointerdown={(ev) => onPalettePointerDown(KING_ID, ev)}
+            title="King (0 pts)"
+          >
+            <PieceIcon svg={artFor(ruleset, 'king')} size={28} />
+            <span class="piece-label">King</span>
+            <span class="piece-cost num">0</span>
+          </button>
+        </div>
+      </div>
+    </aside>
   </div>
 </div>
-
-{#if selectedPreviewSvg}
-  <div class="selection-preview">
-    <span>Selected:</span>
-    <PieceIcon svg={selectedPreviewSvg} size={48} />
-  </div>
-{/if}
-
-<div class="budget-bar-wrap">
-  <p class="budget" class:over={cost > ruleset.pool}>Cost: {cost} / {ruleset.pool}</p>
-  <div class="budget-bar" role="meter" aria-valuenow={cost} aria-valuemin={0} aria-valuemax={ruleset.pool}>
-    <div class="budget-fill" class:over={cost > ruleset.pool} style="width: {Math.min(100, (cost / ruleset.pool) * 100)}%"></div>
-  </div>
-</div>
-
-<Board
-  ranks={3}
-  cellSize={cellSize}
-  fileLabels={true}
-  pieces={boardPieces}
-  highlights={issueHighlights}
-  onSquareClick={onBoardSquareClick}
-  onPieceDown={onBoardPieceDown}
-/>
 
 {#if drag.mode === 'dragging'}
   <div
@@ -300,63 +392,54 @@
   </div>
 {/if}
 
-<p class="hint">
-  Castling partners (rook-tier near king): files
-  {#if castlingFiles.size}
-    {[...castlingFiles].map((f) => 'abcdefgh'[f]).join(', ')}
-  {:else}
-    none
-  {/if}
-</p>
-
-{#if issues.length}
-  <ul class="issues">
-    {#each issues as issue}
-      <li class={issue.severity}>{issue.message}{#if issue.squares.length} — squares: {issue.squares.filter((s) => s < 24).map((s) => `${'abcdefgh'[s % 8]}${Math.floor(s / 8) + 1}`).join(', ')}{/if}</li>
-    {/each}
-  </ul>
-{/if}
-
-<div class="toolbar">
-  <button onclick={loadVanilla}>Load vanilla</button>
-  <button onclick={clearBoard}>Clear board</button>
-</div>
-
-<div class="setup-io">
-  <label>
-    Setup string
-    <input bind:value={setupTextDraft} />
-  </label>
-  <button onclick={onPasteSetup}>Load from text</button>
-</div>
-
-<div class="save-row">
-  <input placeholder="Profile name" bind:value={saveName} />
-  <button disabled={hasErrors(issues)} onclick={save}>Save profile</button>
-</div>
-
 <style>
-  .palette-wrap { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
-  .tier-row { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-  .tier-label { width: 50px; font-size: 12px; opacity: 0.7; text-transform: capitalize; }
+  .builder-grid { display: grid; grid-template-columns: 1fr 300px; gap: var(--s-5); align-items: start; }
+  .board-zone { padding: var(--s-5); display: grid; gap: var(--s-4); }
+  .board-center { display: flex; justify-content: center; }
+
+  .budget-wrap { display: grid; gap: var(--s-2); }
+  .budget-row { justify-content: space-between; }
+  .budget { font: 600 var(--fs-md)/1 var(--font-ui); margin: 0; }
+  .budget.over { color: var(--bad); }
+  .budget-bar { height: 8px; background: var(--ink-2); border-radius: var(--r-pill); overflow: hidden; }
+  .budget-fill { height: 100%; background: var(--accent); border-radius: var(--r-pill); transition: width var(--t-med) var(--ease); }
+  .budget-fill.over { background: var(--bad); }
+
+  .hint { font-size: var(--fs-sm); margin: 0; }
+
+  .issues { list-style: none; padding: 0; margin: 0; }
+  .issues li { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); padding: var(--s-1) 0; cursor: default; }
+  .issue-msg { color: var(--text-muted); }
+  .issues li.error .issue-msg { color: var(--text); }
+
+  .toolbar { flex-wrap: wrap; }
+  .setup-io { flex-wrap: nowrap; }
+  .setup-io input { flex: 1; min-width: 0; }
+  .save-row { flex-wrap: nowrap; }
+  .save-row input { flex: 1; min-width: 0; }
+
+  .palette-rail { padding: var(--s-4); display: grid; gap: var(--s-4); align-content: start; position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; }
+  .selection-preview { display: flex; align-items: center; gap: var(--s-3); }
+  .selection-preview p { margin: 2px 0 0; font: 600 var(--fs-md)/1.2 var(--font-ui); }
+
+  .tier-group { display: grid; gap: var(--s-2); }
+  .tier-pieces { display: grid; gap: var(--s-1); }
   .palette-piece {
-    touch-action: none; background: #2d2d33; border: 1px solid #444; border-radius: 6px; padding: 2px 6px; cursor: pointer;
-    display: flex; align-items: center; gap: 4px; color: #eee;
+    display: flex; align-items: center; gap: var(--s-2);
+    width: 100%; min-height: var(--tap); padding: var(--s-1) var(--s-2);
+    background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--r-2);
+    color: var(--text); cursor: pointer; touch-action: none;
+    transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
   }
-  .palette-piece.selected { border-color: #6ab0f3; box-shadow: 0 0 0 2px #6ab0f3; }
-  .piece-label { font-size: 11px; opacity: 0.85; }
-  .selection-preview { display: flex; align-items: center; gap: 6px; margin: 6px 0; font-size: 13px; opacity: 0.9; }
-  .budget-bar-wrap { margin: 6px 0; }
-  .budget { font-weight: bold; margin: 0 0 4px; }
-  .budget.over { color: #e05; }
-  .budget-bar { height: 10px; background: #333; border-radius: 5px; overflow: hidden; max-width: 320px; }
-  .budget-fill { height: 100%; background: #6ab0f3; transition: width 0.15s; }
-  .budget-fill.over { background: #e05; }
-  .issues { list-style: none; padding: 0; }
-  .issues li.error { color: #e55; }
-  .issues li.warning { color: #e9a93c; }
-  .toolbar { display: flex; gap: 6px; margin: 8px 0; }
-  .setup-io, .save-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-  .setup-io input, .save-row input { flex: 1; min-width: 160px; }
+  .palette-piece:hover { background: var(--ink-3); }
+  .palette-piece.selected { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .piece-label { flex: 1; text-align: left; font: 500 var(--fs-sm)/1.2 var(--font-ui); }
+  .piece-cost { font-size: var(--fs-xs); color: var(--text-faint); }
+
   .drag-ghost { position: fixed; pointer-events: none; transform: translate(-50%, -50%); opacity: 0.85; z-index: 50; }
+
+  @media (max-width: 960px) {
+    .builder-grid { grid-template-columns: 1fr; }
+    .palette-rail { position: static; max-height: none; }
+  }
 </style>
