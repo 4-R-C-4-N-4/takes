@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Azazel">
+  <rect x="20" y="86" width="60" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="28,86 28,34 33,34 33,26 42,26 42,34 58,34 58,26 67,26 67,34 72,34 72,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <polygon points="28,34 18,16 30,24" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" />
+  <polygon points="72,34 82,16 70,24" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" />
+  <polygon points="20,40 10,34 20,48" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" />
+  <polygon points="80,40 90,34 80,48" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" />
+
+</svg>

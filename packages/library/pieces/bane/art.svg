@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Bane">
+  <rect x="23" y="86" width="54" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="31,86 36,40 64,40 69,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <polygon points="34,40 30,16 40,28 50,10 60,28 70,16 66,40" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <circle cx="44" cy="24" r="2.2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="0" stroke-linejoin="round" />
+  <circle cx="56" cy="24" r="2.2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="0" stroke-linejoin="round" />
+
+</svg>

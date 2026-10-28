@@ -87,6 +87,56 @@ across white/black pieces on light/dark squares), `docs/art/set-v3-board.png`
 40px silhouette IoU; the closest pair should stay inspected visually — IoU
 alone does not capture color/detail distinctness).
 
+## Hand-drawn set v5 (2026.3 new pieces)
+
+`packages/library/pieces/{id}/art.svg` also covers the 20 new 2026.3 pieces.
+A first attempt (set v4) encoded movement as small notches on shared boxy
+bodies and failed review: the forward pawns were indistinguishable and most
+minors read as "box + small topper". Set v5 instead draws each piece as a
+bold, memorable silhouette taken from the designer's own nickname — the art's
+job is instant recognition on the board; the in-game UI already shows the
+Betza shorthand in the palette and legal-move dots. Every v5 piece still uses
+the same plinth, baseline and tier-footprint grammar as the classics, and
+pawn-tier pieces reuse the pawn's collar/shoulders so they read as a pawn
+family while differing above the collar.
+
+Motif per piece:
+
+| Piece | Tier | Motif |
+| --- | --- | --- |
+| Triton | pawn | Three-pronged trident head |
+| Sai | pawn | Sai dagger: central blade with two curved side prongs |
+| Worm | pawn | Coiled S-curve worm body |
+| Rose | pawn | Layered rose-bloom petals |
+| Vine | pawn | Curling vine tendril with a leaf |
+| Broom | pawn | Fan-bristled broom head on a shaft |
+| Coroner | minor | Hooded cloak silhouette with a hanging toe-tag |
+| Bullseye | minor | Concentric target rings |
+| Impact | minor | Jagged starburst/meteor spikes |
+| Octopus | minor | Bulbous head with four dangling tentacle lines |
+| Scarab | minor | Split-shell beetle body with leg ticks each side |
+| Seal | minor | Asymmetric rounded seal-animal blob with a flipper |
+| Halo | minor | Head with a free-floating ring above it |
+| Jester | minor | Three-point jester cap tipped with bells |
+| Turtle | minor | Domed shell with a lattice shell pattern |
+| Prince | minor | Small three-point crown, deliberately no cross (unlike the king) |
+| Dancer | minor | Curved flowing body with one raised, sweeping arm |
+| Azazel | rook | Rook tower with curved horns and swept wing tips |
+| Hierophant | major | Stacked triple-tiered crown (papal-tiara silhouette) |
+| Bane | major | Tall body under a jagged spiked crown, the most imposing silhouette |
+
+Regenerate with:
+
+```sh
+python packages/art/scripts/contact-sheet-v5.py
+```
+
+This writes `docs/art/set-v5-40.png`, `docs/art/set-v5-96.png`,
+`docs/art/set-v5-board.png` (mixed 2026.3 army lineup) and
+`docs/art/set-v5-distinctness.json`. Current minimum pairwise 40px silhouette
+IoU is ~0.41 (dancer/azazel), far below the set-v3 era's tight pawn/berolina
+pairing, reflecting the deliberately bold, differentiated silhouettes.
+
 ## Review and regeneration
 
 From the repository root:

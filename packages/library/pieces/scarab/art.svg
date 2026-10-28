@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Scarab">
+  <rect x="23" y="86" width="52" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="33,86 37,52 63,52 67,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <path d="M50 14 C36 14 32 30 36 46 C40 54 60 54 64 46 C68 30 64 14 50 14 Z" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M50 14 L50 50" fill="none" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M36,24 L26,20 M36,34 L24,32 M36,44 L26,46 M64,24 L74,20 M64,34 L76,32 M64,44 L74,46" fill="none" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+</svg>

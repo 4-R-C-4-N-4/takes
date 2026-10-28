@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Bullseye">
+  <rect x="23" y="86" width="52" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="33,86 37,52 63,52 67,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <circle cx="50" cy="34" r="15" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <circle cx="50" cy="34" r="9" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" />
+  <circle cx="50" cy="34" r="3" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+
+</svg>

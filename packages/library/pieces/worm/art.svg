@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Worm">
+  <rect x="29" y="86" width="42" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="35,86 38,56 62,56 65,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <polygon points="38,56 41,47 59,47 62,56" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <path d="M50 47 C38 47 38 38 48 36 C58 34 58 25 48 24 C40 23 40 16 50 15" fill="none" stroke="var(--piece-stroke)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+
+</svg>

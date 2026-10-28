@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Broom">
+  <rect x="29" y="86" width="42" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="35,86 38,56 62,56 65,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <polygon points="38,56 41,47 59,47 62,56" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <path d="M50 47 L50 22" fill="none" stroke="var(--piece-stroke)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="38,22 62,22 58,10 42,10" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <path d="M42,22 L39,32 M46,22 L44,33 M50,22 L50,34 M54,22 L56,33 M58,22 L61,32" fill="none" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+</svg>

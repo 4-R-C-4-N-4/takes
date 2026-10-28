@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Coroner">
+  <rect x="23" y="86" width="52" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="33,86 37,52 63,52 67,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <path d="M50 13 C39 18 34 34 37 52 L63 52 C66 34 61 18 50 13 Z" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M39 28 C46 32 54 32 61 28" fill="none" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="45,52 55,52 55,58 45,58" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="3" stroke-linejoin="round" />
+
+</svg>

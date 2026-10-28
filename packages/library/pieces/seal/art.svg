@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Seal">
+  <rect x="23" y="86" width="52" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="33,86 37,52 63,52 67,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <path d="M66 52 C70 38 62 16 46 14 C30 12 26 28 32 40 C36 48 30 50 24 48 C30 56 44 56 54 50 C60 47 64 50 66 52 Z" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="45" cy="22" r="2.4" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="0" stroke-linejoin="round" />
+
+</svg>

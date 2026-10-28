@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Halo">
+  <rect x="23" y="86" width="52" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="33,86 37,52 63,52 67,86" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <circle cx="50" cy="40" r="11" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <path d="M50 22 C57 22 62 19 62 16 C62 13 57 10 50 10 C43 10 38 13 38 16 C38 19 43 22 50 22 Z" fill="none" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+</svg>
