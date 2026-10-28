@@ -22,6 +22,8 @@ interface CliOptions {
   samplePerFamily?: number;
   /** Keep only left/right mirror-symmetric pieces (the realistic design space; ~16% of the catalog). */
   symmetricOnly?: boolean;
+  /** Also require front/back mirror symmetry (D19: officers read the same advancing and retreating). */
+  frontBackOnly?: boolean;
   seed?: number;
 }
 
@@ -40,6 +42,7 @@ function parseArgs(argv: string[]): CliOptions {
     else if (a === '--sample-per-family') opts.samplePerFamily = Number(next());
     else if (a === '--seed') opts.seed = Number(next());
     else if (a === '--symmetric-only') opts.symmetricOnly = true;
+    else if (a === '--four-way') { opts.symmetricOnly = true; opts.frontBackOnly = true; }
   }
   return opts;
 }
@@ -62,6 +65,16 @@ export function isMirrorSymmetric(key: string): boolean {
   return true;
 }
 
+/** True if the key equals its front/back mirror (dy -> -dy). */
+export function isFrontBackSymmetric(key: string): boolean {
+  const items = new Set(key.split(';'));
+  for (const it of items) {
+    const [dx, dy, ...rest] = it.split(',');
+    if (!items.has([dx, String(-Number(dy) + 0), ...rest].join(','))) return false;
+  }
+  return true;
+}
+
 export async function main(argv = process.argv.slice(2)): Promise<void> {
   const opts = parseArgs(argv);
   const ruleset = getRuleset('2026.2');
@@ -70,6 +83,7 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   // Stage A: drop exact library duplicates, then take a stratified per-family sample (PLAN.md step 4).
   let catalog = full.filter((e) => e.profile.nearestLibraryDistance > 0 || !opts.catalogPath);
   if (opts.symmetricOnly) catalog = catalog.filter((e) => isMirrorSymmetric(e.key));
+  if (opts.frontBackOnly) catalog = catalog.filter((e) => e.tier === 'pawn' || isFrontBackSymmetric(e.key));
   if (opts.samplePerFamily) {
     const { stratifiedSample } = await import('@takes/catalog');
     catalog = stratifiedSample(catalog, opts.samplePerFamily, opts.seed ?? 42);

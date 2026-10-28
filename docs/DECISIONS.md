@@ -41,3 +41,6 @@ These are provisional defaults that resolve the issues raised in docs/plan-revie
   Costs are provisional until valuation. Queen and Dragon are each capped at one.
 
 - [D18] **Takes rule (hard constraint on every rules extension).** A capturing piece must end its move on the captured piece's square. En passant is the only exception. Hopping is allowed, but the hurdle is never captured. This rules out checkers-style jump captures, shooting, capture by approach or withdrawal, and explosions. Any new path type must name its capture square, and that square must be its landing square. Cannon, grasshopper, lame leapers and riders all satisfy this, and are candidate extensions after the catalog.
+
+- [D19] **Officers read the same advancing and retreating** (Ivy). Minor pieces should be front/back symmetric: their backward moves mirror their forward moves, so players can judge what is safe at a glance. The validator emits `FRONT_BACK_SYMMETRY` as a warning for minor pieces; pawn tier is exempt, since it is forward-only by design. The Lancer violates this and stays only until it is replaced. Catalog screens use `--four-way` (left/right and front/back symmetric): 1,403 of 56,211 pieces.
+  - Open question: should rook and major tiers follow the same rule?
