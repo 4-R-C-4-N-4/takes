@@ -1,0 +1,169 @@
+[
+  {
+    "key": "-1,1,3,slide,both;0,1,3,slide,both;1,1,3,slide,both",
+    "betza": "fR3fB3",
+    "tier": "pawn",
+    "verdict": "keep",
+    "name": "Triton"
+  },
+  {
+    "key": "-1,-1,inf,slide,both;-1,-2,1,leap,both;-1,1,inf,slide,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;1,-1,inf,slide,both;1,-2,1,leap,both;1,1,inf,slide,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+    "betza": "BN",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Coroner"
+  },
+  {
+    "key": "-1,-2,1,leap,both;-1,0,3,slide,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-1,3,slide,both;0,1,3,slide,both;1,-2,1,leap,both;1,0,3,slide,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+    "betza": "R3N",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Bullseye"
+  },
+  {
+    "key": "-1,1,2,slide,both;0,1,3,slide,both;1,1,2,slide,both",
+    "betza": "fR3fB2",
+    "tier": "pawn",
+    "verdict": "keep",
+    "name": "Sai"
+  },
+  {
+    "key": "-1,-1,inf,slide,both;-1,0,2,slide,both;-1,1,inf,slide,both;0,-1,2,slide,both;0,1,2,slide,both;1,-1,inf,slide,both;1,0,2,slide,both;1,1,inf,slide,both",
+    "betza": "R2B",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Impact"
+  },
+  {
+    "key": "-1,1,3,slide,both;0,1,2,slide,both;1,1,3,slide,both",
+    "betza": "fR2fB3",
+    "tier": "pawn",
+    "verdict": "keep",
+    "name": "Worm"
+  },
+  {
+    "key": "-1,-1,3,slide,both;-1,0,3,slide,both;-1,1,3,slide,both;0,-1,3,slide,both;0,1,3,slide,both;1,-1,3,slide,both;1,0,3,slide,both;1,1,3,slide,both",
+    "betza": "R3B3",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Octopus"
+  },
+  {
+    "key": "-1,-1,3,slide,both;-1,-2,1,leap,both;-1,1,3,slide,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;1,-1,3,slide,both;1,-2,1,leap,both;1,1,3,slide,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+    "betza": "B3N",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Scarab"
+  },
+  {
+    "key": "-1,1,inf,slide,both;-2,2,1,leap,both;1,1,inf,slide,both;2,2,1,leap,both",
+    "betza": "fBfA",
+    "tier": "pawn",
+    "verdict": "keep",
+    "name": "Vine"
+  },
+  {
+    "key": "-1,-2,1,leap,both;-1,0,2,slide,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-1,2,slide,both;0,1,2,slide,both;1,-2,1,leap,both;1,0,2,slide,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+    "betza": "R2N",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Seal"
+  },
+  {
+    "key": "-1,1,2,slide,both;0,1,2,slide,both;1,1,2,slide,both",
+    "betza": "fR2fB2",
+    "tier": "pawn",
+    "verdict": "keep",
+    "name": "Rose"
+  },
+  {
+    "key": "-1,-1,inf,slide,both;-1,-2,1,leap,both;-1,0,inf,slide,both;-1,1,inf,slide,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-1,inf,slide,both;0,1,inf,slide,both;1,-1,inf,slide,both;1,-2,1,leap,both;1,0,inf,slide,both;1,1,inf,slide,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+    "betza": "RBN",
+    "tier": "major",
+    "verdict": "keep",
+    "name": "Bane"
+  },
+  {
+    "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,0,1,leap,both;-2,1,1,leap,both;0,-2,1,leap,both;0,2,1,leap,both;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,0,1,leap,both;2,1,1,leap,both",
+    "betza": "DN",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Halo"
+  },
+  {
+    "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,-2,1,leap,both;-2,1,1,leap,both;-2,2,1,leap,both;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,-2,1,leap,both;2,1,1,leap,both;2,2,1,leap,both",
+    "betza": "AN",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Jester"
+  },
+  {
+    "key": "-1,0,inf,slide,both;-2,-2,1,leap,both;-2,2,1,leap,both;0,-1,inf,slide,both;0,1,inf,slide,both;1,0,inf,slide,both;2,-2,1,leap,both;2,2,1,leap,both",
+    "betza": "RA",
+    "tier": "rook",
+    "verdict": "keep",
+    "name": "Azazel"
+  },
+  {
+    "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-2,1,leap,both;0,2,1,leap,both;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+    "betza": "vDN",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Turtle"
+  },
+  {
+    "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,0,1,leap,both;-2,1,1,leap,both;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,0,1,leap,both;2,1,1,leap,both",
+    "betza": "sDN",
+    "tier": "minor",
+    "verdict": "reject",
+    "name": "Clam"
+  },
+  {
+    "key": "-1,1,1,slide,both;0,1,1,slide,both;1,1,1,slide,both",
+    "betza": "fWfF",
+    "tier": "pawn",
+    "verdict": "keep",
+    "name": "Broom"
+  },
+  {
+    "key": "-1,-1,3,slide,both;-1,0,inf,slide,both;-1,1,3,slide,both;0,-1,inf,slide,both;0,1,inf,slide,both;1,-1,3,slide,both;1,0,inf,slide,both;1,1,3,slide,both",
+    "betza": "RB3",
+    "tier": "major",
+    "verdict": "reject",
+    "name": "Nova"
+  },
+  {
+    "key": "-1,-2,1,leap,both;-1,0,inf,slide,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-1,inf,slide,both;0,1,inf,slide,both;1,-2,1,leap,both;1,0,inf,slide,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+    "betza": "RN",
+    "tier": "major",
+    "verdict": "keep",
+    "name": "Hierophant"
+  },
+  {
+    "key": "-1,-1,1,slide,both;-1,0,1,slide,both;-1,1,1,slide,both;0,-1,1,slide,both;0,1,1,slide,both;1,-1,1,slide,both;1,0,1,slide,both;1,1,1,slide,both",
+    "betza": "WF",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Prince"
+  },
+  {
+    "key": "-1,-1,inf,slide,both;-1,0,3,slide,both;-1,1,inf,slide,both;0,-1,3,slide,both;0,1,3,slide,both;1,-1,inf,slide,both;1,0,3,slide,both;1,1,inf,slide,both",
+    "betza": "R3B",
+    "tier": "major",
+    "verdict": "reject",
+    "name": "Star"
+  },
+  {
+    "key": "-1,-1,1,slide,both;-1,1,1,slide,both;0,-1,1,slide,both;0,1,1,slide,both;1,-1,1,slide,both;1,1,1,slide,both",
+    "betza": "vWF",
+    "tier": "minor",
+    "verdict": "keep",
+    "name": "Dancer"
+  },
+  {
+    "key": "-1,-1,inf,slide,both;-1,1,inf,slide,both;-2,-2,1,leap,both;-2,2,1,leap,both;0,-1,inf,slide,both;0,1,inf,slide,both;1,-1,inf,slide,both;1,1,inf,slide,both;2,-2,1,leap,both;2,2,1,leap,both",
+    "betza": "vRBA",
+    "tier": "major",
+    "verdict": "reject"
+  }
+]
