@@ -12,5 +12,11 @@
     "@takes/library": "workspace:*",
     "@takes/validator": "workspace:*",
     "@takes/betza": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.0"
+  },
+  "scripts": {
+    "build": "node --import tsx src/build.ts"
   }
 }
