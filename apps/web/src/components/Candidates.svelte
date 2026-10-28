@@ -48,12 +48,13 @@
   function setVerdict(v: Verdict) { if (selected) reviews = saveReview(selected.key, { verdict: v }); }
   function setField(field: 'note' | 'name', value: string) { if (selected) reviews = saveReview(selected.key, { [field]: value }); }
 
-  function testDrive(c: Candidate) {
+  function testDrive(c: Candidate, cpu: 'b' | null) {
     const version = `${CURRENT_RULESET_VERSION}+candidate`;
     sessionStorage.setItem('takes.hotseat', JSON.stringify({
       white: sandboxSetup(version, c.tier),
       black: `${version}:RNBQKBNR/PPPPPPPP/8`,
       candidate: c,
+      cpu,
     }));
     location.hash = routeHref('game', 'hotseat');
   }
@@ -138,7 +139,8 @@
       </table>
 
       <div class="actions">
-        <button onclick={() => testDrive(selected!)}>Test drive (hotseat)</button>
+        <button onclick={() => testDrive(selected!, 'b')}>Test drive vs CPU</button>
+        <button onclick={() => testDrive(selected!, null)}>Hotseat (play both sides)</button>
         <button class="keep" class:on={reviews[selected.key]?.verdict === 'keep'} onclick={() => setVerdict('keep')}>Keep</button>
         <button class="maybe" class:on={reviews[selected.key]?.verdict === 'maybe'} onclick={() => setVerdict('maybe')}>Maybe</button>
         <button class="reject" class:on={reviews[selected.key]?.verdict === 'reject'} onclick={() => setVerdict('reject')}>Reject</button>

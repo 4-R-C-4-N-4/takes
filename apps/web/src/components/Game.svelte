@@ -4,6 +4,7 @@
   import Board from './Board.svelte';
   import { artFor } from '../lib/pieceArt.js';
   import { sandboxRuleset, restoreInfinity } from '../lib/candidates.js';
+  import { chooseMove } from '../lib/sparring.js';
   import { OnlineGameController, type OnlineSnapshot, type Intent } from '../net/online-game.js';
   import { loadToken } from '../net/client.js';
   import { wsUrl } from '../net/url.js';
@@ -15,6 +16,9 @@
   let ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
 
   // ---------- Hotseat (local) mode ----------
+  /** Local sparring CPU (in-browser Takes engine search), if this local game has one. */
+  let cpuColor: 'w' | 'b' | null = null;
+  let cpuThinking = false;
   let whiteSetup = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
   let blackSetup = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
   if (!isOnline && gameParam === 'hotseat') {
@@ -26,6 +30,7 @@
         blackSetup = parsed.black;
         // Candidate test drive: a sandbox ruleset carrying one unpublished catalog piece.
         if (parsed.candidate) ruleset = sandboxRuleset(ruleset, restoreInfinity([parsed.candidate])[0]!);
+        if (parsed.cpu === 'w' || parsed.cpu === 'b') cpuColor = parsed.cpu;
       }
     } catch { /* fall back to vanilla */ }
   }
@@ -108,7 +113,7 @@
     game = game; // trigger reactivity
   }
 
-  const revealTimer = !isOnline ? setTimeout(() => { revealed = true; applyScriptedMoves(); }, 400) : undefined;
+  const revealTimer = !isOnline ? setTimeout(() => { revealed = true; applyScriptedMoves(); maybeCpuMove(); }, 400) : undefined;
   onDestroy(() => clearTimeout(revealTimer));
 
   function pieceColorAt(sq: number): 'w' | 'b' | null {
@@ -150,6 +155,7 @@
   function onSquareClick(sq: number): void {
     if (promoChoice || !game) return;
     if (isOnline && game.sideToMove() !== myColor) return; // not our turn, no local preview moves
+    if (cpuColor !== null && (game.sideToMove() === cpuColor || cpuThinking)) return; // CPU's turn
     if (selectedSq === null) {
       if (pieceColorAt(sq) === game.sideToMove()) selectedSq = sq;
       return;
@@ -178,6 +184,19 @@
     game!.make(m);
     lastMove = m;
     game = game;
+    maybeCpuMove();
+  }
+
+  function maybeCpuMove(): void {
+    if (!game || isOnline || cpuColor === null || cpuThinking) return;
+    if (game.sideToMove() !== cpuColor || game.status().result !== '*') return;
+    cpuThinking = true;
+    // Yield first so the human's move paints before the search blocks the main thread.
+    setTimeout(() => {
+      const reply = game ? chooseMove(game, { timeMs: 700 }) : null;
+      cpuThinking = false;
+      if (reply) playMove(reply);
+    }, 60);
   }
 
   function sq(s: number): string { return `${'abcdefgh'[s % 8]}${Math.floor(s / 8) + 1}`; }
@@ -234,7 +253,7 @@
     </div>
   {/if}
 
-  <p>To move: {game.sideToMove() === 'w' ? 'White' : 'Black'}{game.inCheck() ? ' — in check' : ''}</p>
+  <p>To move: {game.sideToMove() === 'w' ? 'White' : 'Black'}{game.inCheck() ? ' — in check' : ''}{cpuColor !== null ? ` · CPU plays ${cpuColor === 'w' ? 'White' : 'Black'}` : ' · hotseat: you play both sides'}{cpuThinking ? ' — CPU thinking…' : ''}</p>
 
   {#if isOnline && online?.drawOfferBy}
     <p class="notice">

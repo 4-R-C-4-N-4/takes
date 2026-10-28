@@ -35,7 +35,7 @@ const base = process.env.TAKES_URL || 'http://127.0.0.1:43187';
       assert.match(await rows.first().innerText(), new RegExp(`Test ${name}`));
       // Test drive: hotseat game with the candidate in the knight slots.
       await rows.first().click();
-      await page.getByRole('button', { name: 'Test drive (hotseat)', exact: true }).click();
+      await page.getByRole('button', { name: 'Hotseat (play both sides)', exact: true }).click();
       await page.locator('.piece-cell[data-sq="1"]').waitFor();
       await page.waitForTimeout(600);
       assert.equal(await page.locator('.piece-cell[data-sq="6"]').count(), 1, 'candidate also on g1');
@@ -50,6 +50,18 @@ const base = process.env.TAKES_URL || 'http://127.0.0.1:43187';
       assert(dests > 0, 'candidate on b1 has legal moves in the sandbox game');
       await page.screenshot({ path: path.join(__dirname, `${name}-candidate-testdrive.png`), fullPage: true });
       assert.deepEqual(errors, []);
+      // Versus CPU: after White's move, the CPU answers as Black on its own.
+      await page.goto(`${base}/#/candidates`);
+      await page.getByLabel('View').selectOption('reviewed');
+      await rows.first().click();
+      await page.getByRole('button', { name: 'Test drive vs CPU', exact: true }).click();
+      await page.locator('.piece-cell[data-sq="12"]').waitFor();
+      await page.waitForTimeout(600);
+      await page.locator('.piece-cell[data-sq="12"]').click();
+      await page.locator('rect[data-sq="28"]').click();
+      await page.waitForFunction(() => /To move: White/.test(document.body.innerText), null, { timeout: 5000 });
+      const blackMoved = await page.evaluate(() => [48, 49, 50, 51, 52, 53, 54, 55, 57, 62].some((s) => !document.querySelector(`.piece-cell[data-sq="${s}"]`)));
+      assert(blackMoved, 'CPU replied with a Black move');
       console.log(`${name}: candidates list, preview, attacks toggle, verdict+name persist, test drive PASS`);
     }
   } finally { await browser.close(); }

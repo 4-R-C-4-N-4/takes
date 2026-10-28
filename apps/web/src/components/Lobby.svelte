@@ -13,12 +13,14 @@
   let botLevel: BotLevel = 'easy';
   let botProfileId: string = profiles[0]?.id ?? '';
 
+  /** Local game opponent: a human on this device, or the in-browser sparring CPU. */
+  let localCpu: '' | 'w' | 'b' = 'b';
   function startHotseat(): void {
     const white = profiles.find((p) => p.id === whiteId);
     const black = profiles.find((p) => p.id === blackId);
     if (!white || !black) return;
     try {
-      sessionStorage.setItem('takes.hotseat', JSON.stringify({ white: white.setup, black: black.setup }));
+      sessionStorage.setItem('takes.hotseat', JSON.stringify({ white: white.setup, black: black.setup, cpu: localCpu || null }));
     } catch { /* ignore */ }
     location.hash = routeHref('game', 'hotseat');
   }
@@ -58,7 +60,12 @@
     <h2>Hotseat</h2>
     <label>White <select bind:value={whiteId}>{#each profiles as p}<option value={p.id}>{p.name}</option>{/each}</select></label>
     <label>Black <select bind:value={blackId}>{#each profiles as p}<option value={p.id}>{p.name}</option>{/each}</select></label>
-    <button on:click={startHotseat}>Start hotseat game</button>
+    <label>Opponent <select bind:value={localCpu}>
+      <option value="b">CPU plays Black</option>
+      <option value="w">CPU plays White</option>
+      <option value="">Human (hotseat, both sides)</option>
+    </select></label>
+    <button on:click={startHotseat}>Start local game</button>
   </section>
 
   <section>

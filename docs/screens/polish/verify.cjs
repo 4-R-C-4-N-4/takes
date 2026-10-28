@@ -91,7 +91,8 @@ const out = __dirname;
       await click(page.getByRole('link', { name: 'Lobby', exact: true }));
       await page.locator('label').filter({ hasText: /^White / }).locator('select').selectOption(vanillaId);
       await page.locator('label').filter({ hasText: /^Black / }).locator('select').selectOption(vanillaId);
-      await click(page.getByRole('button', { name: 'Start hotseat game', exact: true }));
+      await page.locator('label').filter({ hasText: /^Opponent/ }).locator('select').selectOption('');
+      await click(page.getByRole('button', { name: 'Start local game', exact: true }));
       await piece(12).waitFor();
       for (const [from, to] of [[12, 28], [52, 36], [6, 21], [57, 42]]) {
         await click(piece(from));
@@ -100,7 +101,7 @@ const out = __dirname;
         await exists(from, false); await exists(to);
       }
       assert(await page.getByText('Moves (UCI): 4', { exact: true }).count());
-      assert(await page.getByText('To move: White', { exact: true }).count());
+      assert(await page.getByText(/^To move: White · hotseat/).count());
       await click(page.getByRole('button', { name: 'Flip board', exact: true }));
       await noOverflow();
       await page.screenshot({ path: path.join(out, `${name}-hotseat.png`), fullPage: true });
