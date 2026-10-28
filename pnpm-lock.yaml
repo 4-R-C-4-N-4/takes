@@ -147,6 +147,18 @@ importers:
         specifier: workspace:*
         version: link:../../packages/library
 
+  tools/catalog:
+    dependencies:
+      '@takes/betza':
+        specifier: workspace:*
+        version: link:../betza
+      '@takes/library':
+        specifier: workspace:*
+        version: link:../../packages/library
+      '@takes/validator':
+        specifier: workspace:*
+        version: link:../../packages/validator
+
   tools/perft:
     dependencies:
       '@takes/betza':
@@ -158,6 +170,27 @@ importers:
       '@takes/library':
         specifier: workspace:*
         version: link:../../packages/library
+      '@takes/validator':
+        specifier: workspace:*
+        version: link:../../packages/validator
+
+  tools/scenarios:
+    dependencies:
+      '@takes/betza':
+        specifier: workspace:*
+        version: link:../betza
+      '@takes/catalog':
+        specifier: workspace:*
+        version: link:../catalog
+      '@takes/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
+      '@takes/library':
+        specifier: workspace:*
+        version: link:../../packages/library
+      '@takes/perft':
+        specifier: workspace:*
+        version: link:../perft
       '@takes/validator':
         specifier: workspace:*
         version: link:../../packages/validator

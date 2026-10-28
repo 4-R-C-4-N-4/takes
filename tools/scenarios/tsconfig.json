@@ -1,0 +1,34 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "emitDeclarationOnly": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../packages/library"
+    },
+    {
+      "path": "../../packages/engine"
+    },
+    {
+      "path": "../../packages/validator"
+    },
+    {
+      "path": "../betza"
+    },
+    {
+      "path": "../perft"
+    },
+    {
+      "path": "../catalog"
+    }
+  ]
+}

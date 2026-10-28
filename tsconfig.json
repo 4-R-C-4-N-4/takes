@@ -30,6 +30,12 @@
     },
     {
       "path": "tools/valuation"
+    },
+    {
+      "path": "tools/catalog"
+    },
+    {
+      "path": "tools/scenarios"
     }
   ]
 }

@@ -39,3 +39,5 @@ These are provisional defaults that resolve the issues raised in docs/plan-revie
   - **Heron** `H` (minor, cost 3): leaps exactly two squares diagonally over anything, and steps one square orthogonally. Betza `AW`.
   - **Dragon** `D` (major, cost 13, max 1): a queen that can also hop exactly one adjacent square in any of the eight directions, landing two squares away. The jump limit is the balance lever: it cannot ride past a blocker or jump two squares. Betza `QDA`.
   Costs are provisional until valuation. Queen and Dragon are each capped at one.
+
+- [D18] **Takes rule (hard constraint on every rules extension).** A capturing piece must end its move on the captured piece's square. En passant is the only exception. Hopping is allowed, but the hurdle is never captured. This rules out checkers-style jump captures, shooting, capture by approach or withdrawal, and explosions. Any new path type must name its capture square, and that square must be its landing square. Cannon, grasshopper, lame leapers and riders all satisfy this, and are candidate extensions after the catalog.
