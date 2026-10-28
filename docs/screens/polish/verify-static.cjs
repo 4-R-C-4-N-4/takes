@@ -163,10 +163,10 @@ function serve() {
       assert.equal(await page.locator('.mark-dot, .mark-ring').count(), 0);
       await drag(page.locator('.piece-cell[data-sq="12"]'), page.locator('rect[data-sq="28"]')); // e2-e4
       await page.locator('.piece-cell[data-sq="28"]').waitFor();
-      await page.waitForFunction(() => {
-        const blackMoved = [48, 49, 50, 51, 52, 53, 54, 55, 57, 62].some(s => !document.querySelector(`.piece-cell[data-sq="${s}"]`));
-        return blackMoved && /To move: White/.test(document.body.innerText);
-      }, undefined, { timeout: 5000 });
+      // Any Black reply counts (a king step like Ke8-d8 vacates no 'home' square), so wait for the
+      // move list to reach two plies with White to move again.
+      await page.waitForFunction(() => /\(2\)/.test(document.querySelector('.moves .eyebrow')?.textContent ?? '') &&
+        /To move: White/.test(document.body.innerText), undefined, { timeout: 10000 });
       await noOverflow();
       await page.evaluate(() => { location.hash = '#/lobby'; });
       await page.waitForFunction(() => location.hash.includes('lobby'));
