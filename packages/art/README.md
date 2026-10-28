@@ -46,6 +46,47 @@ The SVG uses `--piece-fill` and `--piece-stroke` for both player colors. Optiona
 Names are XML-escaped. Geometry uses no random state, external images or fonts.
 Existing coarse motif helpers remain available alongside `pieceSignatures`.
 
+## Hand-drawn set v3
+
+`packages/library/pieces/{id}/art.svg` holds a hand-authored override per piece
+(`resolveArt` prefers it over the procedural fallback); `apps/web` resolves these
+via `import.meta.glob`, including `king/art.svg` even though the king has no
+`piece.json` (its data comes from `KING_PIECE` in `apps/web/src/lib/king.ts`).
+All overrides share one geometric style: `viewBox 0 0 100 100`, a single
+rounded plinth baseline at y=86-92, `stroke-width 4`/`stroke-linejoin round`,
+and only `var(--piece-fill)`/`var(--piece-stroke)` for color. Tier widths
+follow the procedural grammar (pawn narrowest, rook/major widest) so silhouette
+weight still signals tier at a glance.
+
+Motif per piece:
+
+| Piece | Motif |
+| --- | --- |
+| Pawn | Round head on a collar, classic Staunton-style silhouette drawn fresh |
+| Berolina | Diamond (rotated-square) head + a V-notch chevron collar cut into the shoulder, unmistakably not a round pawn |
+| Knight | Horse head and mane facing left, minor-tier base |
+| Bishop | Pointed mitre bulb with a diagonal slit and ball finial |
+| Wraith | Tower shoulders (echoing the rook) rising into a bishop-like pointed hood, with a diagonal slit cue for its diagonal capture |
+| Lancer | Vertical shaft through a wide crossguard, topped with a spear point reaching above the other minors |
+| Toad | Squat arched back with two eye bumps and diagonal step notches on each flank |
+| Heron | Thin tall neck/body with a sideways beak and small orthogonal notch tabs |
+| Rook | Crenellated tower, widest plinth |
+| Queen | Tall tapering body under a 5-point open coronet |
+| Dragon | Queen-height body with swept wings at mid-height and a 3-point crest (vs. the queen's 5), the widest and most imposing silhouette |
+| King | Major-tier body topped by a bold connected cross finial |
+
+Regenerate the verification sheets with:
+
+```sh
+python packages/art/scripts/contact-sheet-v3.py
+```
+
+This writes `docs/art/set-v3-40.png`, `docs/art/set-v3-96.png` (contact sheets
+across white/black pieces on light/dark squares), `docs/art/set-v3-board.png`
+(a full-roster board lineup), and `docs/art/set-v3-distinctness.json` (pairwise
+40px silhouette IoU; the closest pair should stay inspected visually — IoU
+alone does not capture color/detail distinctness).
+
 ## Review and regeneration
 
 From the repository root:

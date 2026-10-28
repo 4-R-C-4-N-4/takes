@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Knight">
+  <rect x="26.0" y="86" width="48.0" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="68.0,86.0 68.0,60.0 77.0,47.0 66.0,34.0 58.0,39.0 63.0,29.0 48.0,20.0 20.0,38.0 29.0,47.0 39.0,45.0 33.0,57.0 43.0,63.0 32.0,86.0" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <circle cx="49.0" cy="29.0" r="2.4" fill="var(--piece-stroke)" stroke="none"/>
+
+</svg>

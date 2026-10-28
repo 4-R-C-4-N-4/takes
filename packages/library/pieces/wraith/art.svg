@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Wraith">
+  <rect x="26.0" y="86" width="48.0" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="31.0,86.0 31.0,40.0 36.0,40.0 36.0,32.0 44.0,32.0 44.0,38.0 50.0,22.0 56.0,38.0 64.0,32.0 64.0,40.0 69.0,40.0 69.0,86.0" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <path d="M 41 54 L 59 70" fill="none" stroke="var(--piece-stroke)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+</svg>
