@@ -33,6 +33,18 @@ describe('hand-drawn art.svg overrides (set v3)', () => {
     }
   });
 
+  test('every 2026.3 piece (set v4) has an override', () => {
+    const expected = [
+      'triton', 'sai', 'worm', 'rose', 'vine', 'broom',
+      'coroner', 'bullseye', 'impact', 'octopus', 'scarab', 'seal',
+      'halo', 'jester', 'turtle', 'prince', 'dancer',
+      'azazel', 'hierophant', 'bane',
+    ];
+    for (const id of expected) {
+      expect(overrides).toContain(id);
+    }
+  });
+
   test.each(overrides)('%s/art.svg is well-formed', (id) => {
     const svg = readFileSync(join(piecesDir, id, 'art.svg'), 'utf8');
 

@@ -87,6 +87,35 @@ across white/black pieces on light/dark squares), `docs/art/set-v3-board.png`
 40px silhouette IoU; the closest pair should stay inspected visually — IoU
 alone does not capture color/detail distinctness).
 
+## Set v5: Codex concept silhouettes (current, all 2026.3 pieces + king)
+
+Every override in `packages/library/pieces/{id}/art.svg` (classics, king and the 20 keepers) is a
+traced Codex concept silhouette on the shared plinth. Two hand-drawn attempts for the new pieces
+failed review: v4 encoded movement as notches on boxy bodies (forward pawns indistinguishable), and
+a geometric v5 draft still read as small motifs on stubby bodies. The board's job is instant
+recognition; the UI already shows the movement shorthand (e.g. `B3N`) and legal-move dots.
+
+Motifs follow the designer's nicknames: Triton trident, Sai dagger, Worm coil, Rose bloom, Vine
+leaf tendril, Broom, Coroner hooded figure with staff, Bullseye target, Impact starburst, Octopus,
+Scarab beetle, Seal balancing a ball, Halo robed figure with halo, Jester cap, Turtle shell, Prince
+crown with **no cross** (never confusable with the King), Dancer, Azazel horned winged figure,
+Hierophant papal triple crown, Bane spiked skull crown. Classics are a matching illustrated
+Staunton-style set.
+
+Pipeline (concept sheets are not committed):
+
+1. Codex generates one grid sheet per batch: bold flat black silhouettes on white, all on the same
+   round plinth (prompts recorded in the commit message).
+2. `python packages/art/scripts/split_sheet.py sheet.png crops/ id1,id2,...` finds grid cells,
+   cuts every cell at the median plinth height and saves padded figure masks.
+3. Thicken thin-stroked figures (Pillow `MinFilter(5..9)`) if they vanish at 40px.
+4. `tools/artgen/scripts/trace-concepts.ts crops/ id ...` potraces each mask and fits it into the
+   tier box above the classic plinth (pawn top 30 / minor 17 / rook 15 / major 8; plinth widths
+   42/48/58/54, y 86-92), with `var(--piece-fill)` / `var(--piece-stroke)` and even-odd holes.
+   Run it with tsx from a package that has tsx (e.g. copy into `apps/server` temporarily).
+5. `python packages/art/scripts/contact-sheet-v5.py` renders `docs/art/set-v5-{40,96,board}.png`
+   and `set-v5-distinctness.json` (pairwise 40px silhouette IoU; min pair broom/seal ≈ 0.33).
+
 ## Review and regeneration
 
 From the repository root:
