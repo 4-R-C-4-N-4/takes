@@ -142,12 +142,18 @@ async function main() {
   console.log('[catalog] FSF verification sample:', toVerify.length, '/', catalog.length);
 
   // Exhaustive (every square x every blocker ring) on the sample; smoke probe on EVERY entry.
-  const results = verifyBatch([
-    ...toVerify.flatMap((e) => exhaustiveCases(e.piece, e.betza)),
-    ...catalog.filter((e) => !toVerifyKeys.has(e.key)).flatMap((e) => smokeCases(e.piece, e.betza)),
-  ]);
+  // Streamed in piece chunks: materialising ~2M cases at once exhausts the heap.
+  const results: Array<{ id: string; ok: boolean }> = [];
+  let totalCases = 0;
+  const PIECES_PER_PASS = 230;
+  for (let i = 0; i < catalog.length; i += PIECES_PER_PASS) {
+    const slice = catalog.slice(i, i + PIECES_PER_PASS);
+    const batch = verifyBatch(slice.flatMap((e) => (toVerifyKeys.has(e.key) ? exhaustiveCases(e.piece, e.betza) : smokeCases(e.piece, e.betza))));
+    totalCases += batch.length;
+    for (const r of batch) if (!r.ok) results.push({ id: r.id, ok: false });
+  }
   const mismatches = results.filter((r) => !r.ok);
-  console.log('[catalog] FSF mismatches:', mismatches.length, '/', results.length);
+  console.log('[catalog] FSF mismatching positions:', mismatches.length, '/', totalCases, 'positions checked');
 
   const mismatchKeys = new Set(mismatches.map((m) => m.id));
   const verifiedCatalog = catalog.filter((e) => !mismatchKeys.has(e.piece.id));

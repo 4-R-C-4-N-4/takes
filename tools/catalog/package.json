@@ -17,6 +17,6 @@
     "tsx": "^4.23.0"
   },
   "scripts": {
-    "build": "node --import tsx src/build.ts"
+    "build": "NODE_OPTIONS=--max-old-space-size=8192 node --import tsx src/build.ts"
   }
 }
