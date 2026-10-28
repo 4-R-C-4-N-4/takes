@@ -3,6 +3,7 @@
   import { createGame, type Game, type Move } from '@takes/engine';
   import Board from './Board.svelte';
   import { artFor } from '../lib/pieceArt.js';
+  import { sandboxRuleset, restoreInfinity } from '../lib/candidates.js';
   import { OnlineGameController, type OnlineSnapshot, type Intent } from '../net/online-game.js';
   import { loadToken } from '../net/client.js';
   import { wsUrl } from '../net/url.js';
@@ -11,7 +12,7 @@
   export let gameParam: string | undefined = undefined;
 
   const isOnline = gameParam?.startsWith('online-') ?? false;
-  const ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
+  let ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
 
   // ---------- Hotseat (local) mode ----------
   let whiteSetup = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
@@ -23,6 +24,8 @@
         const parsed = JSON.parse(raw);
         whiteSetup = parsed.white;
         blackSetup = parsed.black;
+        // Candidate test drive: a sandbox ruleset carrying one unpublished catalog piece.
+        if (parsed.candidate) ruleset = sandboxRuleset(ruleset, restoreInfinity([parsed.candidate])[0]!);
       }
     } catch { /* fall back to vanilla */ }
   }

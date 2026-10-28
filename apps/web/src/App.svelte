@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { parseHash, routeHref, type Route } from './lib/router.js';
   import Library from './components/Library.svelte';
+  // Candidates carries ~800 KB of screening data: load it only when the tab is opened.
+  const loadCandidates = () => import('./components/Candidates.svelte');
   import Builder from './components/Builder.svelte';
   import Profiles from './components/Profiles.svelte';
   import Lobby from './components/Lobby.svelte';
@@ -22,6 +24,7 @@
 
 <nav>
   <a href={routeHref('library')} class:active={route.screen === 'library'}>Library</a>
+  <a href={routeHref('candidates')} class:active={route.screen === 'candidates'}>Candidates</a>
   <a href={routeHref('builder')} class:active={route.screen === 'builder'}>Builder</a>
   <a href={routeHref('profiles')} class:active={route.screen === 'profiles'}>Profiles</a>
   <a href={routeHref('lobby')} class:active={route.screen === 'lobby'}>Lobby</a>
@@ -30,6 +33,8 @@
 <main>
   {#if route.screen === 'library'}
     <Library />
+  {:else if route.screen === 'candidates'}
+    {#await loadCandidates()}<p>Loading candidates…</p>{:then m}<m.default />{/await}
   {:else if route.screen === 'builder'}
     <Builder profileId={route.param} />
   {:else if route.screen === 'profiles'}

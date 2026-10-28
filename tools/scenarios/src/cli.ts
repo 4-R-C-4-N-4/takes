@@ -150,6 +150,10 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
     ...[...finalByFamily].flatMap(([fam, es]) => es.map((e) => `| ${fam} | ${e.betza} | ${e.tier} | ${e.metrics.score.toFixed(2)} | ${(nullScore[e.tier] ?? 0.5).toFixed(2)} | ${vsNull(e) >= 0 ? '+' : ''}${vsNull(e).toFixed(2)} |`))].join('\n');
   writeFileSync(`${opts.outDir}/shortlist.md`, renderShortlistMd(finalByFamily, timings) + nullMd + '\n');
   writeFileSync(`${opts.outDir}/null-controls.json`, JSON.stringify(nullScore, null, 2));
+  // Every screened candidate (stage C metrics where available), for the web Candidates review page.
+  const shortlisted = new Set([...finalByFamily.values()].flat().map((e) => e.piece.id));
+  const screened = stageB.map((e) => ({ ...(byId.get(e.piece.id) ?? e), shortlisted: shortlisted.has(e.piece.id) }));
+  writeFileSync(`${opts.outDir}/screened.json`, JSON.stringify({ nullScore, candidates: screened }));
   console.log(`wrote ${opts.outDir}/shortlist.json and shortlist.md`);
   console.log('timings:', JSON.stringify(timings));
 }

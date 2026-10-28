@@ -1,0 +1,56 @@
+// Candidates review page regression. Same env as verify.cjs (TAKES_URL, PLAYWRIGHT_MODULE, CHROME_BIN).
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const assert = require('node:assert/strict');
+const path = require('node:path');
+const base = process.env.TAKES_URL || 'http://127.0.0.1:43187';
+(async () => {
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_BIN, headless: true, args: ['--no-sandbox'] });
+  try {
+    for (const [name, width, height] of [['desktop', 1280, 900], ['phone', 390, 844]]) {
+      const page = await (await browser.newContext({ viewport: { width, height } })).newPage();
+      const errors = [];
+      page.on('pageerror', (e) => errors.push(e.message));
+      await page.goto(`${base}/#/candidates`);
+      await page.getByRole('heading', { name: 'Candidates', exact: true }).waitFor();
+      const rows = page.locator('button.row');
+      assert((await rows.count()) >= 10, 'shortlist rows render');
+      // Pick a minor-tier candidate so the test drive places it on b1/g1.
+      await page.getByLabel('Tier').selectOption('minor');
+      await rows.first().click();
+      const count = (cls) => page.locator(`.highlight.${cls}`).count();
+      assert((await count('quiet')) + (await count('capture')) + (await count('both')) > 0, 'preview shows destinations');
+      await page.getByRole('button', { name: 'Attacks', exact: true }).click();
+      assert.equal(await count('quiet'), 0);
+      assert((await count('capture')) > 0, 'attack view shows attacked squares');
+      await page.getByRole('button', { name: 'Keep', exact: true }).click();
+      await page.getByPlaceholder('e.g. Hydra').fill(`Test ${name}`);
+      await page.getByPlaceholder('e.g. Hydra').press('Tab');
+      assert.equal(await page.locator('button.row .verdict.keep').count(), 1);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: overflow`);
+      await page.screenshot({ path: path.join(__dirname, `${name}-candidates.png`), fullPage: true });
+      // Verdicts survive reload and appear under "My verdicts".
+      await page.reload();
+      await page.getByLabel('View').selectOption('reviewed');
+      assert.equal(await rows.count(), 1);
+      assert.match(await rows.first().innerText(), new RegExp(`Test ${name}`));
+      // Test drive: hotseat game with the candidate in the knight slots.
+      await rows.first().click();
+      await page.getByRole('button', { name: 'Test drive (hotseat)', exact: true }).click();
+      await page.locator('.piece-cell[data-sq="1"]').waitFor();
+      await page.waitForTimeout(600);
+      assert.equal(await page.locator('.piece-cell[data-sq="6"]').count(), 1, 'candidate also on g1');
+      // Open the b1 diagonal (c2-c3, ...e7-e6), then the candidate must have moves.
+      for (const [from, to] of [[10, 18], [52, 44]]) {
+        await page.locator(`.piece-cell[data-sq="${from}"]`).click();
+        await page.locator(`rect[data-sq="${to}"]`).click();
+        await page.locator(`.piece-cell[data-sq="${to}"]`).waitFor();
+      }
+      await page.locator('.piece-cell[data-sq="1"]').click();
+      const dests = await page.locator('.highlight.quiet, .highlight.capture').count();
+      assert(dests > 0, 'candidate on b1 has legal moves in the sandbox game');
+      await page.screenshot({ path: path.join(__dirname, `${name}-candidate-testdrive.png`), fullPage: true });
+      assert.deepEqual(errors, []);
+      console.log(`${name}: candidates list, preview, attacks toggle, verdict+name persist, test drive PASS`);
+    }
+  } finally { await browser.close(); }
+})().catch((e) => { console.error(e); process.exitCode = 1; });
