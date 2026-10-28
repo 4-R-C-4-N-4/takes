@@ -6,6 +6,7 @@ import { createGame, type Game, type Move } from '@takes/engine';
 import type { BotLevel, ServerMsg, WireIssue, WireReason, WireResult } from '@takes/protocol';
 import type { Color } from '@takes/library';
 import { TakesClient, loadToken, type ClientOpts } from './client.js';
+import type { OnlineTransport } from './transport.js';
 
 export type Phase = 'connecting' | 'setup-wait' | 'playing' | 'over';
 
@@ -36,7 +37,7 @@ export type Intent =
   | { kind: 'resume'; code: string };
 
 export class OnlineGameController {
-  private client: TakesClient;
+  private client: OnlineTransport & { connect(code?: string): void };
   private snap: OnlineSnapshot;
   private readonly listeners = new Set<(s: OnlineSnapshot) => void>();
   private pendingSetup: string | null = null;
