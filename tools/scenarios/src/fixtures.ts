@@ -44,7 +44,7 @@ const archbishop: Piece = {
 };
 
 const splitMover: Piece = {
-  id: 'f_mNcB', name: 'Bishop-Knight split', glyph: 'C', tier: 'minor',
+  id: 'f_splitmover', name: 'Bishop-Knight split', glyph: 'C', tier: 'minor',
   components: [
     { vec: [1, 2], sym: 'all', range: 1, path: 'leap', mode: 'move' },
     { vec: [1, 1], sym: 'all', range: Infinity, path: 'slide', mode: 'capture' },
@@ -69,13 +69,13 @@ const heron: Piece = {
 
 /** Forward-only rook: slides forward and sideways, never backward. */
 const forwardRook: Piece = {
-  id: 'f_fR', name: 'Forward Rook', glyph: 'C', tier: 'rook',
+  id: 'f_forwardrook', name: 'Forward Rook', glyph: 'C', tier: 'rook',
   components: [{ vec: [0, 1], sym: ['f', 'l', 'r'], range: Infinity, path: 'slide', mode: 'both' }],
 };
 
 /** Weak piece: moves like a wazir but captures like a ferz (split move/capture, low power). */
 const weakSplit: Piece = {
-  id: 'f_mWcF', name: 'Weak Split', glyph: 'C', tier: 'pawn',
+  id: 'f_weaksplit', name: 'Weak Split', glyph: 'C', tier: 'pawn',
   components: [
     { vec: [0, 1], sym: 'all', range: 1, path: 'slide', mode: 'move' },
     { vec: [1, 1], sym: 'all', range: 1, path: 'slide', mode: 'capture' },
