@@ -13,9 +13,27 @@ const base = process.env.TAKES_URL || 'http://127.0.0.1:43187';
       await page.goto(`${base}/#/candidates`);
       await page.getByRole('heading', { name: 'Candidates', exact: true }).waitFor();
       const rows = page.locator('button.row');
+      await rows.first().waitFor();
       assert((await rows.count()) >= 10, 'shortlist rows render');
+      const matchingMoves = page.getByRole('checkbox', { name: 'Same moves & attacks', exact: true });
+      assert(await matchingMoves.isChecked(), 'same moves/attacks defaults ON');
+      // Both sources honour the filter; changing it must narrow the actual list.
+      const sources = await page.getByLabel('Data source').count() ? ['main', 'fourway'] : [null];
+      for (const source of sources) {
+        if (source) await page.getByLabel('Data source').selectOption(source);
+        await page.getByLabel('View').selectOption('all');
+        await rows.first().waitFor();
+        const countMatches = async () => Number((await page.getByRole('status').innerText()).match(/^(\d+)/)[1]);
+        const filtered = await countMatches();
+        await matchingMoves.uncheck();
+        assert(await countMatches() > filtered, `${source}: allowing split movement expands list`);
+        await matchingMoves.check();
+        assert.equal(await countMatches(), filtered, `${source}: filter is reversible`);
+      }
+      await page.getByLabel('View').selectOption('shortlist');
       // Pick a minor-tier candidate so the test drive places it on b1/g1.
       await page.getByLabel('Tier').selectOption('minor');
+      const notation = await rows.first().locator('.betza').innerText();
       await rows.first().click();
       const count = (cls) => page.locator(`.highlight.${cls}`).count();
       assert((await count('quiet')) + (await count('capture')) + (await count('both')) > 0, 'preview shows destinations');
@@ -31,8 +49,10 @@ const base = process.env.TAKES_URL || 'http://127.0.0.1:43187';
       // Verdicts survive reload and appear under "My verdicts".
       await page.reload();
       await page.getByLabel('View').selectOption('reviewed');
+      await rows.first().waitFor();
       assert.equal(await rows.count(), 1);
       assert.match(await rows.first().innerText(), new RegExp(`Test ${name}`));
+      assert((await rows.first().locator('.betza').innerText()).startsWith(notation), 'notation stays primary after naming');
       // Test drive: hotseat game with the candidate in the knight slots.
       await rows.first().click();
       await page.getByRole('button', { name: 'Hotseat (play both sides)', exact: true }).click();

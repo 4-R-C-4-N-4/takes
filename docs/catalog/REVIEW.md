@@ -4,8 +4,10 @@ Run the app with `pnpm serve` and open `http://localhost:8787/#/candidates`, or 
 
 ## Candidates page
 
-- **Views:** *Shortlist* (top 5 per family after 160-game reruns), *All screened* (every candidate from the run), and *My verdicts*.
-- **Filters:** tier and family. Sort by strength, activity (moves per game) or forks.
+- **Views:** *Shortlist* (per-family finalists after 160-game reruns), *All screened* (every candidate from the run), and *My verdicts*.
+- **Filters:** tier and family. *Fully symmetric* defaults on (pawn tier exempt). *Same moves & attacks* also defaults on: matching quiet/capture directions, ranges and blocker/jump behaviour, across every tier. This is a review preference, not a ruleset restriction; turn it off to revisit split-movement pieces. Filters never delete reviews. Sort by strength, activity (moves per game) or forks.
+- **Labels:** movement shorthand (Betza, e.g. `B3N`) is always primary. Working names remain optional secondary nicknames and are preserved in exports.
+- **Data source:** *Four-way screen* is the default when available; *Main screen* retains the earlier sample.
 - **Preview board:** *Moves + attacks* / *Moves* / *Attacks*. Tap a square to move the piece.
 - **Test drive (hotseat):** plays a game with the candidate in its tier slot against a vanilla army. Minor candidates take the knight squares, rook candidates the rook squares, major candidates the queen square, and pawn candidates d2/e2. This uses a sandbox ruleset; nothing is published.
 - **Verdicts:** Keep / Maybe / Reject, plus a working name and notes. These are stored in your browser. *Export verdicts* copies JSON (betza, tier, verdict, name, note). Paste it to the agent to move keepers into the next valuation and art pass.
@@ -28,6 +30,6 @@ Run the app with `pnpm serve` and open `http://localhost:8787/#/candidates`, or 
 
 ## Known limits of this screen
 
-- Only left/right-symmetric pieces, with at most 100 sampled per family.
+- The main screen sampled at most 100 left/right-symmetric pieces per family. The four-way screen covers 1,621 candidates with all non-pawns symmetric on both axes (pawn tier exempt), without per-family sampling. Its shortlist selected up to 8 per family for longer reruns.
 - Fast low-node Fairy-Stockfish games: these numbers *screen* pieces; they don't price them.
 - Pawn-tier pieces are compared against a pawn, so pawn-tier forward sliders look enormous.

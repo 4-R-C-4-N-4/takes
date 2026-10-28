@@ -10,6 +10,7 @@
     type Candidate, type ScreenedData, type Verdict,
   } from '../lib/candidates.js';
   import { passesFullSymmetry } from '../lib/symmetry.js';
+  import { hasSameMovesAndAttacksKey } from '../lib/movementFilter.js';
   import mainScreenedRaw from '../../../../docs/catalog/screened.json';
 
   // Optional second data source: a four-way-symmetric screen. `eager: false` means a missing
@@ -34,7 +35,8 @@
 
   const mainData = restoreInfinityData(mainScreenedRaw as unknown as ScreenedData);
 
-  const data = $derived(source === 'fourway' && fourwayData ? fourwayData : mainData);
+  // Never show the main screen under the four-way label while its lazy chunk loads.
+  const data = $derived(source === 'fourway' ? (fourwayData ?? { candidates: [], nullScore: {} }) : mainData);
   const candidates = $derived(data.candidates);
   const nullScore = $derived(data.nullScore);
   const base = getRuleset(CURRENT_RULESET_VERSION)!;
@@ -45,6 +47,7 @@
   let family = $state<string>('any');
   let sortBy = $state<'strength' | 'activity' | 'forks'>('strength');
   let symmetricOnly = $state(true);
+  let sameMovesOnly = $state(true);
   let selected = $state<Candidate | null>(null);
   let exported = $state('');
 
@@ -58,7 +61,8 @@
       (view === 'all' || (view === 'shortlist' ? c.shortlisted : reviews[c.key]?.verdict)) &&
       (tier === 'any' || c.tier === tier) &&
       (family === 'any' || c.families.includes(family)) &&
-      (!symmetricOnly || isSymmetric(c)));
+      (!symmetricOnly || isSymmetric(c)) &&
+      (!sameMovesOnly || hasSameMovesAndAttacksKey(c.key)));
     const key = sortBy === 'strength' ? delta : sortBy === 'activity' ? (c: Candidate) => c.metrics.movesPerGame : (c: Candidate) => c.metrics.forksPerGame;
     return [...l].sort((a, b) => key(b) - key(a));
   });
@@ -154,7 +158,12 @@
       <input type="checkbox" bind:checked={symmetricOnly} />
       Fully symmetric
     </label>
+    <label class="symmetry-toggle" title="Matching move and capture directions, ranges and jumping behaviour. Applies to all tiers; a review preference, not a ruleset restriction.">
+      <input type="checkbox" bind:checked={sameMovesOnly} />
+      Same moves &amp; attacks
+    </label>
   </div>
+  <p class="faint" role="status">{list.length} matching candidates · {candidates.length} screened. Filters only hide pieces; saved reviews are kept.</p>
   {#if exported}<textarea class="textarea export mono" readonly>{exported}</textarea><p class="faint">Copied to clipboard (or copy from the box above).</p>{/if}
 
   <div class="layout">
@@ -163,7 +172,7 @@
         <li>
           <button class="row" class:selected={selected?.key === c.key} onclick={() => select(c)}>
             <PieceIcon svg={pieceSvg(c.piece)} size={32} />
-            <span class="betza mono">{reviews[c.key]?.name ?? c.betza}</span>
+            <span class="betza mono">{c.betza}{#if reviews[c.key]?.name}<small class="nickname">{reviews[c.key]?.name}</small>{/if}</span>
             <span class="chip tier-chip">{c.tier}</span>
             <span class="delta-wrap">
               <span class="delta num" class:pos={delta(c) > 0.08} class:neg={delta(c) < -0.08}>{fmt(delta(c))}</span>
@@ -182,8 +191,9 @@
       {@const m = selected.metrics}
       {@const review = reviews[selected.key]}
       <section class="panel detail">
-        <Inspector piece={selected.piece} art={pieceSvg(selected.piece)} title={review?.name ?? selected.betza} cellSize={36}>
+        <Inspector piece={selected.piece} art={pieceSvg(selected.piece)} title={selected.betza} cellSize={36}>
           {#snippet extra()}
+            {#if review?.name}<p class="muted">Nickname: {review.name}</p>{/if}
             <p class="muted replaces">replaces <span class="mono">{selected!.replaced}</span> · <span class="mono">{selected!.betza}</span></p>
 
             <dl class="kv metrics">
@@ -257,6 +267,7 @@
   .list button.row:hover { background: var(--ink-2); }
   .list button.row.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
   .betza { font-size: var(--fs-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nickname { display: block; font-family: var(--font-ui); font-size: var(--fs-xs); color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; }
   .tier-chip { text-transform: capitalize; }
   .delta-wrap { display: grid; justify-items: end; gap: 2px; min-width: 56px; }
   .delta { font-size: var(--fs-sm); }
