@@ -22,6 +22,9 @@
       "path": "../../packages/validator"
     },
     {
+      "path": "../../packages/art"
+    },
+    {
       "path": "../betza"
     },
     {
@@ -29,6 +32,9 @@
     },
     {
       "path": "../catalog"
+    },
+    {
+      "path": "../valuation"
     }
   ]
 }

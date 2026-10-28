@@ -14,6 +14,15 @@
     "@takes/validator": "workspace:*",
     "@takes/betza": "workspace:*",
     "@takes/perft": "workspace:*",
-    "@takes/catalog": "workspace:*"
+    "@takes/catalog": "workspace:*",
+    "@takes/valuation": "workspace:*",
+    "@takes/art": "workspace:*"
+  },
+  "scripts": {
+    "screen": "node --import tsx src/cli.ts",
+    "contact-sheet": "node --import tsx src/contact-sheet.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.0"
   }
 }

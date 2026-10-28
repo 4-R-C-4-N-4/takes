@@ -176,6 +176,9 @@ importers:
 
   tools/scenarios:
     dependencies:
+      '@takes/art':
+        specifier: workspace:*
+        version: link:../../packages/art
       '@takes/betza':
         specifier: workspace:*
         version: link:../betza
@@ -194,6 +197,13 @@ importers:
       '@takes/validator':
         specifier: workspace:*
         version: link:../../packages/validator
+      '@takes/valuation':
+        specifier: workspace:*
+        version: link:../valuation
+    devDependencies:
+      tsx:
+        specifier: ^4.23.0
+        version: 4.23.15
 
   tools/valuation:
     dependencies:
