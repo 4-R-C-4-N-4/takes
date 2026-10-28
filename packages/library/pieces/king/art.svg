@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="King">
+  <rect x="23.0" y="86" width="54.0" height="6" rx="2" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="32.0,86.0 37.0,42.0 63.0,42.0 68.0,86.0" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <polygon points="44.0,42.0 44.0,32.0 47.0,32.0 47.0,25.0 53.0,25.0 53.0,32.0 56.0,32.0 56.0,42.0" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <polygon points="41.0,25.0 59.0,25.0 59.0,19.0 41.0,19.0" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+  <polygon points="47.0,19.0 53.0,19.0 53.0,8.0 47.0,8.0" fill="var(--piece-fill)" stroke="var(--piece-stroke)" stroke-width="4" stroke-linejoin="round" />
+
+</svg>
