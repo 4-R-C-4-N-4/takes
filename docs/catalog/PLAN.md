@@ -23,4 +23,45 @@ Goal: systematically find GOOD pieces before naming or pricing them. Ivy curates
 7. **Stage C.** Run more games for the top N per family, rank them, and produce a contact sheet (badge + art + Betza + metrics) in docs/catalog/shortlist.md and shortlist.png.
 8. **Ivy names, picks and prices** the keepers. The valuation harness then measures them properly.
 
-Extensions after the catalog (D18-compliant): cannon, grasshopper, lame leapers, riders.
+## Extensions after the catalog (D18-compliant): cannon, grasshopper, lame leapers, riders.
+
+## Catalog results (tools/catalog)
+
+Pipeline implemented: enumerate -> canonicalise/dedupe -> validate+Betza -> static
+profile/tier/families -> FSF round-trip verification -> `docs/catalog/catalog.json.gz`
++ `docs/catalog/catalog-summary.md`. Regenerate with
+`pnpm --filter @takes/catalog run build` (~14s).
+
+- Component options enumerated: 453 single components (W/F slides x 15 dir
+  subsets x {1,2,3,∞} ranges x 3 modes; D/A leaps x 15 dir subsets x 3 modes;
+  N leap x 3 modes only — directional N subsets are rejected by the Betza
+  exporter as oblique-leaper ambiguity, matching `componentToBetza`'s
+  documented limitation).
+- 1- and 2-component combos are enumerated **exhaustively** (453 + 102,378).
+  3-component combos are combinatorially enormous (~15.4M unordered triples)
+  and are **not** enumerated exhaustively: we draw a large seeded
+  deterministic sample (80,000 by default, `CATALOG_TRIPLE_SAMPLE` env var)
+  plus a hand-picked seed list (`seedClassicCombos`, currently the amazon
+  R+B+N) guaranteeing specific classics survive the sampling. This is the
+  one deliberate, documented scope reduction from "every piece expressible
+  up to 3 components" — see "known gaps" below.
+- Canonicalisation merges move+capture pairs into `both`, dedupes by the
+  expanded White vector-set key, and merges left/right mirror images.
+- Two additional Betza-exporter ambiguities were found by FSF round-trip
+  testing and are now excluded pre-emptively (not just caught by the sample):
+  (1) two components sharing an atom letter concatenate into an unintended
+  multi-leg compound (e.g. `W`+`W` -> FSF reads `WW` as a 2-leg leaper, not
+  two wazir terms); (2) any piece with 2+ slide components on the same atom
+  (any range) has the same adjacency risk once mode/direction prefixes are
+  stripped. Both are reported as exporter limitations, not fixed in
+  `@takes/betza` (out of this tool's ownership).
+- Last production run (80,000 triples, 2,500-case FSF sample): 182,832 raw
+  combos -> 126,764 canonical -> 56,079 valid -> 56,079 FSF-verified (0
+  mismatches in the sample) -> 56,079 final catalog entries, in 13.8s.
+- Known gaps: dragon (rook+bishop+dabbaba+alfil = 4 schema components)
+  structurally exceeds the ≤3-component cap and cannot appear in this
+  catalog; 3-component space is sampled, not exhaustive, so some valid
+  3-component pieces may be absent from any single build (re-running with a
+  larger `CATALOG_TRIPLE_SAMPLE` finds more); the same-atom slide exclusion
+  is conservative and discards some legitimate pieces (e.g. same-atom,
+  different-direction combos) alongside the genuinely ambiguous ones.

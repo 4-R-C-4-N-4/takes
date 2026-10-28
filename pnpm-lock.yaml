@@ -158,6 +158,10 @@ importers:
       '@takes/validator':
         specifier: workspace:*
         version: link:../../packages/validator
+    devDependencies:
+      tsx:
+        specifier: ^4.23.0
+        version: 4.23.15
 
   tools/perft:
     dependencies:
