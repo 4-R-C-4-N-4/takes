@@ -114,11 +114,16 @@
   <div class="page-head">
     <div>
       <h1>Candidates</h1>
-      <p class="intro">
-        {candidates.length} screened pieces from the catalog. <b>Strength</b> is score minus the slot's null control
-        (the replaced piece itself injected as a new piece: {Object.entries(nullScore).map(([t, s]) => `${t} ${s.toFixed(2)}`).join(', ')}).
-        Roughly ±0.15 is noise at 40 games, ±0.08 at 160.
-      </p>
+      <div class="intro">
+        {candidates.length} screened pieces from the catalog. <b>Strength</b> is score minus the slot's null baseline.
+        <details class="info-disclosure">
+          <summary>What's "null control"?</summary>
+          <p class="faint">
+            The replaced piece itself injected as a new piece: {Object.entries(nullScore).map(([t, s]) => `${t} ${s.toFixed(2)}`).join(', ')}.
+            Roughly ±0.15 is noise at 40 games, ±0.08 at 160.
+          </p>
+        </details>
+      </div>
     </div>
     <button class="btn" onclick={doExport}>Export verdicts</button>
   </div>
@@ -231,6 +236,9 @@
 <style>
   .candidates { max-width: var(--content-max); margin: 0 auto; }
   .intro { max-width: 70ch; }
+  .info-disclosure { margin-top: var(--s-1); font-size: var(--fs-sm); }
+  .info-disclosure summary { cursor: pointer; color: var(--text-muted); }
+  .info-disclosure p { margin: var(--s-1) 0 0; max-width: 60ch; }
   .filters { margin-top: var(--s-2); }
   .filters .select { width: auto; min-width: 140px; }
   .symmetry-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-sm); color: var(--text-muted); cursor: pointer; }

@@ -74,12 +74,13 @@
   .library { max-width: var(--content-max); margin: 0 auto; }
   .explore { display: grid; grid-template-columns: 1fr minmax(300px, 380px); gap: var(--s-6); align-items: start; }
   .tiers { gap: var(--s-6); }
-  .palette { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+  .palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s-2); }
   .inspector-pane { position: sticky; top: var(--s-5); padding: var(--s-5); min-height: 120px; }
   .inspector-pane.empty { display: flex; align-items: center; justify-content: center; }
 
   @media (max-width: 860px) {
     .explore { grid-template-columns: 1fr; }
     .inspector-pane { position: static; }
+    .palette { grid-template-columns: repeat(2, 1fr); }
   }
 </style>

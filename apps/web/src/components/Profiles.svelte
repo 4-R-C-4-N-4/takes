@@ -114,10 +114,19 @@
           </div>
           <div class="army-actions row">
             <a class="btn sm" href={routeHref('builder', p.id)}>Edit</a>
-            <button class="btn sm ghost" onclick={() => refresh(duplicateProfile(p.id))}>Duplicate</button>
-            <button class="btn sm ghost" onclick={() => rename(p)}>Rename</button>
-            <button class="btn sm ghost" onclick={() => copy(p)}>Copy string</button>
-            <button class="btn sm danger ghost" onclick={() => remove(p)}>Delete</button>
+            <button class="btn sm ghost action-extra" onclick={() => refresh(duplicateProfile(p.id))}>Duplicate</button>
+            <button class="btn sm ghost action-extra" onclick={() => rename(p)}>Rename</button>
+            <button class="btn sm ghost action-extra" onclick={() => copy(p)}>Copy string</button>
+            <button class="btn sm danger ghost action-extra" onclick={() => remove(p)}>Delete</button>
+            <details class="overflow-menu">
+              <summary class="btn sm ghost overflow-toggle" aria-label="More actions for {p.name}">⋯</summary>
+              <div class="overflow-panel">
+                <button class="menu-item" onclick={() => refresh(duplicateProfile(p.id))}>Duplicate</button>
+                <button class="menu-item" onclick={() => rename(p)}>Rename</button>
+                <button class="menu-item" onclick={() => copy(p)}>Copy string</button>
+                <button class="menu-item danger" onclick={() => remove(p)}>Delete</button>
+              </div>
+            </details>
           </div>
         </li>
       {/each}
@@ -146,10 +155,26 @@
   .army-info { display: grid; gap: 4px; min-width: 0; }
   .army-name { font: 600 var(--fs-md)/1.2 var(--font-ui); }
   .setup-str { display: block; font-size: var(--fs-xs); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .army-actions { flex-wrap: nowrap; justify-content: flex-end; }
+  .army-actions { flex-wrap: nowrap; justify-content: flex-end; position: relative; }
+  .overflow-menu { display: none; position: relative; }
+  .overflow-toggle { padding: 0 var(--s-2); font-weight: 700; }
+  .overflow-toggle::-webkit-details-marker { display: none; }
+  .overflow-panel {
+    position: absolute; right: 0; top: calc(100% + 4px); z-index: 5; display: grid; min-width: 160px;
+    background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-2);
+    overflow: hidden;
+  }
+  .menu-item {
+    appearance: none; background: transparent; border: 0; color: var(--text); text-align: left; cursor: pointer;
+    padding: var(--s-2) var(--s-3); font: 500 var(--fs-sm)/1.2 var(--font-ui); min-height: var(--tap);
+  }
+  .menu-item:hover { background: var(--ink-3); }
+  .menu-item.danger { color: var(--bad); }
   @media (max-width: 720px) {
     .army-row { grid-template-columns: auto 1fr; }
     .army-actions { grid-column: 1 / -1; justify-content: flex-start; }
+    .action-extra { display: none; }
+    .overflow-menu { display: block; }
   }
   .import-panel { padding: var(--s-4); }
   .import-panel .row { flex-wrap: nowrap; }
