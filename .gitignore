@@ -8,3 +8,4 @@ coverage/
 *.db-wal
 .artgen-cache/
 .scenario-cache/
+dist-static/

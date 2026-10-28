@@ -83,12 +83,17 @@ joined by sharing a lobby code.
 
 Total: about 3½ days of agent work.
 
-## Decisions needed
-1. **Source visibility.** `takes` is private; tiny-games is public and builds from source.
-   - (a) Move the web app and packages into `tiny-games/takes/` (source becomes public;
-     add a licence).
-   - (b) Keep `takes` private, and have its CI push the built single file into tiny-games
-     with a deploy token.
-   - (c) Make `takes` public and serve it from its own Pages path, like OpenXOPS.
-2. **Signalling.** Public Nostr relays (zero infrastructure, the default), or a tiny relay
-   you host (more reliable, but it is a backend).
+## Decisions (Ivy, 2026-10-28)
+1. **Public repo.** `4-R-C-4-N-4/takes` becomes public under Apache-2.0 (same as tiny-games).
+   Before the flip, scan history for secrets: no tokens, keys, `.env` or database files were found.
+   Releases are pinned rather than pushed. tiny-games keeps a `takes/REF` file with a takes commit SHA.
+   Its deploy workflow checks out that commit, runs `pnpm build:static` and copies `dist-static/`
+   to `_site/takes/`. Shipping a new version means bumping `REF`; no cross-repo tokens are needed.
+2. **Public Nostr relays** (Trystero default) for the P2P handshake.
+
+## Execution (2026-10-28)
+- `room-core`: extract the pure `@takes/room` state machine from `apps/server/src/rooms.ts`.
+- `static-build`: static mode (no Lab, no server features, no network), single-file `takes.html`,
+  iframe fit and `verify-static.cjs`.
+- Next, after both merge: the P2P transport (Trystero, commit-reveal, reconnect), then how-to-play,
+  then deploy wiring in tiny-games and the public flip.
