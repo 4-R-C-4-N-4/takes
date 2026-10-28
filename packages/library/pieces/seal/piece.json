@@ -1,0 +1,28 @@
+{
+  "id": "seal",
+  "name": "Seal",
+  "glyph": "E",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": "all",
+      "range": 2,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        2
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    }
+  ]
+}

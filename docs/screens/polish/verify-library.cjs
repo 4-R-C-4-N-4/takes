@@ -10,10 +10,10 @@ const base = process.env.TAKES_URL || 'http://127.0.0.1:43187';
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(`${base}/#/library`);
-    await page.locator('.piece-card').filter({ has: page.locator('.glyph', { hasText: /^X$/ }) }).click(); // wraith
+    await page.locator('.piece-card').filter({ has: page.locator('.glyph', { hasText: /^P$/ }) }).click(); // pawn: quiet forward, diagonal captures
     const count = (cls) => page.locator(`.highlight.${cls}`).count();
-    assert((await count('quiet')) > 0, 'wraith shows quiet moves');
-    assert((await count('capture')) > 0, 'wraith shows attacks');
+    assert((await count('quiet')) > 0, 'pawn shows quiet moves');
+    assert((await count('capture')) > 0, 'pawn shows attacks');
     await page.getByRole('button', { name: 'Attacks', exact: true }).click();
     assert.equal(await count('quiet'), 0);
     assert((await count('capture')) > 0);

@@ -1,0 +1,33 @@
+{
+  "id": "broom",
+  "name": "Broom",
+  "glyph": "M",
+  "tier": "pawn",
+  "components": [
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": [
+        "f"
+      ],
+      "range": 1,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": [
+        "fl",
+        "fr"
+      ],
+      "range": 1,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

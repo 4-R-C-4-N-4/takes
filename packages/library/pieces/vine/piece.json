@@ -1,0 +1,34 @@
+{
+  "id": "vine",
+  "name": "Vine",
+  "glyph": "V",
+  "tier": "pawn",
+  "components": [
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": [
+        "fl",
+        "fr"
+      ],
+      "range": null,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        2,
+        2
+      ],
+      "sym": [
+        "fl",
+        "fr"
+      ],
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    }
+  ]
+}

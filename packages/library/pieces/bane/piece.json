@@ -1,0 +1,38 @@
+{
+  "id": "bane",
+  "name": "Bane",
+  "glyph": "G",
+  "tier": "major",
+  "components": [
+    {
+      "vec": [
+        1,
+        0
+      ],
+      "sym": "all",
+      "range": null,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": "all",
+      "range": null,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        2
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    }
+  ]
+}

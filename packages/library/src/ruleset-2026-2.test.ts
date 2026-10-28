@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { CURRENT_RULESET_VERSION, expandPiece, getRuleset, parseSetup, setupCost } from './index.js';
+import { expandPiece, getRuleset, parseSetup, setupCost } from './index.js';
 
 const r = getRuleset('2026.2')!;
 const sq = (v: { dx: number; dy: number; range: number; path: string }) => `${v.dx},${v.dy},${v.range},${v.path}`;
 
 describe('ruleset 2026.2', () => {
-  it('is current, drops warden, adds toad/heron/dragon, and keeps 2026.1 immutable', () => {
-    expect(CURRENT_RULESET_VERSION).toBe('2026.2');
+  it('drops warden, adds toad/heron/dragon, and keeps 2026.1 immutable', () => {
     expect(r.pieces.warden).toBeUndefined();
     expect(Object.keys(r.pieces)).toEqual(expect.arrayContaining(['toad', 'heron', 'dragon']));
     expect(getRuleset('2026.1')!.pieces.warden).toBeDefined();

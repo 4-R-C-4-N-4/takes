@@ -1,0 +1,28 @@
+{
+  "id": "octopus",
+  "name": "Octopus",
+  "glyph": "O",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": "all",
+      "range": 3,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": "all",
+      "range": 3,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

@@ -74,11 +74,14 @@ function fen(pieces: Map<number, string>): string {
 
 const haveFsf = fsfPath() !== null;
 describe.skipIf(!haveFsf)('Betza round-trip vs Fairy-Stockfish (M5)', () => {
-  for (const rs of [getRuleset('2026.1')!, getRuleset('2026.2')!]) {
+  for (const rs of [getRuleset('2026.1')!, getRuleset('2026.2')!, getRuleset('2026.3')!]) {
   const testPieces = Object.values(rs.pieces).filter((p) => p.id !== 'pawn');
   for (const p of testPieces) {
     it(`${rs.version} ${p.id}: identical move sets from every square, every blocker ring`, () => {
-      const ini = variantIni(rs).replace('king = k', 'king = k\nimmobile = o');
+      // Probe each piece alone: a full 25-piece ruleset uses every free letter, leaving none for the blocker.
+      // Long-range pawn-tier pieces reach the last rank; give FSF a promotion target and strip the suffix.
+      const solo = { ...rs, pieces: { knight: { ...rs.pieces.knight!, glyph: 'N' }, [p.id]: { ...p, glyph: 'A' } } };
+      const ini = variantIni(solo, { promotion: { w: ['knight'], b: ['knight'] } }).replace('king = k', 'king = k\nimmobile = o');
       const variant = ini.slice(1, ini.indexOf(']'));
       const cases: Array<{ fen: string; from: number; want: Set<string>; label: string }> = [];
       for (let from = 0; from < 64; from++) {
@@ -91,14 +94,14 @@ describe.skipIf(!haveFsf)('Betza round-trip vs Fairy-Stockfish (M5)', () => {
         for (let d = 1; d <= 8; d++) {
           const enemies = new Set<number>();
           for (let s = 0; s < 64; s++) if (s !== wk && s !== bk && s !== from && cheb(s, from) === d) enemies.add(s);
-          const board = new Map<number, string>([[from, p.glyph], [wk, 'K'], [bk, 'k']]);
+          const board = new Map<number, string>([[from, 'A'], [wk, 'K'], [bk, 'k']]);
           for (const e of enemies) board.set(e, 'o');
           cases.push({ fen: fen(board), from, want: reference(p, from, enemies, new Set([wk, bk])), label: `${p.id} from ${sq(from)} ring ${d}` });
         }
       }
       const divs = fsfDivideBatch(ini, variant, cases.map((c) => c.fen), 1);
       cases.forEach((c, i) => {
-        const got = Object.keys(divs[i]!).filter((u) => u.startsWith(sq(c.from)));
+        const got = [...new Set(Object.keys(divs[i]!).filter((u) => u.startsWith(sq(c.from))).map((u) => u.slice(0, 4)))];
         expect(got.sort(), c.label).toEqual([...c.want].sort());
       });
       expect(cases.length).toBeGreaterThan(100);

@@ -1,0 +1,28 @@
+{
+  "id": "prince",
+  "name": "Prince",
+  "glyph": "L",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "turtle",
+  "name": "Turtle",
+  "glyph": "U",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        0,
+        2
+      ],
+      "sym": [
+        "f",
+        "b"
+      ],
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        2
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    }
+  ]
+}

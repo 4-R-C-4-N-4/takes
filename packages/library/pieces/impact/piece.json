@@ -1,0 +1,28 @@
+{
+  "id": "impact",
+  "name": "Impact",
+  "glyph": "I",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": "all",
+      "range": 2,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": "all",
+      "range": null,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

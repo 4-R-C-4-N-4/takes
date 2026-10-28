@@ -1,0 +1,33 @@
+{
+  "id": "worm",
+  "name": "Worm",
+  "glyph": "W",
+  "tier": "pawn",
+  "components": [
+    {
+      "vec": [
+        0,
+        1
+      ],
+      "sym": [
+        "f"
+      ],
+      "range": 2,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": [
+        "fl",
+        "fr"
+      ],
+      "range": 3,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { getRuleset } from '@takes/library';
+import { CURRENT_RULESET_VERSION, getRuleset } from '@takes/library';
 import { createGame } from '@takes/engine';
 import { fsfPath } from '@takes/betza';
 import { randomProfile, mulberry32, parity } from './index.js';
 
-const r = getRuleset('2026.2')!; // current ruleset: includes hopping pieces
+const r = getRuleset(CURRENT_RULESET_VERSION)!; // current ruleset
 const N = Number(process.env.PARITY_N ?? 100);
 const DEPTH = Number(process.env.PARITY_DEPTH ?? 3);
 

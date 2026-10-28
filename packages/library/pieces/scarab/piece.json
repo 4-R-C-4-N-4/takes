@@ -1,0 +1,28 @@
+{
+  "id": "scarab",
+  "name": "Scarab",
+  "glyph": "X",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": "all",
+      "range": 3,
+      "path": "slide",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        2
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "jester",
+  "name": "Jester",
+  "glyph": "J",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        2,
+        2
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        2
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    }
+  ]
+}
