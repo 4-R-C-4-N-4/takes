@@ -12,7 +12,7 @@ import { prunedSingles, pairs, sampledTriples, comboToPiece, seedClassicCombos, 
 import { canonicalKey } from './canonicalize.js';
 import { assignTier, assignFamilies } from './families.js';
 import { buildProfile } from './profile.js';
-import { buildVerifyCase, verifyBatch } from './verify.js';
+import { exhaustiveCases, smokeCases, verifyBatch } from './verify.js';
 import type { CatalogEntry } from './types.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -56,23 +56,6 @@ function hasAmbiguousAdjacentAtoms(betza: string): boolean {
   return /([WFDANHCZG])\1/.test(betza);
 }
 
-/**
- * Two or more finite-range (2 or 3) slide components on the same atom are a
- * second observed Betza-concatenation ambiguity (numeric range suffixes from
- * adjacent terms can bleed into each other in FSF's parser — see
- * docs/catalog/catalog-summary.md "known exporter gaps"). Exclude rather than
- * risk a silent movegen mismatch outside the FSF-verified sample.
- */
-function hasAmbiguousRangedSlides(piece: Piece): boolean {
-  const counts = new Map<string, number>();
-  for (const c of piece.components) {
-    if (c.path !== 'slide') continue;
-    const atom = c.vec[0] === 0 || c.vec[1] === 0 ? 'W' : 'F';
-    counts.set(atom, (counts.get(atom) ?? 0) + 1);
-  }
-  return [...counts.values()].some((n) => n > 1);
-}
-
 export function filterValid(canonical: Map<string, Piece>, queenMobilityAvg: number): { entries: Array<{ piece: Piece; betza: string }>; rejected: number } {
   const entries: Array<{ piece: Piece; betza: string }> = [];
   let rejected = 0;
@@ -82,7 +65,6 @@ export function filterValid(canonical: Map<string, Piece>, queenMobilityAvg: num
     const tier = assignTier(raw, queenMobilityAvg, mob);
     const piece: Piece = { ...raw, tier, name: key.slice(0, 40) };
     if (hasErrors(validatePiece(piece))) { rejected++; continue; }
-    if (hasAmbiguousRangedSlides(piece)) { rejected++; continue; }
     let betza: string;
     try { betza = pieceToBetza(piece); } catch (e) {
       if (e instanceof BetzaUnsupported) { rejected++; continue; }
@@ -159,8 +141,11 @@ async function main() {
   const toVerify = catalog.filter((e) => toVerifyKeys.has(e.key));
   console.log('[catalog] FSF verification sample:', toVerify.length, '/', catalog.length);
 
-  const cases = toVerify.map((e) => buildVerifyCase(e.piece, e.betza));
-  const results = verifyBatch(cases);
+  // Exhaustive (every square x every blocker ring) on the sample; smoke probe on EVERY entry.
+  const results = verifyBatch([
+    ...toVerify.flatMap((e) => exhaustiveCases(e.piece, e.betza)),
+    ...catalog.filter((e) => !toVerifyKeys.has(e.key)).flatMap((e) => smokeCases(e.piece, e.betza)),
+  ]);
   const mismatches = results.filter((r) => !r.ok);
   console.log('[catalog] FSF mismatches:', mismatches.length, '/', results.length);
 
@@ -171,7 +156,7 @@ async function main() {
   writeFileSync(join(OUT_DIR, 'catalog.json.gz'), gzipSync(Buffer.from(JSON.stringify(verifiedCatalog))));
 
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
-  writeSummary(verifiedCatalog, stages, combos.length, canonical.size, valid.length, toVerify.length, mismatches.length, Number(elapsed), queenMobilityAvg);
+  writeSummary(verifiedCatalog, stages, combos.length, canonical.size, valid.length, toVerify.length, mismatchKeys.size, Number(elapsed), queenMobilityAvg);
   console.log('[catalog] wrote', verifiedCatalog.length, 'entries in', elapsed, 's');
 }
 
@@ -207,8 +192,8 @@ function writeSummary(
     `- Raw combos generated: ${rawCount} (${stages.map((s) => `${s.name}=${s.count}`).join(', ')})`,
     `- Canonical (deduped + mirror-merged): ${canonicalCount}`,
     `- Valid (validatePiece clean + has capture + Betza export succeeds): ${validCount}`,
-    `- FSF verification sample: ${fsfSampleCount} (mismatches: ${mismatchCount})`,
-    `- Final catalog size (FSF-verified or outside sample): ${catalog.length}`,
+    `- FSF verification: exhaustive (all 56 origin squares x blocker rings 1-7) for ${fsfSampleCount} stratified entries; smoke probe (8 squares x rings 1-3) for every other entry. Mismatching entries: ${mismatchCount}`,
+    `- Final catalog size (every entry FSF-checked at least by smoke probe): ${catalog.length}`,
     `- Build time: ${elapsedSec}s`,
     '',
     '## Tier counts',
