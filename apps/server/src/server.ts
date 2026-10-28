@@ -1,8 +1,8 @@
 /** HTTP + WebSocket server (one port, path /ws) [impl.md "Server"]. */
 import { createServer as createHttpServer, type Server as HttpServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { join, extname } from 'node:path';
-import { existsSync } from 'node:fs';
+import { join, extname, sep } from 'node:path';
+import { existsSync, statSync } from 'node:fs';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { parseClientMsg, type ServerMsg } from '@takes/protocol';
 import { RoomManager, type Room, type SeatInfo } from './rooms.js';
@@ -38,9 +38,13 @@ export function startServer(opts: ServerOpts): { http: HttpServer; wss: WebSocke
     void (async () => {
       const url = req.url ?? '/';
       if (opts.webDist && existsSync(opts.webDist)) {
-        const rel = url === '/' ? '/index.html' : url.split('?')[0]!;
+        // Strip query/hash BEFORE mapping '/' to index.html: '/?moves=...' must serve the app.
+        let pathname = '/';
+        try { pathname = decodeURIComponent(new URL(url, 'http://local').pathname); } catch { /* malformed: 404 */ }
+        const rel = pathname.endsWith('/') ? `${pathname}index.html` : pathname;
         const filePath = join(opts.webDist, rel);
-        if (filePath.startsWith(opts.webDist) && existsSync(filePath)) {
+        const root = opts.webDist.endsWith(sep) ? opts.webDist : opts.webDist + sep;
+        if (filePath.startsWith(root) && existsSync(filePath) && statSync(filePath).isFile()) {
           try {
             const data = await readFile(filePath);
             res.writeHead(200, { 'Content-Type': MIME[extname(filePath)] ?? 'application/octet-stream' });
