@@ -36,3 +36,18 @@ export function afterTapPlacement(source: DragSource): DragState {
 }
 
 export function cancel(): DragState { return idle(); }
+
+export type PaletteGesture = 'pending' | 'drag' | 'scroll' | 'tap';
+
+/** Classify an active palette gesture; `tap` is a stationary, short release candidate.
+ * The caller commits taps only on release and latches drag/scroll decisions.
+ * Horizontal movement can head toward a board beside or above the palette.
+ */
+export function paletteGesture(pointerType: string, elapsedMs: number, dx: number, dy: number): PaletteGesture {
+  const x = Math.abs(dx), y = Math.abs(dy);
+  if (pointerType === 'mouse') return Math.hypot(dx, dy) >= 6 ? 'drag' : 'tap';
+  if (y >= 10 && y >= x) return 'scroll';
+  if (x >= 12 && x > y * 1.5) return 'drag';
+  if (Math.hypot(dx, dy) < 6) return elapsedMs >= 250 ? 'drag' : 'tap';
+  return 'pending';
+}

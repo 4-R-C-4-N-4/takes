@@ -4,12 +4,13 @@
   import { KING_ID } from '@takes/library';
   import { validateProfile, hasErrors, type Issue } from '@takes/validator';
   import Board from './Board.svelte';
+  import PieceSheet from './PieceSheet.svelte';
   import PieceIcon from './PieceIcon.svelte';
   import { artFor, tierOrder, badgeFor } from '../lib/pieceArt.js';
   import { computeCastlingHints } from '../lib/castling.js';
   import { loadProfiles, addProfile, type StoredProfile } from '../lib/profiles.js';
   import { routeHref } from '../lib/router.js';
-  import { idle, startDrag, moveDrag, tapSelect, consumeSelection, afterTapPlacement, cancel, type DragState, type DragSource } from '../lib/drag.js';
+  import { paletteGesture, idle, startDrag, moveDrag, tapSelect, consumeSelection, afterTapPlacement, cancel, type DragState, type DragSource } from '../lib/drag.js';
   import { pieceLabel, type PieceLabel } from '../lib/pieceLabel.js';
   import { KING_PIECE } from '../lib/king.js';
 
@@ -27,6 +28,8 @@
   let saveName = $state('');
   let hoverIssue = $state<Issue | null>(null);
   let showSetupIo = $state(false);
+  let sheetId = $state<string | null>(null);
+  const sheetPiece = $derived(sheetId === KING_ID ? KING_PIECE : sheetId ? ruleset.pieces[sheetId] : undefined);
 
   $effect(() => {
     const existing = loadProfiles().find((p: StoredProfile) => p.id === profileId);
@@ -152,9 +155,16 @@
     return { sq, onBoard };
   }
 
-  let pendingPointer: { source: DragSource; x: number; y: number; id: number } | null = null;
+  let pendingPointer: { source: DragSource; x: number; y: number; id: number; pointerType: string; started: number } | null = null;
+
+  let holdTimer: ReturnType<typeof setTimeout> | undefined;
+  function preventTouchScroll(ev: TouchEvent): void {
+    if (drag.mode === 'dragging' && pendingPointer?.source.kind === 'palette') ev.preventDefault();
+  }
 
   function cleanupPointer(): void {
+    clearTimeout(holdTimer);
+    window.removeEventListener('touchmove', preventTouchScroll);
     pendingPointer = null;
     window.removeEventListener('pointermove', onGlobalPointerMove);
     window.removeEventListener('pointerup', onGlobalPointerUp);
@@ -163,7 +173,13 @@
 
   function onGlobalPointerMove(ev: PointerEvent): void {
     if (!pendingPointer || ev.pointerId !== pendingPointer.id) return;
-    if (drag.mode !== 'dragging' && Math.hypot(ev.clientX - pendingPointer.x, ev.clientY - pendingPointer.y) >= 6) {
+    if (drag.mode !== 'dragging' && pendingPointer.source.kind === 'palette') {
+      const decision = paletteGesture(pendingPointer.pointerType, performance.now() - pendingPointer.started,
+        ev.clientX - pendingPointer.x, ev.clientY - pendingPointer.y);
+      if (decision === 'scroll') { cleanupPointer(); return; }
+      if (decision === 'drag') drag = startDrag(pendingPointer.source, ev.clientX, ev.clientY);
+      else if (Math.hypot(ev.clientX - pendingPointer.x, ev.clientY - pendingPointer.y) >= 6) clearTimeout(holdTimer);
+    } else if (drag.mode !== 'dragging' && Math.hypot(ev.clientX - pendingPointer.x, ev.clientY - pendingPointer.y) >= 6) {
       drag = startDrag(pendingPointer.source, ev.clientX, ev.clientY);
     }
     if (drag.mode === 'dragging') drag = moveDrag(drag, ev.clientX, ev.clientY);
@@ -184,7 +200,7 @@
   }
 
   function onPointerCancel(): void {
-    drag = idle();
+    if (drag.mode === 'dragging') drag = idle();
     cleanupPointer();
   }
 
@@ -193,7 +209,16 @@
   function startPointerDrag(source: DragSource, ev: PointerEvent): void {
     if (!ev.isPrimary || ev.button !== 0) return;
     cleanupPointer();
-    pendingPointer = { source, x: ev.clientX, y: ev.clientY, id: ev.pointerId };
+    pendingPointer = { source, x: ev.clientX, y: ev.clientY, id: ev.pointerId, pointerType: ev.pointerType, started: performance.now() };
+    if (source.kind === 'palette' && ev.pointerType !== 'mouse') {
+      holdTimer = setTimeout(() => {
+        if (pendingPointer && paletteGesture(ev.pointerType, 250, 0, 0) === 'drag') {
+          drag = startDrag(source, ev.clientX, ev.clientY);
+        }
+      }, 250);
+      // Once armed, cancel touch scrolling before the browser cancels our pointer.
+      window.addEventListener('touchmove', preventTouchScroll, { passive: false });
+    }
     // Touch's implicit capture otherwise hides the drop target from the click path.
     const target = ev.target as Element;
     if (target.hasPointerCapture(ev.pointerId)) target.releasePointerCapture(ev.pointerId);
@@ -362,6 +387,7 @@
           <div class="tier-pieces">
             {#each Object.values(ruleset.pieces).filter((p) => p.tier === tier) as p (p.id)}
               {@const label = pieceLabel(p)}
+              <div class="palette-row">
               <button
                 class="palette-piece"
                 class:selected={selectedPaletteId === p.id}
@@ -376,6 +402,8 @@
                 </span>
                 <span class="piece-cost num">{ruleset.costs[p.id]}</span>
               </button>
+              <button class="btn ghost piece-info" aria-label="Moves of {label.primary}" onclick={() => (sheetId = p.id)}>ⓘ</button>
+              </div>
             {/each}
           </div>
         </div>
@@ -383,6 +411,7 @@
       <div class="tier-group">
         <span class="eyebrow">king</span>
         <div class="tier-pieces">
+          <div class="palette-row">
           <button
             class="palette-piece"
             class:selected={selectedPaletteId === KING_ID}
@@ -394,11 +423,17 @@
             <span class="piece-label">King</span>
             <span class="piece-cost num">0</span>
           </button>
+          <button class="btn ghost piece-info" aria-label="Moves of King" onclick={() => (sheetId = KING_ID)}>ⓘ</button>
+          </div>
         </div>
       </div>
     </aside>
   </div>
 </div>
+
+{#if sheetPiece && sheetId}
+  <PieceSheet piece={sheetPiece} art={artFor(ruleset, sheetId)} cost={ruleset.costs[sheetId] ?? 0} onclose={() => (sheetId = null)} />
+{/if}
 
 {#if drag.mode === 'dragging'}
   <div
@@ -447,11 +482,14 @@
 
   .tier-group { display: grid; gap: var(--s-2); }
   .tier-pieces { display: grid; gap: var(--s-1); }
+  .palette-row { display: flex; gap: var(--s-1); min-width: 0; }
+  .piece-info { flex: 0 0 44px; min-height: 44px; padding: 0; }
   .palette-piece {
+    min-width: 0; flex: 1;
     display: flex; align-items: center; gap: var(--s-2);
     width: 100%; min-height: var(--tap); padding: var(--s-1) var(--s-2);
     background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--r-2);
-    color: var(--text); cursor: pointer; touch-action: none;
+    color: var(--text); cursor: pointer; touch-action: pan-y; user-select: none;
     transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
   }
   .palette-piece:hover { background: var(--ink-3); }
@@ -466,7 +504,7 @@
 
   @media (max-width: 960px) {
     .builder-grid { grid-template-columns: 1fr; }
-    .palette-rail { position: static; max-height: none; }
+    .palette-rail { position: static; max-height: 55vh; overscroll-behavior-y: contain; }
     .board-zone { padding: var(--s-3); }
   }
 </style>
