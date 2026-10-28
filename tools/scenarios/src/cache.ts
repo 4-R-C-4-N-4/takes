@@ -14,7 +14,9 @@ export interface CacheSettings {
 
 export function cacheKey(candidateKey: string, settings: CacheSettings): string {
   const h = createHash('sha1').update(JSON.stringify({ candidateKey, settings })).digest('hex').slice(0, 16);
-  return `${candidateKey.replace(/[^a-zA-Z0-9_.-]/g, '_')}_${settings.stage}_${h}`;
+  // Readable prefix capped at 80 chars (filesystem name limit 255); the hash covers the full key.
+  // Keys of <= 80 chars produce the same names as before, so existing caches stay valid.
+  return `${candidateKey.replace(/[^a-zA-Z0-9_.-]/g, '_').slice(0, 80)}_${settings.stage}_${h}`;
 }
 
 export interface CacheFile {
