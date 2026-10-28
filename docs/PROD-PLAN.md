@@ -86,14 +86,15 @@ Total: about 3½ days of agent work.
 ## Decisions (Ivy, 2026-10-28)
 1. **Public repo.** `4-R-C-4-N-4/takes` becomes public under Apache-2.0 (same as tiny-games).
    Before the flip, scan history for secrets: no tokens, keys, `.env` or database files were found.
-   Releases are pinned rather than pushed. tiny-games keeps a `takes/REF` file with a takes commit SHA.
-   Its deploy workflow checks out that commit, runs `pnpm build:static` and copies `dist-static/`
-   to `_site/takes/`. Shipping a new version means bumping `REF`; no cross-repo tokens are needed.
+   Hosting follows OpenXOPS-web: Takes deploys its own GitHub Pages site from this repo
+   (`https://4-r-c-4-n-4.github.io/takes/`, via a Pages workflow on `main`). The main site's Games
+   section links to it as a new-tab card (a `SITE_GAMES` entry with `url: "/takes/"`, `embed: false`).
+   tiny-games is not involved. The static build serves from the `/takes/` subpath; no iframe embedding.
 2. **Public Nostr relays** (Trystero default) for the P2P handshake.
 
 ## Execution (2026-10-28)
 - `room-core`: extract the pure `@takes/room` state machine from `apps/server/src/rooms.ts`.
-- `static-build`: static mode (no Lab, no server features, no network), single-file `takes.html`,
-  iframe fit and `verify-static.cjs`.
+- `static-build`: static mode (no Lab, no server features, no network), `dist-static/` served from `/takes/`,
+  and `verify-static.cjs`.
 - Next, after both merge: the P2P transport (Trystero, commit-reveal, reconnect), then how-to-play,
-  then deploy wiring in tiny-games and the public flip.
+  then the public flip, the Pages workflow and the main-site card.
