@@ -93,7 +93,8 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   const families = new Set(catalog.flatMap((c) => c.families));
   const topByFamily = new Map<string, ScreenedEntry[]>();
   for (const fam of families) {
-    const inFamily = stageB.filter((e) => e.families.includes(fam));
+    // Candidates with ANY excluded (parity) games are not rankable: their metrics come from a biased subset.
+    const inFamily = stageB.filter((e) => e.families.includes(fam) && e.metrics.excluded === 0);
     const ranked = rankByComposite(inFamily.map((e) => ({ id: e.piece.id, metrics: e.metrics })), opts.weights);
     const top = ranked.slice(0, opts.topK).map((r) => inFamily.find((e) => e.piece.id === r.id)!);
     topByFamily.set(fam, top);
@@ -119,7 +120,10 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
     finalByFamily.set(fam, top.map((e) => byId.get(e.piece.id) ?? e));
   }
 
+  const parityFailures = [...stageB, ...stageC].filter((e) => e.metrics.excluded > 0);
+  if (parityFailures.length) console.error(`[parity] ${parityFailures.length} candidates had excluded games: ${parityFailures.map((e) => `${e.betza}(${e.metrics.excluded})`).join(', ')}`);
   mkdirSync(opts.outDir, { recursive: true });
+  writeFileSync(`${opts.outDir}/parity-failures.json`, JSON.stringify(parityFailures.map((e) => ({ betza: e.betza, key: e.key, excluded: e.metrics.excluded, games: e.metrics.games })), null, 2));
   const json = Object.fromEntries([...finalByFamily].map(([fam, entries]) => [fam, entries]));
   writeFileSync(`${opts.outDir}/shortlist.json`, JSON.stringify(json, null, 2));
   writeFileSync(`${opts.outDir}/shortlist.md`, renderShortlistMd(finalByFamily, timings));

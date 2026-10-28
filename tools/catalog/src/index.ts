@@ -18,7 +18,11 @@ const DEFAULT_PATH = join(__dirname, '..', '..', '..', 'docs', 'catalog', 'catal
 /** Loads the built catalog (docs/catalog/catalog.json.gz) for downstream consumers (tools/scenarios). */
 export function loadCatalog(path: string = DEFAULT_PATH): CatalogEntry[] {
   const buf = gunzipSync(readFileSync(path));
-  return JSON.parse(buf.toString('utf8')) as CatalogEntry[];
+  const entries = JSON.parse(buf.toString('utf8')) as CatalogEntry[];
+  // JSON has no Infinity: unbounded slide ranges are stored as null and MUST be restored, or the
+  // Takes engine silently generates no slide moves while FSF (driven by the Betza string) does.
+  for (const e of entries) for (const c of e.piece.components) if (c.range === null) c.range = Infinity;
+  return entries;
 }
 
 function mulberry32(seed: number) {

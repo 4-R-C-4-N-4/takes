@@ -1,20 +1,22 @@
 {
-  "stepper": [
+  "slider": [
     {
-      "key": "fixture:f_commoner",
+      "key": "-1,1,3,slide,both;0,1,2,slide,both;1,1,3,slide,both",
       "piece": {
-        "id": "f_commoner",
-        "name": "Commoner",
+        "id": "c_135vadv",
+        "name": "-1,1,3,slide,both;0,1,2,slide,both;1,1,3",
         "glyph": "C",
-        "tier": "minor",
+        "tier": "pawn",
         "components": [
           {
             "vec": [
               0,
               1
             ],
-            "sym": "all",
-            "range": 1,
+            "sym": [
+              "f"
+            ],
+            "range": 2,
             "path": "slide",
             "mode": "both"
           },
@@ -23,57 +25,62 @@
               1,
               1
             ],
-            "sym": "all",
-            "range": 1,
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
             "path": "slide",
             "mode": "both"
           }
         ]
       },
-      "tier": "minor",
-      "betza": "WF",
+      "tier": "pawn",
+      "betza": "fR2fB3",
       "families": [
-        "stepper"
+        "slider",
+        "forward",
+        "pawnlike"
       ],
       "profile": {
-        "mobilityAvg": 4,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 4,
+        "mobilityAvg": 10.125,
+        "mobilityCenter": 16,
+        "mobilityCorner": 5,
+        "captureAvg": 5.0625,
         "colorBound": false,
         "canRetreat": false,
-        "canSidestep": true,
+        "canSidestep": false,
         "hasLeap": false,
         "hasSlide": true,
         "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
       },
       "metrics": {
         "games": 160,
         "excluded": 0,
-        "score": 0.271875,
+        "score": 0.690625,
         "scoreCI": [
-          0.20293303009165062,
-          0.3408169699083493
+          0.6190007914801584,
+          0.7622492085198417
         ],
-        "movesPerGame": 3.8625,
-        "capturesPerGame": 0.65,
-        "checksPerGame": 0.09375,
-        "forksPerGame": 0.09375,
-        "survival": 0.5125,
-        "finalAttack": 0.007407407407407408,
-        "avgPlies": 81.79375,
-        "decisive": 0.84375
+        "movesPerGame": 2.875,
+        "capturesPerGame": 1.20625,
+        "checksPerGame": 0.53125,
+        "forksPerGame": 0.6125,
+        "survival": 0.26875,
+        "finalAttack": 0.05228758169934641,
+        "avgPlies": 69.58125,
+        "decisive": 0.95625
       },
-      "replaced": "knight",
+      "replaced": "pawn",
       "stage": "C"
     },
     {
-      "key": "fixture:f_wazir",
+      "key": "-1,1,3,slide,both;0,1,inf,slide,capture;1,1,3,slide,both",
       "piece": {
-        "id": "f_wazir",
-        "name": "Wazir",
+        "id": "c_11hhls3",
+        "name": "-1,1,3,slide,both;0,1,inf,slide,capture;",
         "glyph": "C",
         "tier": "pawn",
         "components": [
@@ -82,392 +89,390 @@
               0,
               1
             ],
-            "sym": "all",
-            "range": 1,
-            "path": "slide",
-            "mode": "both"
-          }
-        ]
-      },
-      "tier": "pawn",
-      "betza": "W",
-      "families": [
-        "stepper"
-      ],
-      "profile": {
-        "mobilityAvg": 2,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 2,
-        "colorBound": false,
-        "canRetreat": false,
-        "canSidestep": true,
-        "hasLeap": false,
-        "hasSlide": true,
-        "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
-      },
-      "metrics": {
-        "games": 160,
-        "excluded": 0,
-        "score": 0.359375,
-        "scoreCI": [
-          0.28502654425884993,
-          0.43372345574115007
-        ],
-        "movesPerGame": 2.675,
-        "capturesPerGame": 0.36875,
-        "checksPerGame": 0.03125,
-        "forksPerGame": 0,
-        "survival": 0.6625,
-        "finalAttack": 0,
-        "avgPlies": 73.5875,
-        "decisive": 0.89375
-      },
-      "replaced": "pawn",
-      "stage": "C"
-    },
-    {
-      "key": "fixture:f_ferz",
-      "piece": {
-        "id": "f_ferz",
-        "name": "Ferz",
-        "glyph": "C",
-        "tier": "pawn",
-        "components": [
-          {
-            "vec": [
-              1,
-              1
+            "sym": [
+              "f"
             ],
-            "sym": "all",
-            "range": 1,
-            "path": "slide",
-            "mode": "both"
-          }
-        ]
-      },
-      "tier": "pawn",
-      "betza": "F",
-      "families": [
-        "stepper",
-        "pawnlike"
-      ],
-      "profile": {
-        "mobilityAvg": 2,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 2,
-        "colorBound": true,
-        "canRetreat": false,
-        "canSidestep": true,
-        "hasLeap": false,
-        "hasSlide": true,
-        "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
-      },
-      "metrics": {
-        "games": 160,
-        "excluded": 0,
-        "score": 0.309375,
-        "scoreCI": [
-          0.23775079148015843,
-          0.3809992085198416
-        ],
-        "movesPerGame": 2.5875,
-        "capturesPerGame": 0.35625,
-        "checksPerGame": 0.025,
-        "forksPerGame": 0.00625,
-        "survival": 0.63125,
-        "finalAttack": 0,
-        "avgPlies": 73.9375,
-        "decisive": 0.89375
-      },
-      "replaced": "pawn",
-      "stage": "C"
-    }
-  ],
-  "pawnlike": [
-    {
-      "key": "fixture:f_ferz",
-      "piece": {
-        "id": "f_ferz",
-        "name": "Ferz",
-        "glyph": "C",
-        "tier": "pawn",
-        "components": [
-          {
-            "vec": [
-              1,
-              1
-            ],
-            "sym": "all",
-            "range": 1,
-            "path": "slide",
-            "mode": "both"
-          }
-        ]
-      },
-      "tier": "pawn",
-      "betza": "F",
-      "families": [
-        "stepper",
-        "pawnlike"
-      ],
-      "profile": {
-        "mobilityAvg": 2,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 2,
-        "colorBound": true,
-        "canRetreat": false,
-        "canSidestep": true,
-        "hasLeap": false,
-        "hasSlide": true,
-        "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
-      },
-      "metrics": {
-        "games": 160,
-        "excluded": 0,
-        "score": 0.309375,
-        "scoreCI": [
-          0.23775079148015843,
-          0.3809992085198416
-        ],
-        "movesPerGame": 2.5875,
-        "capturesPerGame": 0.35625,
-        "checksPerGame": 0.025,
-        "forksPerGame": 0.00625,
-        "survival": 0.63125,
-        "finalAttack": 0,
-        "avgPlies": 73.9375,
-        "decisive": 0.89375
-      },
-      "replaced": "pawn",
-      "stage": "C"
-    },
-    {
-      "key": "fixture:f_weaksplit",
-      "piece": {
-        "id": "f_weaksplit",
-        "name": "Weak Split",
-        "glyph": "C",
-        "tier": "pawn",
-        "components": [
-          {
-            "vec": [
-              0,
-              1
-            ],
-            "sym": "all",
-            "range": 1,
-            "path": "slide",
-            "mode": "move"
-          },
-          {
-            "vec": [
-              1,
-              1
-            ],
-            "sym": "all",
-            "range": 1,
+            "range": null,
             "path": "slide",
             "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
           }
         ]
       },
       "tier": "pawn",
-      "betza": "mWcF",
+      "betza": "cfRfB3",
       "families": [
+        "slider",
         "split",
+        "forward",
         "pawnlike"
       ],
       "profile": {
-        "mobilityAvg": 2,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 2,
+        "mobilityAvg": 10.375,
+        "mobilityCenter": 15.5,
+        "mobilityCorner": 6.5,
+        "captureAvg": 6.9375,
         "colorBound": false,
         "canRetreat": false,
-        "canSidestep": true,
+        "canSidestep": false,
         "hasLeap": false,
         "hasSlide": true,
         "splitMoveCapture": true,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
       },
       "metrics": {
-        "games": 160,
-        "excluded": 0,
-        "score": 0.3125,
+        "games": 12,
+        "excluded": 148,
+        "score": 0.5,
         "scoreCI": [
-          0.24067800867770373,
-          0.3843219913222963
+          0.21709836809708338,
+          0.7829016319029166
         ],
-        "movesPerGame": 2.1125,
-        "capturesPerGame": 0.2875,
-        "checksPerGame": 0.0125,
-        "forksPerGame": 0,
-        "survival": 0.6875,
-        "finalAttack": 0.007246376811594203,
-        "avgPlies": 70.45625,
-        "decisive": 0.8625
+        "movesPerGame": 0.9166666666666666,
+        "capturesPerGame": 0.5833333333333334,
+        "checksPerGame": 0.25,
+        "forksPerGame": 0.16666666666666666,
+        "survival": 1,
+        "finalAttack": 0.25,
+        "avgPlies": 8.833333333333334,
+        "decisive": 1
       },
       "replaced": "pawn",
       "stage": "C"
-    }
-  ],
-  "slide-leap": [
+    },
     {
-      "key": "fixture:f_archbishop",
+      "key": "-1,1,3,slide,both;0,1,2,slide,capture;1,1,3,slide,both",
       "piece": {
-        "id": "f_archbishop",
-        "name": "Archbishop",
+        "id": "c_88z1ls",
+        "name": "-1,1,3,slide,both;0,1,2,slide,capture;1,",
         "glyph": "C",
-        "tier": "major",
+        "tier": "pawn",
         "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "capture"
+          },
           {
             "vec": [
               1,
               1
             ],
-            "sym": "all",
-            "range": null,
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "cfR2fB3",
+      "families": [
+        "slider",
+        "split",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 8.5,
+        "mobilityCenter": 14,
+        "mobilityCorner": 4,
+        "captureAvg": 5.0625,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.634375,
+        "scoreCI": [
+          0.5597495347847415,
+          0.7090004652152585
+        ],
+        "movesPerGame": 2.5375,
+        "capturesPerGame": 1.1875,
+        "checksPerGame": 0.48125,
+        "forksPerGame": 0.4875,
+        "survival": 0.375,
+        "finalAttack": 0.059602649006622516,
+        "avgPlies": 64.98125,
+        "decisive": 0.94375
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,3,slide,both;0,1,3,slide,both;1,1,3,slide,both",
+      "piece": {
+        "id": "c_13ytkr8",
+        "name": "-1,1,3,slide,both;0,1,3,slide,both;1,1,3",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 3,
             "path": "slide",
             "mode": "both"
           },
           {
             "vec": [
               1,
-              2
+              1
             ],
-            "sym": "all",
-            "range": 1,
-            "path": "leap",
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
             "mode": "both"
           }
         ]
       },
-      "tier": "major",
-      "betza": "BN",
+      "tier": "pawn",
+      "betza": "fR3fB3",
       "families": [
-        "slide-leap"
+        "slider",
+        "forward",
+        "pawnlike"
       ],
       "profile": {
-        "mobilityAvg": 10,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 10,
+        "mobilityAvg": 11.375,
+        "mobilityCenter": 18,
+        "mobilityCorner": 6,
+        "captureAvg": 5.6875,
         "colorBound": false,
         "canRetreat": false,
-        "canSidestep": true,
-        "hasLeap": true,
+        "canSidestep": false,
+        "hasLeap": false,
         "hasSlide": true,
         "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
       },
       "metrics": {
         "games": 160,
         "excluded": 0,
-        "score": 0.30625,
+        "score": 0.790625,
         "scoreCI": [
-          0.23482740477009395,
-          0.3776725952299061
+          0.7275809995233984,
+          0.8536690004766017
         ],
-        "movesPerGame": 6.05,
-        "capturesPerGame": 1.25625,
-        "checksPerGame": 0.825,
-        "forksPerGame": 0.94375,
-        "survival": 0.4875,
-        "finalAttack": 0.07534246575342465,
-        "avgPlies": 77.56875,
-        "decisive": 0.9125
+        "movesPerGame": 2.33125,
+        "capturesPerGame": 1.1375,
+        "checksPerGame": 0.4375,
+        "forksPerGame": 0.54375,
+        "survival": 0.28125,
+        "finalAttack": 0.22580645161290322,
+        "avgPlies": 49.38125,
+        "decisive": 0.96875
       },
-      "replaced": "queen",
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,2,slide,both;0,1,2,slide,both;1,1,2,slide,both",
+      "piece": {
+        "id": "c_1f51bbj",
+        "name": "-1,1,2,slide,both;0,1,2,slide,both;1,1,2",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "fR2fB2",
+      "families": [
+        "slider",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 8.5625,
+        "mobilityCenter": 12,
+        "mobilityCorner": 4,
+        "captureAvg": 4.28125,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.628125,
+        "scoreCI": [
+          0.5532360724816829,
+          0.7030139275183171
+        ],
+        "movesPerGame": 3.18125,
+        "capturesPerGame": 1.13125,
+        "checksPerGame": 0.45,
+        "forksPerGame": 0.40625,
+        "survival": 0.2875,
+        "finalAttack": 0.041379310344827586,
+        "avgPlies": 72.4375,
+        "decisive": 0.90625
+      },
+      "replaced": "pawn",
       "stage": "C"
     }
   ],
   "split": [
     {
-      "key": "fixture:f_splitmover",
+      "key": "-1,0,3,slide,both;-1,0,inf,slide,capture;0,-1,3,slide,both;0,-1,inf,slide,capture;0,1,3,slide,both;0,1,inf,slide,capture;0,2,1,leap,capture;1,0,3,slide,both;1,0,inf,slide,capture",
       "piece": {
-        "id": "f_splitmover",
-        "name": "Bishop-Knight split",
+        "id": "c_17nrkp4",
+        "name": "-1,0,3,slide,both;-1,0,inf,slide,capture",
         "glyph": "C",
-        "tier": "minor",
+        "tier": "rook",
         "components": [
           {
             "vec": [
-              1,
-              2
+              0,
+              1
             ],
             "sym": "all",
-            "range": 1,
-            "path": "leap",
-            "mode": "move"
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
           },
           {
             "vec": [
-              1,
+              0,
               1
             ],
             "sym": "all",
             "range": null,
             "path": "slide",
             "mode": "capture"
+          },
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "capture"
           }
         ]
       },
-      "tier": "minor",
-      "betza": "mNcB",
+      "tier": "rook",
+      "betza": "mR3cRcfD",
       "families": [
+        "step-leap",
+        "slide-leap",
         "split",
-        "step-leap"
+        "sideways"
       ],
       "profile": {
-        "mobilityAvg": 6,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 4,
+        "mobilityAvg": 32.75,
+        "mobilityCenter": 39,
+        "mobilityCorner": 26.5,
+        "captureAvg": 23.75,
         "colorBound": false,
-        "canRetreat": false,
+        "canRetreat": true,
         "canSidestep": true,
         "hasLeap": true,
         "hasSlide": true,
         "splitMoveCapture": true,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
       },
       "metrics": {
         "games": 160,
         "excluded": 0,
-        "score": 0.334375,
+        "score": 0.18125,
         "scoreCI": [
-          0.2612732468842658,
-          0.40747675311573417
+          0.12155874030165723,
+          0.24094125969834276
         ],
-        "movesPerGame": 2.84375,
-        "capturesPerGame": 0.71875,
-        "checksPerGame": 0.2,
-        "forksPerGame": 0.1125,
-        "survival": 0.31875,
-        "finalAttack": 0,
-        "avgPlies": 79.10625,
-        "decisive": 0.90625
+        "movesPerGame": 4.48125,
+        "capturesPerGame": 0.85625,
+        "checksPerGame": 0.3875,
+        "forksPerGame": 1.325,
+        "survival": 0.54375,
+        "finalAttack": 0.02112676056338028,
+        "avgPlies": 72.325,
+        "decisive": 0.8875
       },
-      "replaced": "knight",
+      "replaced": "rook",
       "stage": "C"
     },
     {
-      "key": "fixture:f_weaksplit",
+      "key": "-1,1,3,slide,both;0,1,inf,slide,capture;1,1,3,slide,both",
       "piece": {
-        "id": "f_weaksplit",
-        "name": "Weak Split",
+        "id": "c_11hhls3",
+        "name": "-1,1,3,slide,both;0,1,inf,slide,capture;",
         "glyph": "C",
         "tier": "pawn",
         "components": [
@@ -476,73 +481,92 @@
               0,
               1
             ],
-            "sym": "all",
-            "range": 1,
+            "sym": [
+              "f"
+            ],
+            "range": null,
             "path": "slide",
-            "mode": "move"
+            "mode": "capture"
           },
           {
             "vec": [
               1,
               1
             ],
-            "sym": "all",
-            "range": 1,
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
             "path": "slide",
-            "mode": "capture"
+            "mode": "both"
           }
         ]
       },
       "tier": "pawn",
-      "betza": "mWcF",
+      "betza": "cfRfB3",
       "families": [
+        "slider",
         "split",
+        "forward",
         "pawnlike"
       ],
       "profile": {
-        "mobilityAvg": 2,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 2,
+        "mobilityAvg": 10.375,
+        "mobilityCenter": 15.5,
+        "mobilityCorner": 6.5,
+        "captureAvg": 6.9375,
         "colorBound": false,
         "canRetreat": false,
-        "canSidestep": true,
+        "canSidestep": false,
         "hasLeap": false,
         "hasSlide": true,
         "splitMoveCapture": true,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
       },
       "metrics": {
-        "games": 160,
-        "excluded": 0,
-        "score": 0.3125,
+        "games": 12,
+        "excluded": 148,
+        "score": 0.5,
         "scoreCI": [
-          0.24067800867770373,
-          0.3843219913222963
+          0.21709836809708338,
+          0.7829016319029166
         ],
-        "movesPerGame": 2.1125,
-        "capturesPerGame": 0.2875,
-        "checksPerGame": 0.0125,
-        "forksPerGame": 0,
-        "survival": 0.6875,
-        "finalAttack": 0.007246376811594203,
-        "avgPlies": 70.45625,
-        "decisive": 0.8625
+        "movesPerGame": 0.9166666666666666,
+        "capturesPerGame": 0.5833333333333334,
+        "checksPerGame": 0.25,
+        "forksPerGame": 0.16666666666666666,
+        "survival": 1,
+        "finalAttack": 0.25,
+        "avgPlies": 8.833333333333334,
+        "decisive": 1
       },
       "replaced": "pawn",
       "stage": "C"
-    }
-  ],
-  "step-leap": [
+    },
     {
-      "key": "fixture:f_splitmover",
+      "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,0,1,leap,move;-2,1,1,leap,both;0,-2,1,leap,move;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,0,1,leap,move;2,1,1,leap,both",
       "piece": {
-        "id": "f_splitmover",
-        "name": "Bishop-Knight split",
+        "id": "c_1p4oo2j",
+        "name": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1",
         "glyph": "C",
         "tier": "minor",
         "components": [
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "b",
+              "l",
+              "r"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "move"
+          },
           {
             "vec": [
               1,
@@ -551,76 +575,221 @@
             "sym": "all",
             "range": 1,
             "path": "leap",
-            "mode": "move"
-          },
-          {
-            "vec": [
-              1,
-              1
-            ],
-            "sym": "all",
-            "range": null,
-            "path": "slide",
-            "mode": "capture"
+            "mode": "both"
           }
         ]
       },
       "tier": "minor",
-      "betza": "mNcB",
+      "betza": "mbDmsDN",
       "families": [
+        "leaper",
         "split",
-        "step-leap"
+        "sideways"
       ],
       "profile": {
-        "mobilityAvg": 6,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 4,
+        "mobilityAvg": 12.75,
+        "mobilityCenter": 19,
+        "mobilityCorner": 5.5,
+        "captureAvg": 5.25,
         "colorBound": false,
-        "canRetreat": false,
+        "canRetreat": true,
         "canSidestep": true,
         "hasLeap": true,
-        "hasSlide": true,
+        "hasSlide": false,
         "splitMoveCapture": true,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
       },
       "metrics": {
         "games": 160,
         "excluded": 0,
-        "score": 0.334375,
+        "score": 0.2625,
         "scoreCI": [
-          0.2612732468842658,
-          0.40747675311573417
+          0.19432239416421254,
+          0.3306776058357875
         ],
-        "movesPerGame": 2.84375,
-        "capturesPerGame": 0.71875,
-        "checksPerGame": 0.2,
-        "forksPerGame": 0.1125,
-        "survival": 0.31875,
-        "finalAttack": 0,
-        "avgPlies": 79.10625,
-        "decisive": 0.90625
+        "movesPerGame": 4.5,
+        "capturesPerGame": 0.73125,
+        "checksPerGame": 0.34375,
+        "forksPerGame": 0.19375,
+        "survival": 0.4125,
+        "finalAttack": 0.014084507042253521,
+        "avgPlies": 82.2375,
+        "decisive": 0.8875
       },
       "replaced": "knight",
       "stage": "C"
     },
     {
-      "key": "fixture:f_heron",
+      "key": "-1,1,3,slide,both;0,1,2,slide,capture;1,1,3,slide,both",
       "piece": {
-        "id": "f_heron",
-        "name": "Heron",
+        "id": "c_88z1ls",
+        "name": "-1,1,3,slide,both;0,1,2,slide,capture;1,",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "cfR2fB3",
+      "families": [
+        "slider",
+        "split",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 8.5,
+        "mobilityCenter": 14,
+        "mobilityCorner": 4,
+        "captureAvg": 5.0625,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.634375,
+        "scoreCI": [
+          0.5597495347847415,
+          0.7090004652152585
+        ],
+        "movesPerGame": 2.5375,
+        "capturesPerGame": 1.1875,
+        "checksPerGame": 0.48125,
+        "forksPerGame": 0.4875,
+        "survival": 0.375,
+        "finalAttack": 0.059602649006622516,
+        "avgPlies": 64.98125,
+        "decisive": 0.94375
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,0,3,slide,capture;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,1,3,slide,capture;1,-2,1,leap,both;1,0,3,slide,capture;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1qk92h9",
+        "name": "-1,-2,1,leap,both;-1,0,3,slide,capture;-",
         "glyph": "C",
         "tier": "minor",
         "components": [
           {
             "vec": [
-              2,
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
               2
             ],
             "sym": "all",
             "range": 1,
             "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cfR3csR3N",
+      "families": [
+        "step-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 17.25,
+        "mobilityCenter": 25,
+        "mobilityCorner": 8.5,
+        "captureAvg": 12,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.54375,
+        "scoreCI": [
+          0.4665713542527792,
+          0.6209286457472207
+        ],
+        "movesPerGame": 4.0125,
+        "capturesPerGame": 1.1375,
+        "checksPerGame": 0.5375,
+        "forksPerGame": 0.5125,
+        "survival": 0.39375,
+        "finalAttack": 0.0625,
+        "avgPlies": 81.63125,
+        "decisive": 0.9
+      },
+      "replaced": "knight",
+      "stage": "C"
+    }
+  ],
+  "sideways": [
+    {
+      "key": "-1,0,3,slide,both;-1,0,inf,slide,capture;0,-1,3,slide,both;0,-1,inf,slide,capture;0,1,3,slide,both;0,1,inf,slide,capture;0,2,1,leap,capture;1,0,3,slide,both;1,0,inf,slide,capture",
+      "piece": {
+        "id": "c_17nrkp4",
+        "name": "-1,0,3,slide,both;-1,0,inf,slide,capture",
+        "glyph": "C",
+        "tier": "rook",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 3,
+            "path": "slide",
             "mode": "both"
           },
           {
@@ -629,116 +798,358 @@
               1
             ],
             "sym": "all",
-            "range": 1,
+            "range": null,
             "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "capture"
+          }
+        ]
+      },
+      "tier": "rook",
+      "betza": "mR3cRcfD",
+      "families": [
+        "step-leap",
+        "slide-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 32.75,
+        "mobilityCenter": 39,
+        "mobilityCorner": 26.5,
+        "captureAvg": 23.75,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.18125,
+        "scoreCI": [
+          0.12155874030165723,
+          0.24094125969834276
+        ],
+        "movesPerGame": 4.48125,
+        "capturesPerGame": 0.85625,
+        "checksPerGame": 0.3875,
+        "forksPerGame": 1.325,
+        "survival": 0.54375,
+        "finalAttack": 0.02112676056338028,
+        "avgPlies": 72.325,
+        "decisive": 0.8875
+      },
+      "replaced": "rook",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,0,1,leap,move;-2,1,1,leap,both;0,-2,1,leap,move;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,0,1,leap,move;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1p4oo2j",
+        "name": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "b",
+              "l",
+              "r"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
             "mode": "both"
           }
         ]
       },
       "tier": "minor",
-      "betza": "AW",
+      "betza": "mbDmsDN",
       "families": [
-        "step-leap"
+        "leaper",
+        "split",
+        "sideways"
       ],
       "profile": {
-        "mobilityAvg": 6,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 4,
+        "mobilityAvg": 12.75,
+        "mobilityCenter": 19,
+        "mobilityCorner": 5.5,
+        "captureAvg": 5.25,
         "colorBound": false,
-        "canRetreat": false,
+        "canRetreat": true,
         "canSidestep": true,
         "hasLeap": true,
-        "hasSlide": true,
-        "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "hasSlide": false,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
       },
       "metrics": {
         "games": 160,
         "excluded": 0,
-        "score": 0.275,
+        "score": 0.2625,
         "scoreCI": [
-          0.20581189589242962,
-          0.3441881041075704
+          0.19432239416421254,
+          0.3306776058357875
         ],
-        "movesPerGame": 3.9,
-        "capturesPerGame": 0.8625,
-        "checksPerGame": 0.175,
-        "forksPerGame": 0.26875,
-        "survival": 0.54375,
-        "finalAttack": 0.020833333333333332,
-        "avgPlies": 83.75,
+        "movesPerGame": 4.5,
+        "capturesPerGame": 0.73125,
+        "checksPerGame": 0.34375,
+        "forksPerGame": 0.19375,
+        "survival": 0.4125,
+        "finalAttack": 0.014084507042253521,
+        "avgPlies": 82.2375,
+        "decisive": 0.8875
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,0,3,slide,capture;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,1,3,slide,capture;1,-2,1,leap,both;1,0,3,slide,capture;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1qk92h9",
+        "name": "-1,-2,1,leap,both;-1,0,3,slide,capture;-",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cfR3csR3N",
+      "families": [
+        "step-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 17.25,
+        "mobilityCenter": 25,
+        "mobilityCorner": 8.5,
+        "captureAvg": 12,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.54375,
+        "scoreCI": [
+          0.4665713542527792,
+          0.6209286457472207
+        ],
+        "movesPerGame": 4.0125,
+        "capturesPerGame": 1.1375,
+        "checksPerGame": 0.5375,
+        "forksPerGame": 0.5125,
+        "survival": 0.39375,
+        "finalAttack": 0.0625,
+        "avgPlies": 81.63125,
         "decisive": 0.9
       },
       "replaced": "knight",
       "stage": "C"
     },
     {
-      "key": "fixture:f_toad",
+      "key": "-1,-2,1,leap,both;-1,0,3,slide,capture;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-1,3,slide,capture;0,1,3,slide,capture;1,-2,1,leap,both;1,0,3,slide,capture;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
       "piece": {
-        "id": "f_toad",
-        "name": "Toad",
+        "id": "c_18p1a2",
+        "name": "-1,-2,1,leap,both;-1,0,3,slide,capture;-",
         "glyph": "C",
         "tier": "minor",
         "components": [
           {
             "vec": [
-              2,
-              0
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 3,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              2
             ],
             "sym": "all",
             "range": 1,
             "path": "leap",
             "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cR3N",
+      "families": [
+        "step-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 19.5,
+        "mobilityCenter": 28,
+        "mobilityCorner": 10,
+        "captureAvg": 14.25,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.33333333333333337
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.5625,
+        "scoreCI": [
+          0.48563186006218184,
+          0.6393681399378182
+        ],
+        "movesPerGame": 4.16875,
+        "capturesPerGame": 1.275,
+        "checksPerGame": 0.49375,
+        "forksPerGame": 0.55625,
+        "survival": 0.44375,
+        "finalAttack": 0.1111111111111111,
+        "avgPlies": 77.775,
+        "decisive": 0.9
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,0,1,leap,capture;-2,1,1,leap,both;0,2,1,leap,capture;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,0,1,leap,capture;2,1,1,leap,both",
+      "piece": {
+        "id": "c_ojykux",
+        "name": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "capture"
           },
           {
             "vec": [
               1,
-              1
+              2
             ],
             "sym": "all",
             "range": 1,
-            "path": "slide",
+            "path": "leap",
             "mode": "both"
           }
         ]
       },
       "tier": "minor",
-      "betza": "DF",
+      "betza": "cfDcsDN",
       "families": [
-        "step-leap"
+        "leaper",
+        "split",
+        "sideways"
       ],
       "profile": {
-        "mobilityAvg": 6,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 4,
+        "mobilityAvg": 12.75,
+        "mobilityCenter": 19,
+        "mobilityCorner": 5.5,
+        "captureAvg": 7.5,
         "colorBound": false,
-        "canRetreat": false,
+        "canRetreat": true,
         "canSidestep": true,
         "hasLeap": true,
-        "hasSlide": true,
-        "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "hasSlide": false,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
       },
       "metrics": {
         "games": 160,
         "excluded": 0,
-        "score": 0.296875,
+        "score": 0.409375,
         "scoreCI": [
-          0.22608055793465315,
-          0.36766944206534685
+          0.3331824249280565,
+          0.4855675750719435
         ],
-        "movesPerGame": 4.025,
-        "capturesPerGame": 0.74375,
-        "checksPerGame": 0.10625,
-        "forksPerGame": 0.13125,
-        "survival": 0.5125,
-        "finalAttack": 0.006711409395973154,
-        "avgPlies": 81.83125,
-        "decisive": 0.93125
+        "movesPerGame": 3.66875,
+        "capturesPerGame": 0.85625,
+        "checksPerGame": 0.34375,
+        "forksPerGame": 0.3625,
+        "survival": 0.34375,
+        "finalAttack": 0.05517241379310345,
+        "avgPlies": 83.61875,
+        "decisive": 0.90625
       },
       "replaced": "knight",
       "stage": "C"
@@ -746,12 +1157,12 @@
   ],
   "forward": [
     {
-      "key": "fixture:f_forwardrook",
+      "key": "-1,1,3,slide,both;0,1,2,slide,both;1,1,3,slide,both",
       "piece": {
-        "id": "f_forwardrook",
-        "name": "Forward Rook",
+        "id": "c_135vadv",
+        "name": "-1,1,3,slide,both;0,1,2,slide,both;1,1,3",
         "glyph": "C",
-        "tier": "rook",
+        "tier": "pawn",
         "components": [
           {
             "vec": [
@@ -759,63 +1170,1680 @@
               1
             ],
             "sym": [
-              "f",
-              "l",
-              "r"
+              "f"
             ],
-            "range": null,
+            "range": 2,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
             "path": "slide",
             "mode": "both"
           }
         ]
       },
-      "tier": "rook",
-      "betza": "fRlr",
+      "tier": "pawn",
+      "betza": "fR2fB3",
       "families": [
+        "slider",
         "forward",
-        "slider"
+        "pawnlike"
       ],
       "profile": {
-        "mobilityAvg": 7,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 4,
+        "mobilityAvg": 10.125,
+        "mobilityCenter": 16,
+        "mobilityCorner": 5,
+        "captureAvg": 5.0625,
         "colorBound": false,
         "canRetreat": false,
-        "canSidestep": true,
+        "canSidestep": false,
         "hasLeap": false,
         "hasSlide": true,
         "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
       },
       "metrics": {
         "games": 160,
         "excluded": 0,
-        "score": 0.234375,
+        "score": 0.690625,
         "scoreCI": [
-          0.16873632954885703,
-          0.30001367045114297
+          0.6190007914801584,
+          0.7622492085198417
         ],
-        "movesPerGame": 3.1375,
-        "capturesPerGame": 0.875,
-        "checksPerGame": 0.30625,
-        "forksPerGame": 0.11875,
-        "survival": 0.5125,
-        "finalAttack": 0.034013605442176874,
-        "avgPlies": 72.53125,
-        "decisive": 0.91875
+        "movesPerGame": 2.875,
+        "capturesPerGame": 1.20625,
+        "checksPerGame": 0.53125,
+        "forksPerGame": 0.6125,
+        "survival": 0.26875,
+        "finalAttack": 0.05228758169934641,
+        "avgPlies": 69.58125,
+        "decisive": 0.95625
       },
-      "replaced": "rook",
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,3,slide,both;0,1,2,slide,capture;1,1,3,slide,both",
+      "piece": {
+        "id": "c_88z1ls",
+        "name": "-1,1,3,slide,both;0,1,2,slide,capture;1,",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "cfR2fB3",
+      "families": [
+        "slider",
+        "split",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 8.5,
+        "mobilityCenter": 14,
+        "mobilityCorner": 4,
+        "captureAvg": 5.0625,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.634375,
+        "scoreCI": [
+          0.5597495347847415,
+          0.7090004652152585
+        ],
+        "movesPerGame": 2.5375,
+        "capturesPerGame": 1.1875,
+        "checksPerGame": 0.48125,
+        "forksPerGame": 0.4875,
+        "survival": 0.375,
+        "finalAttack": 0.059602649006622516,
+        "avgPlies": 64.98125,
+        "decisive": 0.94375
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,3,slide,both;0,1,3,slide,both;1,1,3,slide,both",
+      "piece": {
+        "id": "c_13ytkr8",
+        "name": "-1,1,3,slide,both;0,1,3,slide,both;1,1,3",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "fR3fB3",
+      "families": [
+        "slider",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 11.375,
+        "mobilityCenter": 18,
+        "mobilityCorner": 6,
+        "captureAvg": 5.6875,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.790625,
+        "scoreCI": [
+          0.7275809995233984,
+          0.8536690004766017
+        ],
+        "movesPerGame": 2.33125,
+        "capturesPerGame": 1.1375,
+        "checksPerGame": 0.4375,
+        "forksPerGame": 0.54375,
+        "survival": 0.28125,
+        "finalAttack": 0.22580645161290322,
+        "avgPlies": 49.38125,
+        "decisive": 0.96875
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,2,slide,both;0,1,2,slide,both;1,1,2,slide,both",
+      "piece": {
+        "id": "c_1f51bbj",
+        "name": "-1,1,2,slide,both;0,1,2,slide,both;1,1,2",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "fR2fB2",
+      "families": [
+        "slider",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 8.5625,
+        "mobilityCenter": 12,
+        "mobilityCorner": 4,
+        "captureAvg": 4.28125,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.628125,
+        "scoreCI": [
+          0.5532360724816829,
+          0.7030139275183171
+        ],
+        "movesPerGame": 3.18125,
+        "capturesPerGame": 1.13125,
+        "checksPerGame": 0.45,
+        "forksPerGame": 0.40625,
+        "survival": 0.2875,
+        "finalAttack": 0.041379310344827586,
+        "avgPlies": 72.4375,
+        "decisive": 0.90625
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,3,slide,both;0,1,inf,slide,capture;1,1,3,slide,both",
+      "piece": {
+        "id": "c_11hhls3",
+        "name": "-1,1,3,slide,both;0,1,inf,slide,capture;",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": null,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "cfRfB3",
+      "families": [
+        "slider",
+        "split",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 10.375,
+        "mobilityCenter": 15.5,
+        "mobilityCorner": 6.5,
+        "captureAvg": 6.9375,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 12,
+        "excluded": 148,
+        "score": 0.5,
+        "scoreCI": [
+          0.21709836809708338,
+          0.7829016319029166
+        ],
+        "movesPerGame": 0.9166666666666666,
+        "capturesPerGame": 0.5833333333333334,
+        "checksPerGame": 0.25,
+        "forksPerGame": 0.16666666666666666,
+        "survival": 1,
+        "finalAttack": 0.25,
+        "avgPlies": 8.833333333333334,
+        "decisive": 1
+      },
+      "replaced": "pawn",
       "stage": "C"
     }
   ],
-  "slider": [
+  "pawnlike": [
     {
-      "key": "fixture:f_forwardrook",
+      "key": "-1,1,3,slide,both;0,1,2,slide,both;1,1,3,slide,both",
       "piece": {
-        "id": "f_forwardrook",
-        "name": "Forward Rook",
+        "id": "c_135vadv",
+        "name": "-1,1,3,slide,both;0,1,2,slide,both;1,1,3",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "fR2fB3",
+      "families": [
+        "slider",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 10.125,
+        "mobilityCenter": 16,
+        "mobilityCorner": 5,
+        "captureAvg": 5.0625,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.690625,
+        "scoreCI": [
+          0.6190007914801584,
+          0.7622492085198417
+        ],
+        "movesPerGame": 2.875,
+        "capturesPerGame": 1.20625,
+        "checksPerGame": 0.53125,
+        "forksPerGame": 0.6125,
+        "survival": 0.26875,
+        "finalAttack": 0.05228758169934641,
+        "avgPlies": 69.58125,
+        "decisive": 0.95625
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,3,slide,both;0,1,2,slide,capture;1,1,3,slide,both",
+      "piece": {
+        "id": "c_88z1ls",
+        "name": "-1,1,3,slide,both;0,1,2,slide,capture;1,",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "cfR2fB3",
+      "families": [
+        "slider",
+        "split",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 8.5,
+        "mobilityCenter": 14,
+        "mobilityCorner": 4,
+        "captureAvg": 5.0625,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.634375,
+        "scoreCI": [
+          0.5597495347847415,
+          0.7090004652152585
+        ],
+        "movesPerGame": 2.5375,
+        "capturesPerGame": 1.1875,
+        "checksPerGame": 0.48125,
+        "forksPerGame": 0.4875,
+        "survival": 0.375,
+        "finalAttack": 0.059602649006622516,
+        "avgPlies": 64.98125,
+        "decisive": 0.94375
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,3,slide,both;0,1,3,slide,both;1,1,3,slide,both",
+      "piece": {
+        "id": "c_13ytkr8",
+        "name": "-1,1,3,slide,both;0,1,3,slide,both;1,1,3",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "fR3fB3",
+      "families": [
+        "slider",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 11.375,
+        "mobilityCenter": 18,
+        "mobilityCorner": 6,
+        "captureAvg": 5.6875,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.790625,
+        "scoreCI": [
+          0.7275809995233984,
+          0.8536690004766017
+        ],
+        "movesPerGame": 2.33125,
+        "capturesPerGame": 1.1375,
+        "checksPerGame": 0.4375,
+        "forksPerGame": 0.54375,
+        "survival": 0.28125,
+        "finalAttack": 0.22580645161290322,
+        "avgPlies": 49.38125,
+        "decisive": 0.96875
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,2,slide,both;0,1,2,slide,both;1,1,2,slide,both",
+      "piece": {
+        "id": "c_1f51bbj",
+        "name": "-1,1,2,slide,both;0,1,2,slide,both;1,1,2",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "fR2fB2",
+      "families": [
+        "slider",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 8.5625,
+        "mobilityCenter": 12,
+        "mobilityCorner": 4,
+        "captureAvg": 4.28125,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.628125,
+        "scoreCI": [
+          0.5532360724816829,
+          0.7030139275183171
+        ],
+        "movesPerGame": 3.18125,
+        "capturesPerGame": 1.13125,
+        "checksPerGame": 0.45,
+        "forksPerGame": 0.40625,
+        "survival": 0.2875,
+        "finalAttack": 0.041379310344827586,
+        "avgPlies": 72.4375,
+        "decisive": 0.90625
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,3,slide,both;0,1,inf,slide,capture;1,1,3,slide,both",
+      "piece": {
+        "id": "c_11hhls3",
+        "name": "-1,1,3,slide,both;0,1,inf,slide,capture;",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": null,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "cfRfB3",
+      "families": [
+        "slider",
+        "split",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 10.375,
+        "mobilityCenter": 15.5,
+        "mobilityCorner": 6.5,
+        "captureAvg": 6.9375,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 12,
+        "excluded": 148,
+        "score": 0.5,
+        "scoreCI": [
+          0.21709836809708338,
+          0.7829016319029166
+        ],
+        "movesPerGame": 0.9166666666666666,
+        "capturesPerGame": 0.5833333333333334,
+        "checksPerGame": 0.25,
+        "forksPerGame": 0.16666666666666666,
+        "survival": 1,
+        "finalAttack": 0.25,
+        "avgPlies": 8.833333333333334,
+        "decisive": 1
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    }
+  ],
+  "stepper": [
+    {
+      "key": "-1,0,1,slide,both;-1,1,1,slide,both;0,1,1,slide,both;1,0,1,slide,both;1,1,1,slide,both",
+      "piece": {
+        "id": "c_1cs9nt9",
+        "name": "-1,0,1,slide,both;-1,1,1,slide,both;0,1,",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "fWsWfF",
+      "families": [
+        "slider",
+        "stepper",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 8.3125,
+        "mobilityCenter": 10,
+        "mobilityCorner": 4,
+        "captureAvg": 4.15625,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "heron",
+        "nearestLibraryDistance": 0.7
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.165625,
+        "scoreCI": [
+          0.10802272089063011,
+          0.22322727910936987
+        ],
+        "movesPerGame": 2.89375,
+        "capturesPerGame": 0.48125,
+        "checksPerGame": 0.10625,
+        "forksPerGame": 0.08125,
+        "survival": 0.6375,
+        "finalAttack": 0.020134228187919462,
+        "avgPlies": 72.58125,
+        "decisive": 0.93125
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,0,1,slide,both;-1,0,1,slide,capture;0,-1,1,slide,both;0,1,1,slide,both;0,1,1,slide,capture;1,0,1,slide,both;1,0,1,slide,capture",
+      "piece": {
+        "id": "c_1ysiam1",
+        "name": "-1,0,1,slide,both;-1,0,1,slide,capture;0",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 1,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "W",
+      "families": [
+        "slider",
+        "stepper",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 9.625,
+        "mobilityCenter": 11,
+        "mobilityCorner": 5.5,
+        "captureAvg": 6.125,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "heron",
+        "nearestLibraryDistance": 0.6363636363636364
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.046875,
+        "scoreCI": [
+          0.014122711494557356,
+          0.07962728850544265
+        ],
+        "movesPerGame": 2.59375,
+        "capturesPerGame": 0.2375,
+        "checksPerGame": 0.03125,
+        "forksPerGame": 0.21875,
+        "survival": 0.7875,
+        "finalAttack": 0,
+        "avgPlies": 58.4875,
+        "decisive": 0.96875
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-1,1,slide,both;-1,0,1,slide,capture;-1,1,1,slide,both;0,-1,1,slide,capture;0,1,1,slide,capture;1,-1,1,slide,both;1,0,1,slide,capture;1,1,1,slide,both",
+      "piece": {
+        "id": "c_vbqdfm",
+        "name": "-1,-1,1,slide,both;-1,0,1,slide,capture;",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cWF",
+      "families": [
+        "slider",
+        "stepper",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 9.625,
+        "mobilityCenter": 12,
+        "mobilityCorner": 4,
+        "captureAvg": 6.5625,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "toad",
+        "nearestLibraryDistance": 0.6666666666666667
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.196875,
+        "scoreCI": [
+          0.13526049864403875,
+          0.25848950135596127
+        ],
+        "movesPerGame": 3.3625,
+        "capturesPerGame": 0.60625,
+        "checksPerGame": 0.08125,
+        "forksPerGame": 0.075,
+        "survival": 0.6375,
+        "finalAttack": 0.006993006993006993,
+        "avgPlies": 78.99375,
+        "decisive": 0.89375
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-1,1,slide,both;-1,1,1,slide,both;0,1,1,slide,capture;1,-1,1,slide,both;1,1,1,slide,both",
+      "piece": {
+        "id": "c_b1pqki",
+        "name": "-1,-1,1,slide,both;-1,1,1,slide,both;0,1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 1,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cfWF",
+      "families": [
+        "slider",
+        "stepper",
+        "split"
+      ],
+      "profile": {
+        "mobilityAvg": 7,
+        "mobilityCenter": 9,
+        "mobilityCorner": 2.5,
+        "captureAvg": 3.9375,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "toad",
+        "nearestLibraryDistance": 0.5555555555555556
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.159375,
+        "scoreCI": [
+          0.10265877329992984,
+          0.21609122670007014
+        ],
+        "movesPerGame": 3.01875,
+        "capturesPerGame": 0.38125,
+        "checksPerGame": 0.06875,
+        "forksPerGame": 0.025,
+        "survival": 0.65,
+        "finalAttack": 0,
+        "avgPlies": 71.88125,
+        "decisive": 0.89375
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,1,1,slide,both;0,1,1,slide,capture;1,1,1,slide,both",
+      "piece": {
+        "id": "c_sp17xb",
+        "name": "-1,1,1,slide,both;0,1,1,slide,capture;1,",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 1,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "cfWfF",
+      "families": [
+        "slider",
+        "stepper",
+        "split",
+        "forward",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 3.9375,
+        "mobilityCenter": 5,
+        "mobilityCorner": 1.5,
+        "captureAvg": 2.40625,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": false,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "toad",
+        "nearestLibraryDistance": 0.7777777777777778
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.35625,
+        "scoreCI": [
+          0.28204517630655673,
+          0.4304548236934433
+        ],
+        "movesPerGame": 1.79375,
+        "capturesPerGame": 0.3875,
+        "checksPerGame": 0.0125,
+        "forksPerGame": 0.01875,
+        "survival": 0.59375,
+        "finalAttack": 0,
+        "avgPlies": 66.56875,
+        "decisive": 0.9125
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    }
+  ],
+  "step-leap": [
+    {
+      "key": "-1,0,3,slide,both;-1,0,inf,slide,capture;0,-1,3,slide,both;0,-1,inf,slide,capture;0,1,3,slide,both;0,1,inf,slide,capture;0,2,1,leap,capture;1,0,3,slide,both;1,0,inf,slide,capture",
+      "piece": {
+        "id": "c_17nrkp4",
+        "name": "-1,0,3,slide,both;-1,0,inf,slide,capture",
+        "glyph": "C",
+        "tier": "rook",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": null,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "capture"
+          }
+        ]
+      },
+      "tier": "rook",
+      "betza": "mR3cRcfD",
+      "families": [
+        "step-leap",
+        "slide-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 32.75,
+        "mobilityCenter": 39,
+        "mobilityCorner": 26.5,
+        "captureAvg": 23.75,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.18125,
+        "scoreCI": [
+          0.12155874030165723,
+          0.24094125969834276
+        ],
+        "movesPerGame": 4.48125,
+        "capturesPerGame": 0.85625,
+        "checksPerGame": 0.3875,
+        "forksPerGame": 1.325,
+        "survival": 0.54375,
+        "finalAttack": 0.02112676056338028,
+        "avgPlies": 72.325,
+        "decisive": 0.8875
+      },
+      "replaced": "rook",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,0,3,slide,capture;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,1,3,slide,capture;1,-2,1,leap,both;1,0,3,slide,capture;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1qk92h9",
+        "name": "-1,-2,1,leap,both;-1,0,3,slide,capture;-",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cfR3csR3N",
+      "families": [
+        "step-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 17.25,
+        "mobilityCenter": 25,
+        "mobilityCorner": 8.5,
+        "captureAvg": 12,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.54375,
+        "scoreCI": [
+          0.4665713542527792,
+          0.6209286457472207
+        ],
+        "movesPerGame": 4.0125,
+        "capturesPerGame": 1.1375,
+        "checksPerGame": 0.5375,
+        "forksPerGame": 0.5125,
+        "survival": 0.39375,
+        "finalAttack": 0.0625,
+        "avgPlies": 81.63125,
+        "decisive": 0.9
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,0,3,slide,capture;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-1,3,slide,capture;0,1,3,slide,capture;1,-2,1,leap,both;1,0,3,slide,capture;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_18p1a2",
+        "name": "-1,-2,1,leap,both;-1,0,3,slide,capture;-",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 3,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cR3N",
+      "families": [
+        "step-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 19.5,
+        "mobilityCenter": 28,
+        "mobilityCorner": 10,
+        "captureAvg": 14.25,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.33333333333333337
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.5625,
+        "scoreCI": [
+          0.48563186006218184,
+          0.6393681399378182
+        ],
+        "movesPerGame": 4.16875,
+        "capturesPerGame": 1.275,
+        "checksPerGame": 0.49375,
+        "forksPerGame": 0.55625,
+        "survival": 0.44375,
+        "finalAttack": 0.1111111111111111,
+        "avgPlies": 77.775,
+        "decisive": 0.9
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,0,3,slide,both;-2,-2,1,leap,both;-2,2,1,leap,both;0,1,3,slide,both;1,0,3,slide,both;2,-2,1,leap,both;2,2,1,leap,both",
+      "piece": {
+        "id": "c_gium9e",
+        "name": "-1,0,3,slide,both;-2,-2,1,leap,both;-2,2",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              2,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "fR3sR3A",
+      "families": [
+        "step-leap",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 18,
+        "mobilityCenter": 26,
+        "mobilityCorner": 11,
+        "captureAvg": 9,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "heron",
+        "nearestLibraryDistance": 0.6363636363636364
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.41875,
+        "scoreCI": [
+          0.3423039635796924,
+          0.49519603642030763
+        ],
+        "movesPerGame": 4.00625,
+        "capturesPerGame": 1.0625,
+        "checksPerGame": 0.41875,
+        "forksPerGame": 0.41875,
+        "survival": 0.325,
+        "finalAttack": 0.05,
+        "avgPlies": 85.16875,
+        "decisive": 0.875
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,0,2,slide,capture;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,1,2,slide,capture;1,-2,1,leap,both;1,0,2,slide,capture;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1o96upo",
+        "name": "-1,-2,1,leap,both;-1,0,2,slide,capture;-",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 2,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cfR2csR2N",
+      "families": [
+        "step-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 15.375,
+        "mobilityCenter": 22,
+        "mobilityCorner": 7,
+        "captureAvg": 10.125,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.4875,
+        "scoreCI": [
+          0.4100484122983912,
+          0.5649515877016088
+        ],
+        "movesPerGame": 4.10625,
+        "capturesPerGame": 1.04375,
+        "checksPerGame": 0.35625,
+        "forksPerGame": 0.3375,
+        "survival": 0.4125,
+        "finalAttack": 0.09722222222222222,
+        "avgPlies": 79.075,
+        "decisive": 0.9
+      },
+      "replaced": "knight",
+      "stage": "C"
+    }
+  ],
+  "slide-leap": [
+    {
+      "key": "-1,0,3,slide,both;-1,0,inf,slide,capture;0,-1,3,slide,both;0,-1,inf,slide,capture;0,1,3,slide,both;0,1,inf,slide,capture;0,2,1,leap,capture;1,0,3,slide,both;1,0,inf,slide,capture",
+      "piece": {
+        "id": "c_17nrkp4",
+        "name": "-1,0,3,slide,both;-1,0,inf,slide,capture",
+        "glyph": "C",
+        "tier": "rook",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 3,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": null,
+            "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "f"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "capture"
+          }
+        ]
+      },
+      "tier": "rook",
+      "betza": "mR3cRcfD",
+      "families": [
+        "step-leap",
+        "slide-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 32.75,
+        "mobilityCenter": 39,
+        "mobilityCorner": 26.5,
+        "captureAvg": 23.75,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "pawn",
+        "nearestLibraryDistance": 1
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.18125,
+        "scoreCI": [
+          0.12155874030165723,
+          0.24094125969834276
+        ],
+        "movesPerGame": 4.48125,
+        "capturesPerGame": 0.85625,
+        "checksPerGame": 0.3875,
+        "forksPerGame": 1.325,
+        "survival": 0.54375,
+        "finalAttack": 0.02112676056338028,
+        "avgPlies": 72.325,
+        "decisive": 0.8875
+      },
+      "replaced": "rook",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-1,inf,slide,move;-1,-2,1,leap,both;-1,1,inf,slide,move;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;1,-1,inf,slide,move;1,-2,1,leap,both;1,1,inf,slide,move;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_hdjtts",
+        "name": "-1,-1,inf,slide,move;-1,-2,1,leap,both;-",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": null,
+            "path": "slide",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "mBN",
+      "families": [
+        "step-leap",
+        "slide-leap",
+        "split"
+      ],
+      "profile": {
+        "mobilityAvg": 19.25,
+        "mobilityCenter": 29,
+        "mobilityCorner": 11,
+        "captureAvg": 5.25,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": false,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.33333333333333337
+      },
+      "metrics": {
+        "games": 28,
+        "excluded": 132,
+        "score": 0.7142857142857143,
+        "scoreCI": [
+          0.5469537089788992,
+          0.8816177195925294
+        ],
+        "movesPerGame": 0.9285714285714286,
+        "capturesPerGame": 0.14285714285714285,
+        "checksPerGame": 0.07142857142857142,
+        "forksPerGame": 0.07142857142857142,
+        "survival": 0.7857142857142857,
+        "finalAttack": 0.07692307692307693,
+        "avgPlies": 27.642857142857142,
+        "decisive": 0.9285714285714286
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,0,inf,slide,capture;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,1,inf,slide,capture;1,-2,1,leap,both;1,0,inf,slide,capture;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1qj1n53",
+        "name": "-1,-2,1,leap,both;-1,0,inf,slide,capture",
         "glyph": "C",
         "tier": "rook",
         "components": [
@@ -831,48 +2859,576 @@
             ],
             "range": null,
             "path": "slide",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
             "mode": "both"
           }
         ]
       },
       "tier": "rook",
-      "betza": "fRlr",
+      "betza": "cfRcsRN",
       "families": [
-        "forward",
-        "slider"
+        "step-leap",
+        "slide-leap",
+        "split",
+        "sideways"
       ],
       "profile": {
-        "mobilityAvg": 7,
-        "mobilityCenter": 4,
-        "mobilityCorner": 2,
-        "captureAvg": 4,
+        "mobilityAvg": 21,
+        "mobilityCenter": 26.5,
+        "mobilityCorner": 14.5,
+        "captureAvg": 15.75,
         "colorBound": false,
-        "canRetreat": false,
+        "canRetreat": true,
         "canSidestep": true,
-        "hasLeap": false,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
+      },
+      "metrics": {
+        "games": 26,
+        "excluded": 134,
+        "score": 0.5,
+        "scoreCI": [
+          0.30780618756457967,
+          0.6921938124354203
+        ],
+        "movesPerGame": 1.0384615384615385,
+        "capturesPerGame": 0.23076923076923078,
+        "checksPerGame": 0.07692307692307693,
+        "forksPerGame": 0.15384615384615385,
+        "survival": 0.7692307692307693,
+        "finalAttack": 0.038461538461538464,
+        "avgPlies": 33.42307692307692,
+        "decisive": 1
+      },
+      "replaced": "rook",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,0,inf,slide,move;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,1,inf,slide,move;1,-2,1,leap,both;1,0,inf,slide,move;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_18h70dg",
+        "name": "-1,-2,1,leap,both;-1,0,inf,slide,move;-1",
+        "glyph": "C",
+        "tier": "rook",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": null,
+            "path": "slide",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "rook",
+      "betza": "mfRmsRN",
+      "families": [
+        "step-leap",
+        "slide-leap",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 21,
+        "mobilityCenter": 26.5,
+        "mobilityCorner": 14.5,
+        "captureAvg": 5.25,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
+      },
+      "metrics": {
+        "games": 26,
+        "excluded": 134,
+        "score": 0.5,
+        "scoreCI": [
+          0.30780618756457967,
+          0.6921938124354203
+        ],
+        "movesPerGame": 1.0384615384615385,
+        "capturesPerGame": 0.23076923076923078,
+        "checksPerGame": 0.07692307692307693,
+        "forksPerGame": 0.038461538461538464,
+        "survival": 0.7692307692307693,
+        "finalAttack": 0.038461538461538464,
+        "avgPlies": 33.42307692307692,
+        "decisive": 1
+      },
+      "replaced": "rook",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,1,inf,slide,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;1,-2,1,leap,both;1,1,inf,slide,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1wwrcwh",
+        "name": "-1,-2,1,leap,both;-1,1,inf,slide,both;-1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": [
+              "fl",
+              "fr"
+            ],
+            "range": null,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "fBN",
+      "families": [
+        "step-leap",
+        "slide-leap"
+      ],
+      "profile": {
+        "mobilityAvg": 19.25,
+        "mobilityCenter": 29,
+        "mobilityCorner": 11,
+        "captureAvg": 9.625,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": false,
+        "hasLeap": true,
         "hasSlide": true,
         "splitMoveCapture": false,
-        "nearestLibraryId": "rook",
-        "nearestLibraryDistance": 0.5
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.19999999999999996
+      },
+      "metrics": {
+        "games": 42,
+        "excluded": 118,
+        "score": 0.5357142857142857,
+        "scoreCI": [
+          0.38488325442430216,
+          0.6865453170042692
+        ],
+        "movesPerGame": 1.4047619047619047,
+        "capturesPerGame": 0.19047619047619047,
+        "checksPerGame": 0.023809523809523808,
+        "forksPerGame": 0.11904761904761904,
+        "survival": 0.5238095238095238,
+        "finalAttack": 0.05128205128205128,
+        "avgPlies": 43.095238095238095,
+        "decisive": 0.9285714285714286
+      },
+      "replaced": "knight",
+      "stage": "C"
+    }
+  ],
+  "leaper": [
+    {
+      "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,0,1,leap,move;-2,1,1,leap,both;0,-2,1,leap,move;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,0,1,leap,move;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1p4oo2j",
+        "name": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "b",
+              "l",
+              "r"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "mbDmsDN",
+      "families": [
+        "leaper",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 12.75,
+        "mobilityCenter": 19,
+        "mobilityCorner": 5.5,
+        "captureAvg": 5.25,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": false,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
       },
       "metrics": {
         "games": 160,
         "excluded": 0,
-        "score": 0.234375,
+        "score": 0.2625,
         "scoreCI": [
-          0.16873632954885703,
-          0.30001367045114297
+          0.19432239416421254,
+          0.3306776058357875
         ],
-        "movesPerGame": 3.1375,
-        "capturesPerGame": 0.875,
-        "checksPerGame": 0.30625,
-        "forksPerGame": 0.11875,
-        "survival": 0.5125,
-        "finalAttack": 0.034013605442176874,
-        "avgPlies": 72.53125,
-        "decisive": 0.91875
+        "movesPerGame": 4.5,
+        "capturesPerGame": 0.73125,
+        "checksPerGame": 0.34375,
+        "forksPerGame": 0.19375,
+        "survival": 0.4125,
+        "finalAttack": 0.014084507042253521,
+        "avgPlies": 82.2375,
+        "decisive": 0.8875
       },
-      "replaced": "rook",
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,0,1,leap,capture;-2,1,1,leap,both;0,2,1,leap,capture;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,0,1,leap,capture;2,1,1,leap,both",
+      "piece": {
+        "id": "c_ojykux",
+        "name": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cfDcsDN",
+      "families": [
+        "leaper",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 12.75,
+        "mobilityCenter": 19,
+        "mobilityCorner": 5.5,
+        "captureAvg": 7.5,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": false,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.2727272727272727
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.409375,
+        "scoreCI": [
+          0.3331824249280565,
+          0.4855675750719435
+        ],
+        "movesPerGame": 3.66875,
+        "capturesPerGame": 0.85625,
+        "checksPerGame": 0.34375,
+        "forksPerGame": 0.3625,
+        "survival": 0.34375,
+        "finalAttack": 0.05517241379310345,
+        "avgPlies": 83.61875,
+        "decisive": 0.90625
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-2,1,leap,both;0,2,1,leap,both;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1m20hgf",
+        "name": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "f",
+              "b"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "vDN",
+      "families": [
+        "leaper"
+      ],
+      "profile": {
+        "mobilityAvg": 13.5,
+        "mobilityCenter": 20,
+        "mobilityCorner": 6,
+        "captureAvg": 6.75,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": false,
+        "hasLeap": true,
+        "hasSlide": false,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.19999999999999996
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.403125,
+        "scoreCI": [
+          0.3271172913294727,
+          0.4791327086705273
+        ],
+        "movesPerGame": 3.9625,
+        "capturesPerGame": 0.8375,
+        "checksPerGame": 0.33125,
+        "forksPerGame": 0.25,
+        "survival": 0.38125,
+        "finalAttack": 0.014598540145985401,
+        "avgPlies": 86.45,
+        "decisive": 0.85625
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,0,1,leap,capture;-2,1,1,leap,both;0,-2,1,leap,capture;0,2,1,leap,capture;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,0,1,leap,capture;2,1,1,leap,both",
+      "piece": {
+        "id": "c_16r42q",
+        "name": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "capture"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "cDN",
+      "families": [
+        "leaper",
+        "split",
+        "sideways"
+      ],
+      "profile": {
+        "mobilityAvg": 13.5,
+        "mobilityCenter": 20,
+        "mobilityCorner": 6,
+        "captureAvg": 8.25,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": false,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.33333333333333337
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.33125,
+        "scoreCI": [
+          0.25832004912674766,
+          0.4041799508732523
+        ],
+        "movesPerGame": 3.625,
+        "capturesPerGame": 0.83125,
+        "checksPerGame": 0.3875,
+        "forksPerGame": 0.25,
+        "survival": 0.35,
+        "finalAttack": 0.04929577464788732,
+        "avgPlies": 83.98125,
+        "decisive": 0.8875
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1,1,leap,both;-2,1,1,leap,both;0,-2,1,leap,move;1,-2,1,leap,both;1,2,1,leap,both;2,-1,1,leap,both;2,1,1,leap,both",
+      "piece": {
+        "id": "c_1powkbu",
+        "name": "-1,-2,1,leap,both;-1,2,1,leap,both;-2,-1",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              2
+            ],
+            "sym": [
+              "b"
+            ],
+            "range": 1,
+            "path": "leap",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "mbDN",
+      "families": [
+        "leaper",
+        "split"
+      ],
+      "profile": {
+        "mobilityAvg": 11.25,
+        "mobilityCenter": 17,
+        "mobilityCorner": 4.5,
+        "captureAvg": 5.25,
+        "colorBound": false,
+        "canRetreat": true,
+        "canSidestep": false,
+        "hasLeap": true,
+        "hasSlide": false,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "knight",
+        "nearestLibraryDistance": 0.11111111111111116
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.253125,
+        "scoreCI": [
+          0.1857517400792885,
+          0.32049825992071146
+        ],
+        "movesPerGame": 3.425,
+        "capturesPerGame": 0.675,
+        "checksPerGame": 0.2125,
+        "forksPerGame": 0.2,
+        "survival": 0.3625,
+        "finalAttack": 0,
+        "avgPlies": 81.2625,
+        "decisive": 0.89375
+      },
+      "replaced": "knight",
       "stage": "C"
     }
   ]
