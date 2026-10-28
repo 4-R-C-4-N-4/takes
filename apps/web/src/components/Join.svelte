@@ -17,11 +17,29 @@
   }
 </script>
 
-<h1>Join game {code}</h1>
+<div class="page">
+  <div class="page-head">
+    <h1>Join game</h1>
+    <p>Code: <strong class="mono">{code}</strong></p>
+  </div>
 
-{#if profiles.length === 0}
-  <p>No profiles yet. Build one in the Builder first.</p>
-{:else}
-  <label>Profile <select bind:value={profileId}>{#each profiles as p}<option value={p.id}>{p.name}</option>{/each}</select></label>
-  <button on:click={join}>Join with this profile</button>
-{/if}
+  {#if profiles.length === 0}
+    <p class="muted">No profiles yet. Build one in the Builder first.</p>
+  {:else}
+    <div class="panel join-panel stack">
+      <div class="field">
+        <label for="join-army">Army</label>
+        <select id="join-army" class="select" bind:value={profileId}>
+          {#each profiles as p}<option value={p.id}>{p.name}</option>{/each}
+        </select>
+      </div>
+      <button class="btn primary" onclick={join}>Join with this army</button>
+    </div>
+  {/if}
+</div>
+
+<style>
+  .join-panel { padding: var(--s-4); max-width: 420px; }
+  .field { display: grid; gap: var(--s-1); }
+  .field label { color: var(--text-muted); font-size: var(--fs-sm); }
+</style>
