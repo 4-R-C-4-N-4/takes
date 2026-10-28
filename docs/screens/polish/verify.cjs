@@ -35,6 +35,46 @@ const out = __dirname;
       await page.getByRole('heading', { name: 'Armies', exact: true }).waitFor();
       assert(await page.getByText('Vanilla', { exact: true }).count());
       await click(page.getByRole('link', { name: 'Builder', exact: true }));
+      if (name === 'phone') {
+        const rail = page.locator('.palette-rail');
+        await rail.scrollIntoViewIfNeeded();
+        const box = await rail.boundingBox();
+        const cdp = await context.newCDPSession(page);
+        const touch = (type, x, y) => cdp.send('Input.dispatchTouchEvent', {
+          type, touchPoints: type === 'touchEnd' ? [] : [{ x, y }],
+        });
+        const x = box.x + 70, y = box.y + Math.min(box.height - 30, 240);
+        const before = await rail.evaluate(el => el.scrollTop);
+        await touch('touchStart', x, y);
+        for (let i = 1; i <= 10; i++) {
+          await touch('touchMove', x, y - i * 16);
+          await page.waitForTimeout(20);
+        }
+        await touch('touchEnd', x, y - 160);
+        await page.waitForTimeout(300);
+        assert(await rail.evaluate(el => el.scrollTop) > before, 'touch swipe scrolls palette');
+        assert.equal(await page.locator('.palette-piece.selected').count(), 0);
+        assert.equal(await page.locator('.piece-cell').count(), 0);
+        await rail.evaluate(el => { el.scrollTop = 0; });
+        await cdp.detach();
+      }
+      const info = page.getByRole('button', { name: 'Moves of Knight', exact: true });
+      await click(info);
+      const sheet = page.getByRole('dialog', { name: 'Moves of Knight', exact: true });
+      await sheet.waitFor();
+      assert(await sheet.locator('.highlight').count() > 0);
+      await click(sheet.getByRole('button', { name: 'Attacks', exact: true }));
+      assert.equal(await sheet.getByRole('button', { name: 'Attacks', exact: true }).getAttribute('aria-pressed'), 'true');
+      assert(await sheet.locator('.highlight.capture').count() > 0);
+      await noOverflow();
+      await page.keyboard.press('Escape');
+      await sheet.waitFor({ state: 'detached' });
+      assert(await info.evaluate(el => el === document.activeElement));
+      await click(info);
+      await sheet.waitFor();
+      await page.mouse.click(2, 2);
+      await sheet.waitFor({ state: 'detached' });
+      assert.equal(await page.locator('.palette-piece.selected').count(), 0);
       await click(page.getByTitle('Pawn (1 pts)', { exact: true }));
       await click(square(16)); // a3: pawn placement is legal in this zone.
       await exists(16);
@@ -50,6 +90,32 @@ const out = __dirname;
       assert.equal(await page.locator('.palette-piece.selected').count(), 0);
       assert(await page.locator('.issues li').count());
       assert(await page.getByRole('button', { name: 'Save profile', exact: true }).isDisabled());
+      if (name === 'phone') {
+        // Hold in the palette, then reveal the board while keeping the touch active.
+        await page.locator('.palette-rail').evaluate(el => { el.scrollTop = 0; });
+        const knight = page.getByTitle('Knight (3 pts)', { exact: true });
+        await knight.scrollIntoViewIfNeeded();
+        const a = await knight.boundingBox();
+
+        const cdp = await context.newCDPSession(page);
+        const touch = (type, x, y) => cdp.send('Input.dispatchTouchEvent', {
+          type, touchPoints: type === 'touchEnd' ? [] : [{ x, y }],
+        });
+        const x = a.x + a.width / 2, y = a.y + a.height / 2;
+        await touch('touchStart', x, y);
+        await page.waitForTimeout(300);
+        await square(17).scrollIntoViewIfNeeded();
+        const b = await square(17).boundingBox();
+        const tx = b.x + b.width / 2, ty = b.y + b.height / 2;
+        for (let i = 1; i <= 12; i++) {
+          await touch('touchMove', x + (tx - x) * i / 12, y + (ty - y) * i / 12);
+          await page.waitForTimeout(16);
+        }
+        await touch('touchEnd', tx, ty);
+        await cdp.detach();
+        await exists(17);
+        assert.equal(await page.locator('.budget').textContent(), 'Cost: 4 / 39');
+      }
       await drag(page.getByTitle('Knight (3 pts)', { exact: true }), square(17));
       await exists(17);
       await drag(piece(17), square(18));
