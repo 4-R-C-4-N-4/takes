@@ -1,0 +1,162 @@
+/*
+ * Takes design system. Read docs/DESIGN.md before adding styles.
+ * Direction: a quiet tournament hall. Warm charcoal and ivory, one vermilion accent that means
+ * "takes" (captures, primary actions, danger-adjacent emphasis). Type carries hierarchy; boxes are rare.
+ */
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/hanken-grotesk';
+@import '@fontsource-variable/jetbrains-mono';
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Colour ---- */
+  --ink-0: oklch(16% 0.008 60);   /* page */
+  --ink-1: oklch(19.5% 0.009 60); /* raised surface */
+  --ink-2: oklch(23.5% 0.010 60); /* control / hover surface */
+  --ink-3: oklch(30% 0.012 60);   /* border strong, pressed */
+  --line: oklch(100% 0 0 / 0.08); /* hairline */
+  --line-strong: oklch(100% 0 0 / 0.16);
+
+  --text: oklch(93% 0.012 85);        /* ivory */
+  --text-muted: oklch(72% 0.012 80);
+  --text-faint: oklch(56% 0.010 75);
+
+  --accent: oklch(66% 0.17 38);        /* vermilion — "takes" */
+  --accent-strong: oklch(71% 0.18 40);
+  --accent-ink: oklch(18% 0.03 40);    /* text on accent */
+  --accent-soft: oklch(66% 0.17 38 / 0.16);
+
+  --good: oklch(74% 0.12 150);
+  --warn: oklch(80% 0.13 80);
+  --bad: oklch(66% 0.17 25);
+  --good-soft: oklch(74% 0.12 150 / 0.14);
+  --warn-soft: oklch(80% 0.13 80 / 0.16);
+  --bad-soft: oklch(66% 0.17 25 / 0.16);
+
+  /* Board */
+  --sq-light: oklch(86% 0.035 80);
+  --sq-dark: oklch(58% 0.045 60);
+  --mark-move: oklch(30% 0.02 60 / 0.38);      /* quiet destination dot */
+  --mark-capture: oklch(66% 0.17 38 / 0.85);   /* capture ring */
+  --mark-both: oklch(55% 0.13 300 / 0.55);
+  --mark-select: oklch(84% 0.13 95 / 0.55);
+  --mark-last: oklch(84% 0.13 95 / 0.30);
+  --mark-check: oklch(62% 0.2 28 / 0.75);
+  --mark-error: oklch(62% 0.2 28 / 0.55);
+  --mark-warning: oklch(80% 0.13 80 / 0.55);
+
+  /* Pieces (consumed by PieceIcon) */
+  --piece-fill-w: oklch(96% 0.012 90);
+  --piece-stroke-w: oklch(22% 0.01 60);
+  --piece-fill-b: oklch(24% 0.012 60);
+  --piece-stroke-b: oklch(90% 0.015 85);
+
+  /* ---- Type ---- */
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-ui: 'Hanken Grotesk Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.8125rem;
+  --fs-md: 0.9375rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+
+  /* ---- Space, radius, elevation, motion ---- */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px;
+  --r-1: 4px; --r-2: 8px; --r-3: 12px; --r-pill: 999px;
+  --shadow-1: 0 1px 0 oklch(100% 0 0 / 0.04) inset, 0 1px 2px oklch(0% 0 0 / 0.35);
+  --shadow-2: 0 1px 0 oklch(100% 0 0 / 0.05) inset, 0 8px 24px oklch(0% 0 0 / 0.40);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-fast: 120ms;
+  --t-med: 220ms;
+  --content-max: 1180px;
+  --tap: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-fast: 0ms; --t-med: 0ms; }
+}
+
+/* ---- Base ---- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ink-0);
+  color: var(--text);
+  font: 400 var(--fs-md)/1.5 var(--font-ui);
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 560; letter-spacing: -0.01em; line-height: 1.15; margin: 0; text-wrap: balance; }
+h1 { font-size: var(--fs-2xl); font-variation-settings: 'opsz' 96; }
+h2 { font-size: var(--fs-xl); font-variation-settings: 'opsz' 48; }
+h3 { font-size: var(--fs-lg); font-family: var(--font-ui); font-weight: 650; letter-spacing: 0; }
+p { margin: 0; text-wrap: pretty; }
+a { color: inherit; }
+code, kbd, .mono { font-family: var(--font-mono); font-size: 0.92em; }
+::selection { background: var(--accent-soft); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-1); }
+
+/* ---- Primitives (use these; do not restyle per screen) ---- */
+.eyebrow { font: 600 var(--fs-xs)/1 var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+.muted { color: var(--text-muted); }
+.faint { color: var(--text-faint); }
+.num { font-variant-numeric: tabular-nums; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  min-height: 36px; padding: 0 var(--s-4);
+  font: 600 var(--fs-sm)/1 var(--font-ui); letter-spacing: 0.01em;
+  color: var(--text); background: var(--ink-2); border: 1px solid var(--line-strong); border-radius: var(--r-2);
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.btn:hover { background: var(--ink-3); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled, .btn[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; transform: none; }
+.btn.primary { background: var(--accent); border-color: transparent; color: var(--accent-ink); }
+.btn.primary:hover { background: var(--accent-strong); }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--text-muted); }
+.btn.ghost:hover { background: var(--ink-2); color: var(--text); }
+.btn.danger { color: var(--bad); }
+.btn.sm { min-height: 30px; padding: 0 var(--s-3); font-size: var(--fs-xs); }
+@media (pointer: coarse) { .btn { min-height: var(--tap); } .btn.sm { min-height: 38px; } }
+
+.segmented { display: inline-flex; padding: 3px; gap: 2px; background: var(--ink-1); border: 1px solid var(--line); border-radius: var(--r-2); }
+.segmented > button {
+  min-height: 30px; padding: 0 var(--s-3); border: 0; border-radius: 6px; background: transparent;
+  color: var(--text-muted); font: 600 var(--fs-xs)/1 var(--font-ui); cursor: pointer;
+}
+.segmented > button[aria-pressed='true'], .segmented > button.active { background: var(--ink-3); color: var(--text); }
+
+.field { display: grid; gap: var(--s-1); font-size: var(--fs-sm); color: var(--text-muted); }
+.input, .select, .textarea {
+  width: 100%; min-height: 36px; padding: 0 var(--s-3);
+  color: var(--text); background: var(--ink-1); border: 1px solid var(--line-strong); border-radius: var(--r-2);
+  font: 500 var(--fs-sm)/1.2 var(--font-ui);
+}
+.textarea { padding: var(--s-2) var(--s-3); min-height: 84px; resize: vertical; line-height: 1.45; }
+.select { appearance: none; padding-right: 28px; background-image: linear-gradient(45deg, transparent 50%, var(--text-faint) 50%), linear-gradient(135deg, var(--text-faint) 50%, transparent 50%); background-position: right 14px center, right 9px center; background-size: 5px 5px; background-repeat: no-repeat; }
+.input:focus, .select:focus, .textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.panel { background: var(--ink-1); border: 1px solid var(--line); border-radius: var(--r-3); box-shadow: var(--shadow-1); }
+.chip { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: var(--r-pill); font: 600 var(--fs-xs)/1 var(--font-ui); background: var(--ink-2); color: var(--text-muted); }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.accent { background: var(--accent-soft); color: var(--accent-strong); }
+
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 6px var(--s-4); font-size: var(--fs-sm); }
+.kv > dt { color: var(--text-faint); }
+.kv > dd { margin: 0; }
+
+.page { display: grid; gap: var(--s-5); }
+.page-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--s-3); }
+.page-head p { color: var(--text-muted); max-width: 62ch; margin-top: var(--s-2); }
+.stack { display: grid; gap: var(--s-3); }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
+.divider { height: 1px; background: var(--line); border: 0; margin: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
