@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 # Publishes the static build (no server, no Lab) to https://4-r-c-4-n-4.github.io/takes/.
 # The main site's Games section links here as a new-tab card, like OpenXOPS-web.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:

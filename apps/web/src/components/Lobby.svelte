@@ -120,7 +120,7 @@
 <div class="page lobby-page">
   <div class="page-head stacked">
     <h1>Play</h1>
-    <p>Choose your army, then pick how you want to play.</p>
+    <p>Choose your army, then pick how you want to play. <a href="./how-to-play.html" target="_blank" rel="noopener">How to play</a></p>
   </div>
 
   {#if profiles.length === 0}

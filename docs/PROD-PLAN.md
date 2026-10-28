@@ -1,100 +1,65 @@
-# Path to production: Takes on the tiny-games site
+# Takes production plan and verification
 
-Target: `https://4-r-c-4-n-4.github.io/tiny-games/takes/`, listed automatically on the
-site's Games section. Fully static hosting, with online games played peer-to-peer and
-joined by sharing a lobby code.
+Target: https://4-r-c-4-n-4.github.io/takes/
 
-## What the site expects (checked against the repos)
+## Deployment decisions
 
-- `4-R-C-4-N-4/tiny-games` (public) builds every game in one Pages workflow
-  (`.github/workflows/deploy.yml`) into `_site/<slug>/`. Each game provides:
-  - `<slug>.html`: a self-contained single file, which the cabinet embeds in an iframe.
-  - `index.html`: the fullscreen page.
-  - `game.json`: name, rune, tagline and note. It feeds `/tiny-games/games.json`.
-- The ARCANA site (`4-R-C-4-N-4.github.io`) renders cabinets from that manifest, so it
-  needs no edits.
-- The house rule (tiny-games `CONTEXT.md`) is "no backend, nothing phoned home at play time".
-  - Single-player and hotseat meet it fully: the CPU already runs in the browser.
-  - Online play needs one handshake through public signalling relays. After that, moves
-    travel directly between browsers. The game card should say so.
+- Takes stays in its own public repository, `4-R-C-4-N-4/takes`, under Apache-2.0.
+- Its own Pages workflow publishes `apps/web/dist-static/`. The main github.io site's Games
+  section links to `/takes/` in a new tab, like OpenXOPS. Nothing is housed in tiny-games and
+  there is no iframe requirement.
+- Peer discovery uses Trystero's default public Nostr relays. Moves use an encrypted WebRTC
+  data channel. No accounts or application backend are required for the public build.
 
-## What changes in Takes
+## Implemented
 
-### 1. Static build (about half a day)
-- Production Play modes are vs CPU (in-browser Easy/Medium/Hard), hotseat, and online P2P.
-  - The server-side Fairy-Stockfish bot stays a dev and research tool. It is GPL, native,
-    and needs a server.
-- Keep the Lab (Candidates) and its 2 MB of screen data out of the production build,
-  behind a build flag.
-- Single-file output (`vite-plugin-singlefile` or the tiny-games `bundle-single.mjs`):
-  - Inline latin-subset fonts as base64.
-  - Target under about 500 kB.
-  - The hash router already works under any base path.
-- Add `game.json`.
-- Prod CI runs the typecheck and tests. The Fairy-Stockfish parity tests skip themselves
-  when the binary is absent.
+- Static build: `pnpm --filter @takes/web build:static` produces an approximately 618 kB
+  self-contained `index.html` (about 311 kB gzip), with embedded fonts and piece SVGs.
+  The Lab and native Fairy-Stockfish server bot are excluded. A help page and third-party
+  licence notices ship alongside the app.
+- Offline modes: in-browser CPU Easy/Medium/Hard, hotseat, Builder, Armies and Library.
+  These make no external requests; relays are contacted only after online opt-in.
+- `@takes/room`: pure state machine, reused by the optional Node server and browser host.
+- Online: host creates a code/link, guest joins with their army. The first release fixes
+  host=White, guest=Black. Both sides commit before either reveals its army. Reveals are
+  checked against commitments and the setup validator. Guest independently checks every move
+  and position hash. Wrong protocol/ruleset peers cannot proceed past the handshake.
+- Resume: localStorage saves setups/commitments/moves/results. Host reconstructs by replay;
+  guest requires the host's replay to extend its own history. Reloading either browser was
+  exercised on a real data channel. No mid-game FEN-only resume.
+- Status/disconnect UI, draw offer/accept, resignation and result display.
+- Help: `apps/web/public/how-to-play.html`, linked from Play; source copy in `docs/HOW-TO-PLAY.md`.
 
-### 2. Peer-to-peer online play (about 2 days)
-- **Transport seam.** `net/online-game.ts` talks to a `Transport` interface. It has two
-  implementations:
-  - WebSocket to the existing server (kept for dev and self-hosting).
-  - WebRTC via Trystero (MIT, public Nostr relays, no account).
-- **Host-authoritative room.** The room state machine moves out of `apps/server/src/rooms.ts`
-  into a pure `RoomCore`, with no sqlite, ws or Fairy-Stockfish. The host's browser runs it.
-  - The guest sends the same `ClientMsg`s.
-  - The host answers with the same `ServerMsg`s, so the protocol, validator and parser are
-    reused unchanged.
-  - The guest also replays every move in its own engine and flags any illegal state.
-    Cheating then means breaking your own client, not your opponent's.
-- **Blind setups need commit-reveal.** Without a neutral server, the host would see the
-  guest's army first. So:
-  1. Each side sends `SHA-256(setup + salt)`.
-  2. Once both commitments arrive, each side reveals its setup.
-  3. Each side verifies the other's reveal against its commitment.
-- **Lobby code.**
-  - The existing 6-character invite code is the room id, namespaced by app id and ruleset
-    version.
-  - The share link is `…/tiny-games/takes/#/join/CODE`.
-  - The code doubles as Trystero's room password, so relays can't read the handshake.
-  - Peers on different ruleset versions are refused with a clear message.
-- **Reconnect.**
-  - Both peers keep setups and the move list in localStorage under the code.
-  - Rejoining the room resyncs by replaying the moves. This follows the existing
-    "resume by replay, never mid-game FEN" rule.
-  - Without a neutral server there is no forfeit timer. Show the opponent as
-    disconnected and let a player leave or claim the game after a timeout.
-- **Known limit.** Connections use STUN only. Roughly 10–20% of networks (strict corporate
-  NAT, some mobile carriers) can't connect without a TURN relay, which needs a host and
-  usually money. Detect the failure and say so; add TURN later if it matters.
+## Independent verification (2026-10-28)
 
-### 3. Deploy (about half a day)
-- Publish into tiny-games (decision below), add the workflow block, and confirm the
-  manifest picks it up.
-- Verify on the real Pages URL:
-  - two browsers;
-  - a phone on cellular against desktop wifi;
-  - embedded cabinet and fullscreen;
-  - reload mid-game on both sides.
+- `pnpm check`: zero errors or warnings.
+- `pnpm test`: 455 tests pass, including native Fairy-Stockfish parity when installed.
+- `verify-static.cjs`: desktop 1280×800 and phone 390×844, served under `/takes/`; CPU replies,
+  hotseat, Builder, Library, no overflow/page errors/external HTTP or WebSocket traffic.
+- `verify-p2p.cjs`: two separate Chromium contexts; real public Nostr signalling and native
+  WebRTC, not an in-memory test double. Creates/joins using the actual invite link, plays
+  four plies, compares both boards, reloads guest then host, asserts a connected RTC, then
+  resigns and verifies the same result on both sides. Passes after hardening fixes.
+- Independent code review found and fixed two important defects: guests had verified host
+  commitment consistency but not army legality, and mismatched hellos had reported an error
+  without actually gating later actions. Both now have regression tests.
 
-### 4. Pre-launch polish (about half a day)
-- A short how-to-play page covering the setup zone, the budget, the shorthand
-  notation and promotion.
-- Card copy and privacy note: online play uses public relays for the handshake only.
+## Honest limitations
 
-Total: about 3½ days of agent work.
+- The real-browser test used two contexts on one machine. Cellular-vs-Wi-Fi and different
+  physical devices remain unverified; do not infer cross-NAT reliability from that test.
+- STUN only, no TURN fallback. Some networks cannot connect directly; public relays can be
+  unavailable. There is no justified fixed percentage of failures for this application yet.
+- Peer play is casual, not server-adjudicated/rated chess. Commitments stop adaptive setup
+  changes, not every kind of cheating or host refusal/disconnection. A disconnect is not proof
+  of a result. Invite codes are shared capabilities, not accounts.
+- Sessions are local, not cloud-saved. Clearing browser storage can lose a game.
+- WebRTC exposes connection metadata and can reveal a player's public IP to the opponent.
 
-## Decisions (Ivy, 2026-10-28)
-1. **Public repo.** `4-R-C-4-N-4/takes` becomes public under Apache-2.0 (same as tiny-games).
-   Before the flip, scan history for secrets: no tokens, keys, `.env` or database files were found.
-   Hosting follows OpenXOPS-web: Takes deploys its own GitHub Pages site from this repo
-   (`https://4-r-c-4-n-4.github.io/takes/`, via a Pages workflow on `main`). The main site's Games
-   section links to it as a new-tab card (a `SITE_GAMES` entry with `url: "/takes/"`, `embed: false`).
-   tiny-games is not involved. The static build serves from the `/takes/` subpath; no iframe embedding.
-2. **Public Nostr relays** (Trystero default) for the P2P handshake.
+## Launch gates
 
-## Execution (2026-10-28)
-- `room-core`: extract the pure `@takes/room` state machine from `apps/server/src/rooms.ts`.
-- `static-build`: static mode (no Lab, no server features, no network), `dist-static/` served from `/takes/`,
-  and `verify-static.cjs`.
-- Next, after both merge: the P2P transport (Trystero, commit-reveal, reconnect), then how-to-play,
-  then the public flip, the Pages workflow and the main-site card.
+1. Final integrated build + static/P2P browser checks + normal-server browser regressions.
+2. Review repository history for accidental credentials before making it public.
+3. Enable repository Pages, deploy, verify the real HTTPS URL and help/notices files.
+4. Add the new-tab Takes card to the main site's `SITE_GAMES`, deploy and verify it.
+5. Repeat the browser smoke against the live URL; report remaining cross-network checks.

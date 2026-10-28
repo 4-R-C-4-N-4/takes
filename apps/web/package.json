@@ -5,8 +5,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:static": "vite build --mode static",
+    "build": "node scripts/notices.mjs && vite build",
+    "build:static": "node scripts/notices.mjs && vite build --mode static",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },

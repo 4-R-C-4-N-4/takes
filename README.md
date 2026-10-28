@@ -4,7 +4,13 @@ Chess with armies you design. Each player secretly builds a three-rank setup fro
 choosing from a roster of data-defined pieces, then both setups are revealed and the game is played
 under normal chess rules: a piece always captures by landing on the square it takes.
 
-Play it in the browser on the tiny-games shelf: https://4-r-c-4-n-4.github.io/tiny-games/takes/
+Play: https://4-r-c-4-n-4.github.io/takes/
+
+[How to play](docs/HOW-TO-PLAY.md) · [Production notes and limitations](docs/PROD-PLAN.md)
+
+The public build supports in-browser CPU, hotseat and peer-to-peer games by invite link/code.
+Public relays discover your opponent; moves travel over WebRTC. Direct connections may fail on
+restrictive networks (no TURN fallback yet). Takes is deployed from this repository, not tiny-games.
 
 ## Pieces are labelled by how they move
 
@@ -37,6 +43,7 @@ pnpm install
 pnpm check            # TypeScript + svelte-check
 pnpm test             # vitest; Fairy-Stockfish parity tests run when the binary is present
 pnpm serve            # build the web app and serve it with the Node server on :8787
+pnpm --filter @takes/web build:static # Pages output in apps/web/dist-static/
 ```
 
 Fairy-Stockfish (GPL-3.0) is never bundled. The optional server and research tools run it as a
