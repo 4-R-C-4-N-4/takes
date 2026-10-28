@@ -79,6 +79,9 @@ importers:
       '@takes/art':
         specifier: workspace:*
         version: link:../../packages/art
+      '@takes/betza':
+        specifier: workspace:*
+        version: link:../../tools/betza
       '@takes/engine':
         specifier: workspace:*
         version: link:../../packages/engine
