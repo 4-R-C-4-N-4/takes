@@ -9,7 +9,7 @@
     restoreInfinity, deltaVsNull, loadReviews, saveReview, exportReviews, sandboxSetup,
     type Candidate, type ScreenedData, type Verdict,
   } from '../lib/candidates.js';
-  import { passesFrontBackSymmetry } from '../lib/symmetry.js';
+  import { passesFullSymmetry } from '../lib/symmetry.js';
   import mainScreenedRaw from '../../../../docs/catalog/screened.json';
 
   // Optional second data source: a four-way-symmetric screen. `eager: false` means a missing
@@ -51,7 +51,7 @@
   const families = $derived([...new Set(candidates.flatMap((c) => c.families))].sort());
   const delta = (c: Candidate) => deltaVsNull(c, nullScore);
   const fmt = (x: number) => `${x >= 0 ? '+' : ''}${x.toFixed(2)}`;
-  const isSymmetric = (c: Candidate) => passesFrontBackSymmetry(c.key, c.tier);
+  const isSymmetric = (c: Candidate) => passesFullSymmetry(c.key, c.tier);
 
   const list = $derived.by(() => {
     let l = candidates.filter((c) =>
@@ -147,7 +147,7 @@
     {/if}
     <label class="symmetry-toggle">
       <input type="checkbox" bind:checked={symmetricOnly} />
-      Front/back symmetric
+      Fully symmetric
     </label>
   </div>
   {#if exported}<textarea class="textarea export mono" readonly>{exported}</textarea><p class="faint">Copied to clipboard (or copy from the box above).</p>{/if}
