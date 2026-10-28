@@ -1,6 +1,7 @@
 <script lang="ts">
   import { loadProfiles, type StoredProfile } from '../lib/profiles.js';
   import { routeHref } from '../lib/router.js';
+  import { isStatic } from '../lib/target.js';
 
   export let code: string | undefined = undefined;
 
@@ -10,6 +11,13 @@
   function join(): void {
     const profile = profiles.find((p) => p.id === profileId);
     if (!profile || !code) return;
+    if (isStatic) {
+      try {
+        sessionStorage.setItem(`takes.p2p.pending.${code}`, JSON.stringify({ kind: 'guest', setup: profile.setup }));
+      } catch { /* ignore */ }
+      location.hash = routeHref('game', `p2p-${code}`);
+      return;
+    }
     try {
       sessionStorage.setItem(`takes.online.pending.${code}`, JSON.stringify({ kind: 'join', code, setup: profile.setup }));
     } catch { /* ignore */ }
@@ -34,6 +42,9 @@
         </select>
       </div>
       <button class="btn primary" onclick={join}>Join with this army</button>
+      {#if isStatic}
+        <p class="muted sm">Online play finds your opponent through public relays; moves go directly between your browsers.</p>
+      {/if}
     </div>
   {/if}
 </div>
@@ -42,4 +53,5 @@
   .join-panel { padding: var(--s-4); max-width: 420px; }
   .field { display: grid; gap: var(--s-1); }
   .field label { color: var(--text-muted); font-size: var(--fs-sm); }
+  .muted.sm { font-size: var(--fs-sm); }
 </style>

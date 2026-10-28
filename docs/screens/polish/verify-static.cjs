@@ -128,12 +128,13 @@ function serve() {
       assert.equal(await page.locator('.candidate-screen, [data-screen="candidates"]').count(), 0, `${name}: candidates screen reachable`);
       await page.evaluate(() => { location.hash = '#/lobby'; });
 
-      // Server-only features are gone; an "Online play — coming soon" placeholder sits in their slot.
+      // Server-only features are gone; a self-serve "Play a friend online" P2P section sits in
+      // their slot (create/join by code, no server round trip).
       assert.equal(await page.getByText('Server bot level', { exact: false }).count(), 0, `${name}: server bot control present`);
       assert.equal(await page.getByRole('button', { name: 'Create invite link', exact: true }).count(), 0, `${name}: invite present`);
-      assert.equal(await page.getByRole('button', { name: 'Join', exact: true }).count(), 0, `${name}: join-by-code present`);
-      await page.getByRole('heading', { name: 'Online play', exact: true }).waitFor();
-      assert(await page.getByText('Coming soon', { exact: false }).count() > 0, `${name}: online-placeholder copy missing`);
+      await page.getByRole('heading', { name: 'Play a friend online', exact: true }).waitFor();
+      assert(await page.getByText('public relays', { exact: false }).count() > 0, `${name}: P2P privacy line missing`);
+      assert(await page.getByRole('button', { name: 'Create game', exact: true }).count() > 0, `${name}: P2P create-game control missing`);
       await noOverflow();
 
       // vs-CPU: Easy game, one human move, CPU replies.

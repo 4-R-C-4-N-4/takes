@@ -34,7 +34,11 @@ export interface CreateOpts { ruleset: string; color?: Color; bot?: BotLevel }
 export type Intent =
   | { kind: 'create'; opts: CreateOpts; setup: string }
   | { kind: 'join'; code: string; setup: string }
-  | { kind: 'resume'; code: string };
+  | { kind: 'resume'; code: string }
+  /** P2P (static build): the transport is already live (HostSession/GuestSession); no
+   *  create_room/join_room round trip — just record code/color/ruleset and submit the setup
+   *  (or, on resume, start from a pre-built snapshot instead of resubmitting it). */
+  | { kind: 'p2p'; code: string; color: Color; ruleset: string; setup: string; resumeSnapshot?: Partial<OnlineSnapshot> };
 
 export class OnlineGameController {
   private client: OnlineTransport & { connect(code?: string): void };
@@ -42,8 +46,10 @@ export class OnlineGameController {
   private readonly listeners = new Set<(s: OnlineSnapshot) => void>();
   private pendingSetup: string | null = null;
 
-  constructor(clientOpts: ClientOpts) {
-    this.client = new TakesClient(clientOpts);
+  /** Accepts either server-connection options (wraps a TakesClient) or an already-built
+   *  transport (P2P's HostSession/GuestSession loopback, wrapped with a no-op connect()). */
+  constructor(clientOrTransport: ClientOpts | (OnlineTransport & { connect(code?: string): void })) {
+    this.client = 'url' in clientOrTransport ? new TakesClient(clientOrTransport) : clientOrTransport;
     this.snap = {
       phase: 'connecting', code: null, color: null, ruleset: '', bot: null,
       mySetup: null, opponentReady: false, setupIssues: null, game: null, lastMove: null,
@@ -67,6 +73,17 @@ export class OnlineGameController {
   start(intent: Intent): void {
     if (intent.kind === 'resume') {
       this.client.connect(intent.code);
+      return;
+    }
+    if (intent.kind === 'p2p') {
+      this.client.connect();
+      if (intent.resumeSnapshot) {
+        this.emit({ code: intent.code, color: intent.color, ruleset: intent.ruleset, ...intent.resumeSnapshot });
+      } else {
+        this.pendingSetup = intent.setup;
+        this.emit({ code: intent.code, color: intent.color, ruleset: intent.ruleset, phase: 'setup-wait' });
+        this.client.send({ t: 'submit_setup', setup: intent.setup });
+      }
       return;
     }
     this.pendingSetup = intent.setup;
