@@ -89,12 +89,12 @@
         {/if}
       {/if}
       {#if coordinates && isBottomRow(sq, ranks, flipped)}
-        <text class="coord file" x={p.x + cellSize - 4} y={p.y + cellSize - 4}>{'abcdefgh'[sq % 8]}</text>
+        <text class="coord file" x={p.x + cellSize - 5} y={p.y + cellSize - 5} fill={isLight(sq) ? 'oklch(30% 0.02 60 / 0.6)' : 'oklch(96% 0.012 90 / 0.75)'}>{'abcdefgh'[sq % 8]}</text>
       {/if}
     {/each}
     {#each squareList.filter((sq) => (flipped ? sq % 8 === 7 : sq % 8 === 0)) as sq}
       {@const p = xy(sq, ranks, flipped, cellSize)}
-      <text class="rank-label" x={p.x + 3} y={p.y + 12} fill={isLight(sq) ? 'oklch(30% 0.02 60 / 0.65)' : 'oklch(96% 0.012 90 / 0.8)'}>{Math.floor(sq / 8) + 1}</text>
+      <text class="rank-label" x={p.x + 5} y={p.y + 14} fill={isLight(sq) ? 'oklch(30% 0.02 60 / 0.6)' : 'oklch(96% 0.012 90 / 0.75)'}>{Math.floor(sq / 8) + 1}</text>
     {/each}
     {#each squareList as sq (sq)}
       {@const p = xy(sq, ranks, flipped, cellSize)}
@@ -153,11 +153,9 @@
     fill: none; stroke: var(--mark-capture); stroke-width: calc(var(--cell) * 0.07); pointer-events: none;
   }
 
-  .coord { pointer-events: none; font-family: var(--font-ui); font-weight: 600; font-size: calc(var(--cell) * 0.22); }
-  .coord.file { text-anchor: end; fill: color-mix(in oklch, var(--sq-light) 0%, var(--sq-dark) 0%); }
-  /* Coordinate colour follows the square it sits on, computed per-square via currentColor trick isn't
-     practical in SVG text fill from CSS alone, so use a contrast-safe neutral that reads on both. */
-  .coord { fill: oklch(40% 0.02 60 / 0.65); }
+  .coord { pointer-events: none; font-family: var(--font-ui); font-weight: 650; font-size: calc(var(--cell) * 0.16); }
+  .coord.file { text-anchor: end; }
+  .rank-label { pointer-events: none; font-family: var(--font-ui); font-weight: 650; font-size: calc(var(--cell) * 0.16); }
 
   .piece-cell {
     width: 100%; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;

@@ -3,6 +3,9 @@
   import { routeHref } from '../lib/router.js';
   import { BOT_LEVELS, type BotLevel } from '@takes/protocol';
   import { CURRENT_RULESET_VERSION, getRuleset, parseSetup, setupCost, type Color } from '@takes/library';
+  import { createGame } from '@takes/engine';
+  import Board from './Board.svelte';
+  import { artFor } from '../lib/pieceArt.js';
   import type { SparringLevel } from '../lib/sparring.js';
 
   const profiles: StoredProfile[] = loadProfiles();
@@ -18,6 +21,20 @@
     }
   }
 
+  function previewPieces(setup: string): Map<number, { svg: string; color: 'w' | 'b' }> {
+    const map = new Map<number, { svg: string; color: 'w' | 'b' }>();
+    if (!ruleset) return map;
+    try {
+      const g = createGame(ruleset, setup, setup);
+      const board = g.board();
+      for (let sq = 0; sq < 24; sq++) {
+        const bp = board[sq];
+        if (bp) map.set(sq, { svg: artFor(ruleset, bp.pieceId), color: bp.color });
+      }
+    } catch { /* invalid setup: show an empty preview */ }
+    return map;
+  }
+
   /** Army chosen for local/invite/bot play — one picker shared across the modes below. */
   let armyId: string = profiles[0]?.id ?? '';
 
@@ -28,7 +45,7 @@
   /** In-browser sparring CPU difficulty (easy/medium/hard), independent of the server bot levels. */
   let cpuLevel: SparringLevel = 'easy';
   /** Local game opponent: the in-browser sparring CPU (colour it plays), or empty for hotseat (both sides, human). */
-  let localCpu: '' | 'w' | 'b' = 'b';
+  let localCpu: '' | 'w' | 'b' = 'w';
 
   function startVsCpu(): void {
     const army = profiles.find((p) => p.id === armyId);
@@ -77,8 +94,8 @@
   }
 </script>
 
-<div class="page">
-  <div class="page-head">
+<div class="page lobby-page">
+  <div class="page-head stacked">
     <h1>Play</h1>
     <p>Choose your army, then pick how you want to play.</p>
   </div>
@@ -86,92 +103,123 @@
   {#if profiles.length === 0}
     <p class="muted">No profiles yet. Build one in the Builder first.</p>
   {:else}
-    <section class="stack panel army-panel">
-      <p class="eyebrow">Your army</p>
-      <div class="field">
-        <label for="army-select">Army</label>
-        <select id="army-select" class="select" bind:value={armyId}>
-          {#each profiles as p}<option value={p.id}>{p.name}</option>{/each}
-        </select>
-      </div>
-      {#if profiles.find((p) => p.id === armyId)}
-        {@const s = summarize(profiles.find((p) => p.id === armyId)!)}
-        <div class="row">
-          <span class="chip">Cost {s.cost}</span>
-          <span class="chip {s.valid ? 'good' : 'bad'}">{s.valid ? 'valid' : 'needs review'}</span>
-        </div>
-      {/if}
-    </section>
-
-    <section class="stack panel mode-panel">
-      <h2>Play the computer</h2>
-      <p class="muted">In-browser sparring CPU — instant, runs on your device.</p>
-      <div class="row">
+    <div class="lobby-grid">
+      <section class="stack panel army-panel">
+        <p class="eyebrow">Your army</p>
         <div class="field">
-          <label for="cpu-side">You play</label>
-          <select id="cpu-side" class="select" bind:value={localCpu} aria-label="Opponent">
-            <option value="w">White — CPU plays Black</option>
-            <option value="b">Black — CPU plays White</option>
+          <label for="army-select">Army</label>
+          <select id="army-select" class="select" bind:value={armyId}>
+            {#each profiles as p}<option value={p.id}>{p.name}</option>{/each}
           </select>
         </div>
-        <div class="field">
-          <label for="cpu-level">Difficulty</label>
-          <div class="segmented" id="cpu-level">
-            {#each (['easy', 'medium', 'hard'] as const) as lvl}
-              <button type="button" aria-pressed={cpuLevel === lvl} onclick={() => (cpuLevel = lvl)}>{lvl[0]!.toUpperCase()}{lvl.slice(1)}</button>
-            {/each}
+        {#if profiles.find((p) => p.id === armyId)}
+          {@const army = profiles.find((p) => p.id === armyId)!}
+          {@const s = summarize(army)}
+          <div class="army-preview">
+            <Board ranks={3} cellSize={34} pieces={previewPieces(army.setup)} />
           </div>
-        </div>
-      </div>
-      <button class="btn primary" onclick={startVsCpu}>Test drive vs CPU</button>
-      <div class="divider"></div>
-      <p class="muted">Or spar against the server's Fairy-Stockfish bot instead:</p>
-      <div class="row">
-        <div class="field">
-          <label for="bot-level">Server bot level</label>
-          <select id="bot-level" class="select" bind:value={botLevel}>
-            {#each BOT_LEVELS as lvl}<option value={lvl}>{lvl}</option>{/each}
-          </select>
-        </div>
-        <button class="btn" onclick={playServerBot}>Play server bot</button>
-      </div>
-    </section>
+          <div class="row">
+            <span class="chip">Cost {s.cost}</span>
+            <span class="chip {s.valid ? 'good' : 'bad'}">{s.valid ? 'valid' : 'needs review'}</span>
+          </div>
+        {/if}
+      </section>
 
-    <section class="stack panel mode-panel">
-      <h2>Invite a friend</h2>
-      <p class="muted">Share a link; they join from any device.</p>
-      <div class="row">
-        <div class="field">
-          <label for="invite-color">Your colour</label>
-          <select id="invite-color" class="select" bind:value={inviteColor}>
-            <option value="random">Random</option>
-            <option value="w">White</option>
-            <option value="b">Black</option>
-          </select>
+      <div class="stack modes-col">
+        <section class="stack panel mode-panel">
+          <h2>Play the computer</h2>
+          <p class="muted">In-browser sparring CPU — instant, runs on your device.</p>
+          <div class="row">
+            <div class="field">
+              <label for="cpu-side">You play</label>
+              <select id="cpu-side" class="select" bind:value={localCpu} aria-label="Opponent">
+                <option value="w">White — CPU plays Black</option>
+                <option value="b">Black — CPU plays White</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="cpu-level">Difficulty</label>
+              <div class="segmented" id="cpu-level">
+                {#each (['easy', 'medium', 'hard'] as const) as lvl}
+                  <button type="button" aria-pressed={cpuLevel === lvl} onclick={() => (cpuLevel = lvl)}>{lvl[0]!.toUpperCase()}{lvl.slice(1)}</button>
+                {/each}
+              </div>
+            </div>
+          </div>
+          <button class="btn primary" onclick={startVsCpu}>Play</button>
+          <div class="divider"></div>
+          <div class="server-bot-row">
+            <p class="muted sm">Or spar against the server's Fairy-Stockfish bot:</p>
+            <div class="row">
+              <div class="field">
+                <label for="bot-level">Server bot level</label>
+                <select id="bot-level" class="select sm" bind:value={botLevel}>
+                  {#each BOT_LEVELS as lvl}<option value={lvl}>{lvl}</option>{/each}
+                </select>
+              </div>
+              <button class="btn ghost sm" onclick={playServerBot}>Play server bot</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="row online-row">
+          <section class="stack panel mode-panel compact">
+            <h3>Invite a friend</h3>
+            <p class="muted sm">Share a link; they join from any device.</p>
+            <div class="field">
+              <label for="invite-color">Your colour</label>
+              <select id="invite-color" class="select sm" bind:value={inviteColor}>
+                <option value="random">Random</option>
+                <option value="w">White</option>
+                <option value="b">Black</option>
+              </select>
+            </div>
+            <button class="btn sm" onclick={createInvite}>Create invite link</button>
+          </section>
+
+          <section class="stack panel mode-panel compact">
+            <h3>Join with a code</h3>
+            <div class="row">
+              <input class="input mono sm" placeholder="Invite code" bind:value={joinCode} aria-label="Invite code" />
+              <button class="btn sm" onclick={joinByCode}>Join</button>
+            </div>
+          </section>
         </div>
-      </div>
-      <button class="btn primary" onclick={createInvite}>Create invite link</button>
-    </section>
 
-    <section class="stack panel mode-panel">
-      <h2>Join with a code</h2>
-      <div class="row">
-        <input class="input mono" placeholder="Invite code" bind:value={joinCode} aria-label="Invite code" />
-        <button class="btn primary" onclick={joinByCode}>Join</button>
+        <section class="stack mode-panel secondary">
+          <h3>Hotseat</h3>
+          <p class="muted sm">Play both sides on this device, no CPU.</p>
+          <button class="btn ghost sm" onclick={startHotseat}>Hotseat (play both sides)</button>
+        </section>
       </div>
-    </section>
-
-    <section class="stack mode-panel secondary">
-      <h3>Hotseat</h3>
-      <p class="muted">Play both sides on this device, no CPU.</p>
-      <button class="btn ghost" onclick={startHotseat}>Hotseat (play both sides)</button>
-    </section>
+    </div>
   {/if}
 </div>
 
 <style>
-  .army-panel, .mode-panel { padding: var(--s-4); max-width: 560px; }
+  .lobby-page { max-width: var(--content-max); margin: 0 auto; }
+  .page-head.stacked { flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+  .page-head.stacked p { margin-top: var(--s-1); }
+
+  .lobby-grid { display: grid; gap: var(--s-4); grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+
+  @media (min-width: 980px) {
+    .lobby-grid { grid-template-columns: 340px 1fr; max-width: none; margin: 0; align-items: start; }
+  }
+
+  .army-panel, .mode-panel { padding: var(--s-4); }
+  .army-preview { display: flex; justify-content: center; padding: var(--s-2) 0; }
+  .modes-col { max-width: 560px; }
   .mode-panel.secondary { background: none; border: none; box-shadow: none; padding: 0; }
+  .mode-panel.compact { padding: var(--s-3); gap: var(--s-2); }
   .field label { color: var(--text-muted); font-size: var(--fs-sm); }
   .field { display: grid; gap: var(--s-1); }
+  .muted.sm { font-size: var(--fs-sm); }
+  .select.sm, .input.sm { min-height: 32px; font-size: var(--fs-sm); }
+
+  .server-bot-row { opacity: 0.85; }
+  .server-bot-row .field label { font-size: var(--fs-xs); }
+
+  .online-row { align-items: stretch; }
+  .online-row .mode-panel.compact { flex: 1 1 0; min-width: 220px; }
 </style>

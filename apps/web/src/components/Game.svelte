@@ -2,6 +2,7 @@
   import { getRuleset, CURRENT_RULESET_VERSION } from '@takes/library';
   import { createGame, type Game, type Move } from '@takes/engine';
   import Board from './Board.svelte';
+  import PieceIcon from './PieceIcon.svelte';
   import { artFor } from '../lib/pieceArt.js';
   import { sandboxRuleset, restoreInfinity } from '../lib/candidates.js';
   import { chooseMoveAtLevel, pieceValues, type SparringLevel } from '../lib/sparring.js';
@@ -262,8 +263,23 @@
 
   const levelLabel: Record<SparringLevel, string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 
+  function playerLabel(color: 'w' | 'b'): string {
+    if (isOnline) return myColor === color ? 'You' : 'Opponent';
+    if (cpuColor === color) return `CPU · ${levelLabel[cpuLevel]}`;
+    if (cpuColor !== null) return 'You';
+    return '';
+  }
+
+  function capturedIcons(ids: string[]): { svg: string; id: string }[] {
+    return ids.map((id) => ({ svg: artFor(ruleset, id), id }));
+  }
+
   $: status = game?.status();
   $: effectiveResult = resigned ? { result: resigned === 'w' ? '0-1' : '1-0', reason: `${resigned === 'w' ? 'White' : 'Black'} resigned` } : status && status.result !== '*' ? status : null;
+  /** Visual top/bottom of the board, independent of whose rail row is listed where. */
+  $: boardFlipped = isOnline ? myColor === 'b' : flipped;
+  $: topColor = (boardFlipped ? 'w' : 'b') as 'w' | 'b';
+  $: bottomColor = (boardFlipped ? 'b' : 'w') as 'w' | 'b';
 </script>
 
 <div class="page game-page">
@@ -293,9 +309,19 @@
   {:else if game}
     <div class="game-grid">
       <div class="board-col">
+        <div class="player-bar top" class:tomove={game.sideToMove() === topColor && !effectiveResult}>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="who">{playerLabel(topColor)}</span>
+          <span class="eyebrow side">{topColor === 'w' ? 'White' : 'Black'}</span>
+          <span class="num diff" class:neg={materialDiff(topColor) < 0} class:pos={materialDiff(topColor) > 0}>{materialDiff(topColor) > 0 ? `+${materialDiff(topColor)}` : ''}</span>
+          <div class="tray" aria-label="Pieces {topColor === 'w' ? 'White' : 'Black'} has captured">
+            {#each capturedIcons(captured[topColor === 'w' ? 'b' : 'w']) as p, i (i)}<PieceIcon svg={p.svg} color={topColor === 'w' ? 'b' : 'w'} size={18} />{/each}
+          </div>
+        </div>
+
         <div class="board-wrap">
           {#key renderTick}
-            <Board ranks={8} cellSize={64} coordinates flipped={isOnline ? myColor === 'b' : flipped} pieces={boardPieces(game)} highlights={highlights(game, selectedSq, lastMove)} onSquareClick={onSquareClick} />
+            <Board ranks={8} cellSize={90} coordinates flipped={boardFlipped} pieces={boardPieces(game)} highlights={highlights(game, selectedSq, lastMove)} onSquareClick={onSquareClick} />
           {/key}
           {#if promoChoice}
             <div class="promo-popover panel" role="dialog" aria-label="Choose promotion piece">
@@ -310,19 +336,39 @@
             </div>
           {/if}
         </div>
+
+        <div class="player-bar bottom" class:tomove={game.sideToMove() === bottomColor && !effectiveResult}>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="who">{playerLabel(bottomColor)}</span>
+          <span class="eyebrow side">{bottomColor === 'w' ? 'White' : 'Black'}</span>
+          <span class="num diff" class:neg={materialDiff(bottomColor) < 0} class:pos={materialDiff(bottomColor) > 0}>{materialDiff(bottomColor) > 0 ? `+${materialDiff(bottomColor)}` : ''}</span>
+          <div class="tray" aria-label="Pieces {bottomColor === 'w' ? 'White' : 'Black'} has captured">
+            {#each capturedIcons(captured[bottomColor === 'w' ? 'b' : 'w']) as p, i (i)}<PieceIcon svg={p.svg} color={bottomColor === 'w' ? 'b' : 'w'} size={18} />{/each}
+          </div>
+        </div>
+
+        <div class="panel moves moves-strip">
+          <p class="eyebrow">Moves <span class="num">({game.ply()})</span></p>
+          <ol class="movelist movelist-strip mono">
+            {#each movePairs(history) as pair (pair.n)}
+              <li class:current={pair.n === movePairs(history).length}><span class="num mn">{pair.n}.</span><span class="mv">{pair.w}</span><span class="mv">{pair.b ?? ''}</span></li>
+            {/each}
+          </ol>
+        </div>
+
         <div class="row board-actions">
-          {#if !isOnline}<button class="btn sm" onclick={() => (flipped = !flipped)}>Flip board</button>{/if}
+          {#if !isOnline}
+            <button class="btn sm icon-btn" onclick={() => (flipped = !flipped)} aria-label="Flip board" title="Flip board">⇅</button>
+          {/if}
           {#if resignConfirm}
             <span class="chip warn">Really resign?</span>
             <button class="btn sm danger" onclick={resign}>Confirm resign</button>
             <button class="btn sm ghost" onclick={() => (resignConfirm = false)}>Cancel</button>
           {:else}
-            <button class="btn sm ghost" onclick={resign} disabled={!!effectiveResult}>Resign</button>
+            <button class="btn sm ghost danger" onclick={resign} disabled={!!effectiveResult}>Resign</button>
           {/if}
           {#if isOnline}
             <button class="btn sm ghost" onclick={offerDraw} disabled={!!effectiveResult}>Offer draw</button>
-          {:else}
-            <button class="btn sm ghost" disabled title="Draw offers require the online server">Offer draw</button>
           {/if}
         </div>
       </div>
@@ -330,31 +376,34 @@
       <aside class="rail stack">
         <div class="panel players">
           <div class="player" class:tomove={game.sideToMove() === 'b' && !effectiveResult}>
+            <span class="dot" aria-hidden="true"></span>
             <span class="eyebrow">Black</span>
-            <span class="who">{isOnline ? (myColor === 'b' ? 'You' : 'Opponent') : cpuColor === 'b' ? `CPU · ${levelLabel[cpuLevel]}` : 'Player'}</span>
+            <span class="who">{playerLabel('b')}</span>
             <span class="num diff" class:neg={materialDiff('b') < 0} class:pos={materialDiff('b') > 0}>{materialDiff('b') > 0 ? `+${materialDiff('b')}` : materialDiff('b') || ''}</span>
           </div>
           <div class="tray" aria-label="Pieces Black has captured">
-            {#each captured.w as id, i (i)}<span class="tray-piece mono">{id.slice(0, 1).toUpperCase()}</span>{/each}
+            {#each capturedIcons(captured.w) as p, i (i)}<PieceIcon svg={p.svg} color="w" size={20} />{/each}
           </div>
           <div class="divider"></div>
           <div class="tray" aria-label="Pieces White has captured">
-            {#each captured.b as id, i (i)}<span class="tray-piece mono">{id.slice(0, 1).toUpperCase()}</span>{/each}
+            {#each capturedIcons(captured.b) as p, i (i)}<PieceIcon svg={p.svg} color="b" size={20} />{/each}
           </div>
           <div class="player" class:tomove={game.sideToMove() === 'w' && !effectiveResult}>
+            <span class="dot" aria-hidden="true"></span>
             <span class="eyebrow">White</span>
-            <span class="who">{isOnline ? (myColor === 'w' ? 'You' : 'Opponent') : cpuColor === 'w' ? `CPU · ${levelLabel[cpuLevel]}` : 'Player'}</span>
+            <span class="who">{playerLabel('w')}</span>
             <span class="num diff" class:neg={materialDiff('w') < 0} class:pos={materialDiff('w') > 0}>{materialDiff('w') > 0 ? `+${materialDiff('w')}` : materialDiff('w') || ''}</span>
           </div>
         </div>
 
         <p class="status-line" data-testid="to-move">
           {#if effectiveResult}
-            Game over
+            <span class="chip">Game over</span>
           {:else}
-            To move: {game.sideToMove() === 'w' ? 'White' : 'Black'}{game.inCheck() ? ' — in check' : ''}{cpuColor !== null ? ` · CPU plays ${cpuColor === 'w' ? 'White' : 'Black'}` : ' · hotseat: you play both sides'}
+            <span class="chip {game.inCheck() ? 'bad' : 'accent'}">To move: {game.sideToMove() === 'w' ? 'White' : 'Black'}{game.inCheck() ? ' — in check' : ''}</span>
+            <span class="status-sub"> · {cpuColor !== null ? `CPU plays ${cpuColor === 'w' ? 'White' : 'Black'}` : 'hotseat: you play both sides'}</span>
           {/if}
-          {#if cpuThinking}<span class="chip accent">CPU thinking…</span>{/if}
+          {#if cpuThinking}<span class="chip warn">CPU thinking…</span>{/if}
         </p>
 
         {#if isOnline && online?.drawOfferBy}
@@ -371,8 +420,8 @@
         <div class="panel moves">
           <p class="eyebrow">Moves <span class="num">({game.ply()})</span></p>
           <ol class="movelist mono">
-            {#each movePairs(history) as pair (pair.n)}
-              <li><span class="num mn">{pair.n}.</span><span class="mv">{pair.w}</span><span class="mv">{pair.b ?? ''}</span></li>
+            {#each movePairs(history) as pair, i (pair.n)}
+              <li class:current={i === movePairs(history).length - 1}><span class="num mn">{pair.n}.</span><span class="mv">{pair.w}</span><span class="mv">{pair.b ?? ''}</span></li>
             {/each}
           </ol>
         </div>
@@ -399,33 +448,52 @@
   .game-page { max-width: var(--content-max); margin: 0 auto; }
   .reveal { font-style: italic; }
 
-  .game-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--s-5); align-items: start; }
+  .game-grid { display: grid; grid-template-columns: max-content 320px; gap: var(--s-5); align-items: start; justify-content: center; }
   .board-col { display: grid; gap: var(--s-3); position: relative; min-width: 0; }
-  .board-wrap { position: relative; width: 100%; max-width: 640px; }
+  .board-wrap { position: relative; width: min(100%, calc(100vh - 190px), 720px); margin: 0 auto; }
 
-  .rail { min-width: 0; }
+  .rail { min-width: 0; width: 320px; }
   .panel { padding: var(--s-4); }
 
+  /* Compact bars that sit directly above/below the board; shown on phones only. */
+  .player-bar {
+    display: none; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-1);
+  }
+  .player-bar .who { font-weight: 650; }
+  .player-bar .eyebrow.side { color: var(--text-faint); }
+  .player-bar .tray { margin-left: auto; }
+  .player-bar.tomove .who { color: var(--accent); }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); flex: none; }
+  .tomove .dot { background: var(--accent); box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent) 25%, transparent); }
+
   .players { display: grid; gap: var(--s-2); }
-  .player { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-2); padding: var(--s-1) 0; border-radius: var(--r-2); }
-  .player.tomove { box-shadow: inset 3px 0 0 var(--accent); padding-left: var(--s-2); }
-  .player .who { font-weight: 650; }
-  .diff { color: var(--text-faint); min-width: 2ch; text-align: right; }
+  .player { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); padding: var(--s-1) var(--s-2); border-radius: var(--r-2); }
+  .player.tomove { background: color-mix(in oklch, var(--accent) 10%, transparent); }
+  .player .eyebrow { flex: none; white-space: nowrap; }
+  .player .who { font-weight: 650; flex: 1; }
+  .diff { color: var(--text-faint); min-width: 2ch; text-align: right; font-weight: 650; }
   .diff.pos { color: var(--good); }
   .diff.neg { color: var(--text-faint); }
-  .tray { display: flex; flex-wrap: wrap; gap: 4px; min-height: 20px; }
-  .tray-piece { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: var(--r-1); background: var(--ink-2); color: var(--text-muted); font-size: var(--fs-xs); }
+  .tray { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; min-height: 20px; }
 
-  .status-line { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); color: var(--text-muted); font-size: var(--fs-sm); }
+  .status-line { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-2); color: var(--text-muted); font-size: var(--fs-sm); margin: 0; }
+  .status-sub { color: var(--text-faint); }
 
   .moves { max-height: 320px; overflow: auto; }
   .movelist { list-style: none; margin: var(--s-2) 0 0; padding: 0; display: grid; gap: 2px; font-size: var(--fs-sm); }
-  .movelist li { display: grid; grid-template-columns: 2.4em 1fr 1fr; gap: var(--s-2); padding: 2px 4px; border-radius: var(--r-1); }
+  .movelist li { display: grid; grid-template-columns: 2.4em 1fr 1fr; gap: var(--s-2); padding: 3px 6px; border-radius: var(--r-1); }
   .movelist li:nth-child(odd) { background: color-mix(in oklch, var(--ink-2) 50%, transparent); }
+  .movelist li.current { background: color-mix(in oklch, var(--accent) 16%, transparent); outline: 1px solid color-mix(in oklch, var(--accent) 40%, transparent); }
   .mn { color: var(--text-faint); }
   .mv { color: var(--text); }
 
-  .board-actions { padding-top: var(--s-1); }
+  .moves-strip { display: none; }
+
+  .board-actions { padding-top: var(--s-1); justify-content: center; }
+  .icon-btn { width: var(--tap); padding: 0; font-size: var(--fs-lg); line-height: 1; }
+  .btn.danger.ghost { color: var(--bad); border-color: color-mix(in oklch, var(--bad) 45%, transparent); }
+  .btn.danger.ghost:hover { background: color-mix(in oklch, var(--bad) 12%, transparent); }
 
   .promo-popover {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -443,7 +511,24 @@
   .result-dialog { padding: var(--s-5); display: grid; gap: var(--s-2); text-align: center; min-width: 280px; }
 
   @media (max-width: 900px) {
-    .game-grid { grid-template-columns: 1fr; }
-    .board-wrap { max-width: 100%; margin: 0 auto; }
+    .game-grid { grid-template-columns: 1fr; justify-content: stretch; }
+    .board-wrap { width: 100%; max-width: 100%; margin: 0; }
+    .board-col { gap: var(--s-2); }
+
+    /* Mobile convention: opponent bar above the board, your own bar below. */
+    .player-bar { display: flex; }
+    .rail .players { display: none; }
+
+    .moves-strip { display: block; }
+    .rail .moves { display: none; }
+
+    .movelist-strip { display: flex; gap: var(--s-2); overflow-x: auto; margin-top: var(--s-2); padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+    .movelist-strip li { display: flex; gap: 6px; flex: none; padding: 4px 8px; }
+    .movelist-strip .mv { white-space: nowrap; }
+
+    .board-actions { padding-top: var(--s-2); justify-content: space-between; }
+
+    .rail { width: 100%; }
+    .status-line { padding: 0 var(--s-1); }
   }
 </style>
