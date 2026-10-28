@@ -1,0 +1,879 @@
+{
+  "stepper": [
+    {
+      "key": "fixture:f_commoner",
+      "piece": {
+        "id": "f_commoner",
+        "name": "Commoner",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "WF",
+      "families": [
+        "stepper"
+      ],
+      "profile": {
+        "mobilityAvg": 4,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 4,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.271875,
+        "scoreCI": [
+          0.20293303009165062,
+          0.3408169699083493
+        ],
+        "movesPerGame": 3.8625,
+        "capturesPerGame": 0.65,
+        "checksPerGame": 0.09375,
+        "forksPerGame": 0.09375,
+        "survival": 0.5125,
+        "finalAttack": 0.007407407407407408,
+        "avgPlies": 81.79375,
+        "decisive": 0.84375
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "fixture:f_wazir",
+      "piece": {
+        "id": "f_wazir",
+        "name": "Wazir",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "W",
+      "families": [
+        "stepper"
+      ],
+      "profile": {
+        "mobilityAvg": 2,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 2,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.359375,
+        "scoreCI": [
+          0.28502654425884993,
+          0.43372345574115007
+        ],
+        "movesPerGame": 2.675,
+        "capturesPerGame": 0.36875,
+        "checksPerGame": 0.03125,
+        "forksPerGame": 0,
+        "survival": 0.6625,
+        "finalAttack": 0,
+        "avgPlies": 73.5875,
+        "decisive": 0.89375
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "fixture:f_ferz",
+      "piece": {
+        "id": "f_ferz",
+        "name": "Ferz",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "F",
+      "families": [
+        "stepper",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 2,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 2,
+        "colorBound": true,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.309375,
+        "scoreCI": [
+          0.23775079148015843,
+          0.3809992085198416
+        ],
+        "movesPerGame": 2.5875,
+        "capturesPerGame": 0.35625,
+        "checksPerGame": 0.025,
+        "forksPerGame": 0.00625,
+        "survival": 0.63125,
+        "finalAttack": 0,
+        "avgPlies": 73.9375,
+        "decisive": 0.89375
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    }
+  ],
+  "pawnlike": [
+    {
+      "key": "fixture:f_ferz",
+      "piece": {
+        "id": "f_ferz",
+        "name": "Ferz",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "F",
+      "families": [
+        "stepper",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 2,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 2,
+        "colorBound": true,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.309375,
+        "scoreCI": [
+          0.23775079148015843,
+          0.3809992085198416
+        ],
+        "movesPerGame": 2.5875,
+        "capturesPerGame": 0.35625,
+        "checksPerGame": 0.025,
+        "forksPerGame": 0.00625,
+        "survival": 0.63125,
+        "finalAttack": 0,
+        "avgPlies": 73.9375,
+        "decisive": 0.89375
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    },
+    {
+      "key": "fixture:f_weaksplit",
+      "piece": {
+        "id": "f_weaksplit",
+        "name": "Weak Split",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "capture"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "mWcF",
+      "families": [
+        "split",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 2,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 2,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.3125,
+        "scoreCI": [
+          0.24067800867770373,
+          0.3843219913222963
+        ],
+        "movesPerGame": 2.1125,
+        "capturesPerGame": 0.2875,
+        "checksPerGame": 0.0125,
+        "forksPerGame": 0,
+        "survival": 0.6875,
+        "finalAttack": 0.007246376811594203,
+        "avgPlies": 70.45625,
+        "decisive": 0.8625
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    }
+  ],
+  "slide-leap": [
+    {
+      "key": "fixture:f_archbishop",
+      "piece": {
+        "id": "f_archbishop",
+        "name": "Archbishop",
+        "glyph": "C",
+        "tier": "major",
+        "components": [
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": null,
+            "path": "slide",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "major",
+      "betza": "BN",
+      "families": [
+        "slide-leap"
+      ],
+      "profile": {
+        "mobilityAvg": 10,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 10,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.30625,
+        "scoreCI": [
+          0.23482740477009395,
+          0.3776725952299061
+        ],
+        "movesPerGame": 6.05,
+        "capturesPerGame": 1.25625,
+        "checksPerGame": 0.825,
+        "forksPerGame": 0.94375,
+        "survival": 0.4875,
+        "finalAttack": 0.07534246575342465,
+        "avgPlies": 77.56875,
+        "decisive": 0.9125
+      },
+      "replaced": "queen",
+      "stage": "C"
+    }
+  ],
+  "split": [
+    {
+      "key": "fixture:f_splitmover",
+      "piece": {
+        "id": "f_splitmover",
+        "name": "Bishop-Knight split",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": null,
+            "path": "slide",
+            "mode": "capture"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "mNcB",
+      "families": [
+        "split",
+        "step-leap"
+      ],
+      "profile": {
+        "mobilityAvg": 6,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 4,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.334375,
+        "scoreCI": [
+          0.2612732468842658,
+          0.40747675311573417
+        ],
+        "movesPerGame": 2.84375,
+        "capturesPerGame": 0.71875,
+        "checksPerGame": 0.2,
+        "forksPerGame": 0.1125,
+        "survival": 0.31875,
+        "finalAttack": 0,
+        "avgPlies": 79.10625,
+        "decisive": 0.90625
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "fixture:f_weaksplit",
+      "piece": {
+        "id": "f_weaksplit",
+        "name": "Weak Split",
+        "glyph": "C",
+        "tier": "pawn",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "capture"
+          }
+        ]
+      },
+      "tier": "pawn",
+      "betza": "mWcF",
+      "families": [
+        "split",
+        "pawnlike"
+      ],
+      "profile": {
+        "mobilityAvg": 2,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 2,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.3125,
+        "scoreCI": [
+          0.24067800867770373,
+          0.3843219913222963
+        ],
+        "movesPerGame": 2.1125,
+        "capturesPerGame": 0.2875,
+        "checksPerGame": 0.0125,
+        "forksPerGame": 0,
+        "survival": 0.6875,
+        "finalAttack": 0.007246376811594203,
+        "avgPlies": 70.45625,
+        "decisive": 0.8625
+      },
+      "replaced": "pawn",
+      "stage": "C"
+    }
+  ],
+  "step-leap": [
+    {
+      "key": "fixture:f_splitmover",
+      "piece": {
+        "id": "f_splitmover",
+        "name": "Bishop-Knight split",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              1,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "move"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": null,
+            "path": "slide",
+            "mode": "capture"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "mNcB",
+      "families": [
+        "split",
+        "step-leap"
+      ],
+      "profile": {
+        "mobilityAvg": 6,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 4,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": true,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.334375,
+        "scoreCI": [
+          0.2612732468842658,
+          0.40747675311573417
+        ],
+        "movesPerGame": 2.84375,
+        "capturesPerGame": 0.71875,
+        "checksPerGame": 0.2,
+        "forksPerGame": 0.1125,
+        "survival": 0.31875,
+        "finalAttack": 0,
+        "avgPlies": 79.10625,
+        "decisive": 0.90625
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "fixture:f_heron",
+      "piece": {
+        "id": "f_heron",
+        "name": "Heron",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              2,
+              2
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "AW",
+      "families": [
+        "step-leap"
+      ],
+      "profile": {
+        "mobilityAvg": 6,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 4,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.275,
+        "scoreCI": [
+          0.20581189589242962,
+          0.3441881041075704
+        ],
+        "movesPerGame": 3.9,
+        "capturesPerGame": 0.8625,
+        "checksPerGame": 0.175,
+        "forksPerGame": 0.26875,
+        "survival": 0.54375,
+        "finalAttack": 0.020833333333333332,
+        "avgPlies": 83.75,
+        "decisive": 0.9
+      },
+      "replaced": "knight",
+      "stage": "C"
+    },
+    {
+      "key": "fixture:f_toad",
+      "piece": {
+        "id": "f_toad",
+        "name": "Toad",
+        "glyph": "C",
+        "tier": "minor",
+        "components": [
+          {
+            "vec": [
+              2,
+              0
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "leap",
+            "mode": "both"
+          },
+          {
+            "vec": [
+              1,
+              1
+            ],
+            "sym": "all",
+            "range": 1,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "minor",
+      "betza": "DF",
+      "families": [
+        "step-leap"
+      ],
+      "profile": {
+        "mobilityAvg": 6,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 4,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": true,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.296875,
+        "scoreCI": [
+          0.22608055793465315,
+          0.36766944206534685
+        ],
+        "movesPerGame": 4.025,
+        "capturesPerGame": 0.74375,
+        "checksPerGame": 0.10625,
+        "forksPerGame": 0.13125,
+        "survival": 0.5125,
+        "finalAttack": 0.006711409395973154,
+        "avgPlies": 81.83125,
+        "decisive": 0.93125
+      },
+      "replaced": "knight",
+      "stage": "C"
+    }
+  ],
+  "forward": [
+    {
+      "key": "fixture:f_forwardrook",
+      "piece": {
+        "id": "f_forwardrook",
+        "name": "Forward Rook",
+        "glyph": "C",
+        "tier": "rook",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": null,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "rook",
+      "betza": "fRlr",
+      "families": [
+        "forward",
+        "slider"
+      ],
+      "profile": {
+        "mobilityAvg": 7,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 4,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.234375,
+        "scoreCI": [
+          0.16873632954885703,
+          0.30001367045114297
+        ],
+        "movesPerGame": 3.1375,
+        "capturesPerGame": 0.875,
+        "checksPerGame": 0.30625,
+        "forksPerGame": 0.11875,
+        "survival": 0.5125,
+        "finalAttack": 0.034013605442176874,
+        "avgPlies": 72.53125,
+        "decisive": 0.91875
+      },
+      "replaced": "rook",
+      "stage": "C"
+    }
+  ],
+  "slider": [
+    {
+      "key": "fixture:f_forwardrook",
+      "piece": {
+        "id": "f_forwardrook",
+        "name": "Forward Rook",
+        "glyph": "C",
+        "tier": "rook",
+        "components": [
+          {
+            "vec": [
+              0,
+              1
+            ],
+            "sym": [
+              "f",
+              "l",
+              "r"
+            ],
+            "range": null,
+            "path": "slide",
+            "mode": "both"
+          }
+        ]
+      },
+      "tier": "rook",
+      "betza": "fRlr",
+      "families": [
+        "forward",
+        "slider"
+      ],
+      "profile": {
+        "mobilityAvg": 7,
+        "mobilityCenter": 4,
+        "mobilityCorner": 2,
+        "captureAvg": 4,
+        "colorBound": false,
+        "canRetreat": false,
+        "canSidestep": true,
+        "hasLeap": false,
+        "hasSlide": true,
+        "splitMoveCapture": false,
+        "nearestLibraryId": "rook",
+        "nearestLibraryDistance": 0.5
+      },
+      "metrics": {
+        "games": 160,
+        "excluded": 0,
+        "score": 0.234375,
+        "scoreCI": [
+          0.16873632954885703,
+          0.30001367045114297
+        ],
+        "movesPerGame": 3.1375,
+        "capturesPerGame": 0.875,
+        "checksPerGame": 0.30625,
+        "forksPerGame": 0.11875,
+        "survival": 0.5125,
+        "finalAttack": 0.034013605442176874,
+        "avgPlies": 72.53125,
+        "decisive": 0.91875
+      },
+      "replaced": "rook",
+      "stage": "C"
+    }
+  ]
+}
