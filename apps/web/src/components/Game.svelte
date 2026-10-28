@@ -5,6 +5,7 @@
   import PieceIcon from './PieceIcon.svelte';
   import { artFor } from '../lib/pieceArt.js';
   import { sandboxRuleset, restoreInfinity } from '../lib/candidates.js';
+  import { localRuleset } from '../lib/localRuleset.js';
   import { chooseMoveAtLevel, pieceValues, type SparringLevel } from '../lib/sparring.js';
   import { OnlineGameController, type OnlineSnapshot, type Intent } from '../net/online-game.js';
   import { loadToken } from '../net/client.js';
@@ -30,6 +31,8 @@
       const raw = sessionStorage.getItem('takes.hotseat');
       if (raw) {
         const parsed = JSON.parse(raw);
+        // Armies saved before a ruleset bump still play under their own version.
+        ruleset = localRuleset(parsed.white, parsed.black);
         whiteSetup = parsed.white;
         blackSetup = parsed.black;
         // Candidate test drive: a sandbox ruleset carrying one unpublished catalog piece.
@@ -37,7 +40,13 @@
         if (parsed.cpu === 'w' || parsed.cpu === 'b') cpuColor = parsed.cpu;
         if (parsed.cpuLevel === 'easy' || parsed.cpuLevel === 'medium' || parsed.cpuLevel === 'hard') cpuLevel = parsed.cpuLevel;
       }
-    } catch { /* fall back to vanilla */ }
+    } catch (e) {
+      // Unreadable or incompatible session: fall back to a vanilla game instead of a blank screen.
+      console.warn('local game fallback:', e);
+      ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
+      whiteSetup = blackSetup = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
+      cpuColor = null;
+    }
   }
 
   let game: Game | null = isOnline ? null : createGame(ruleset, whiteSetup, blackSetup);
