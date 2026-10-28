@@ -21,6 +21,18 @@
         31,
         38
       ],
+      "dragon": [
+        5,
+        1,
+        35,
+        38
+      ],
+      "heron": [
+        5,
+        5,
+        35,
+        38
+      ],
       "king": [
         9,
         1,
@@ -57,10 +69,10 @@
         34,
         38
       ],
-      "warden": [
-        6,
-        8,
-        34,
+      "toad": [
+        5,
+        5,
+        35,
         38
       ],
       "wraith": [
@@ -80,17 +92,17 @@
       },
       {
         "pair": [
-          "rook",
-          "warden"
-        ],
-        "distance": 0.035176
-      },
-      {
-        "pair": [
           "bishop",
           "knight"
         ],
         "distance": 0.039882
+      },
+      {
+        "pair": [
+          "bishop",
+          "toad"
+        ],
+        "distance": 0.041199
       },
       {
         "pair": [
@@ -108,10 +120,24 @@
       },
       {
         "pair": [
+          "dragon",
+          "queen"
+        ],
+        "distance": 0.04523
+      },
+      {
+        "pair": [
           "bishop",
           "lancer"
         ],
         "distance": 0.046152
+      },
+      {
+        "pair": [
+          "heron",
+          "toad"
+        ],
+        "distance": 0.049216
       },
       {
         "pair": [
@@ -157,6 +183,13 @@
       },
       {
         "pair": [
+          "heron",
+          "wraith"
+        ],
+        "distance": 0.07049
+      },
+      {
+        "pair": [
           "king",
           "knight"
         ],
@@ -178,6 +211,20 @@
       },
       {
         "pair": [
+          "knight",
+          "toad"
+        ],
+        "distance": 0.081081
+      },
+      {
+        "pair": [
+          "toad",
+          "wraith"
+        ],
+        "distance": 0.082167
+      },
+      {
+        "pair": [
           "lancer",
           "queen"
         ],
@@ -192,10 +239,59 @@
       },
       {
         "pair": [
+          "dragon",
+          "toad"
+        ],
+        "distance": 0.086713
+      },
+      {
+        "pair": [
           "queen",
           "wraith"
         ],
         "distance": 0.086841
+      },
+      {
+        "pair": [
+          "lancer",
+          "toad"
+        ],
+        "distance": 0.08735
+      },
+      {
+        "pair": [
+          "bishop",
+          "heron"
+        ],
+        "distance": 0.090414
+      },
+      {
+        "pair": [
+          "heron",
+          "knight"
+        ],
+        "distance": 0.0914
+      },
+      {
+        "pair": [
+          "king",
+          "toad"
+        ],
+        "distance": 0.091863
+      },
+      {
+        "pair": [
+          "queen",
+          "toad"
+        ],
+        "distance": 0.093051
+      },
+      {
+        "pair": [
+          "dragon",
+          "king"
+        ],
+        "distance": 0.094806
       },
       {
         "pair": [
@@ -206,10 +302,17 @@
       },
       {
         "pair": [
-          "warden",
-          "wraith"
+          "bishop",
+          "dragon"
         ],
-        "distance": 0.100576
+        "distance": 0.097083
+      },
+      {
+        "pair": [
+          "dragon",
+          "heron"
+        ],
+        "distance": 0.10688
       },
       {
         "pair": [
@@ -220,6 +323,34 @@
       },
       {
         "pair": [
+          "heron",
+          "lancer"
+        ],
+        "distance": 0.117993
+      },
+      {
+        "pair": [
+          "dragon",
+          "wraith"
+        ],
+        "distance": 0.119071
+      },
+      {
+        "pair": [
+          "heron",
+          "queen"
+        ],
+        "distance": 0.119297
+      },
+      {
+        "pair": [
+          "heron",
+          "king"
+        ],
+        "distance": 0.119324
+      },
+      {
+        "pair": [
           "knight",
           "pawn"
         ],
@@ -227,10 +358,24 @@
       },
       {
         "pair": [
+          "dragon",
+          "knight"
+        ],
+        "distance": 0.125108
+      },
+      {
+        "pair": [
           "king",
           "pawn"
         ],
         "distance": 0.125365
+      },
+      {
+        "pair": [
+          "dragon",
+          "lancer"
+        ],
+        "distance": 0.126971
       },
       {
         "pair": [
@@ -248,31 +393,10 @@
       },
       {
         "pair": [
-          "lancer",
-          "warden"
-        ],
-        "distance": 0.130696
-      },
-      {
-        "pair": [
-          "bishop",
-          "warden"
-        ],
-        "distance": 0.131451
-      },
-      {
-        "pair": [
           "berolina",
           "knight"
         ],
         "distance": 0.133924
-      },
-      {
-        "pair": [
-          "knight",
-          "warden"
-        ],
-        "distance": 0.136828
       },
       {
         "pair": [
@@ -283,10 +407,24 @@
       },
       {
         "pair": [
+          "heron",
+          "rook"
+        ],
+        "distance": 0.144449
+      },
+      {
+        "pair": [
           "pawn",
           "wraith"
         ],
         "distance": 0.145184
+      },
+      {
+        "pair": [
+          "pawn",
+          "toad"
+        ],
+        "distance": 0.146635
       },
       {
         "pair": [
@@ -311,17 +449,17 @@
       },
       {
         "pair": [
-          "king",
-          "warden"
-        ],
-        "distance": 0.153909
-      },
-      {
-        "pair": [
           "pawn",
           "queen"
         ],
         "distance": 0.154333
+      },
+      {
+        "pair": [
+          "berolina",
+          "toad"
+        ],
+        "distance": 0.15926
       },
       {
         "pair": [
@@ -332,6 +470,13 @@
       },
       {
         "pair": [
+          "rook",
+          "toad"
+        ],
+        "distance": 0.16687
+      },
+      {
+        "pair": [
           "berolina",
           "queen"
         ],
@@ -339,10 +484,17 @@
       },
       {
         "pair": [
-          "queen",
-          "warden"
+          "dragon",
+          "rook"
         ],
-        "distance": 0.17425
+        "distance": 0.188422
+      },
+      {
+        "pair": [
+          "dragon",
+          "pawn"
+        ],
+        "distance": 0.18899
       },
       {
         "pair": [
@@ -353,17 +505,24 @@
       },
       {
         "pair": [
-          "pawn",
-          "warden"
+          "berolina",
+          "dragon"
         ],
-        "distance": 0.195103
+        "distance": 0.190007
+      },
+      {
+        "pair": [
+          "heron",
+          "pawn"
+        ],
+        "distance": 0.192125
       },
       {
         "pair": [
           "berolina",
-          "warden"
+          "heron"
         ],
-        "distance": 0.195934
+        "distance": 0.199103
       },
       {
         "pair": [
@@ -410,6 +569,18 @@
         50,
         60
       ],
+      "dragon": [
+        9,
+        1,
+        55,
+        60
+      ],
+      "heron": [
+        9,
+        8,
+        55,
+        60
+      ],
       "king": [
         15,
         1,
@@ -446,9 +617,9 @@
         55,
         60
       ],
-      "warden": [
+      "toad": [
         9,
-        13,
+        8,
         55,
         60
       ],
@@ -469,17 +640,17 @@
       },
       {
         "pair": [
-          "rook",
-          "warden"
-        ],
-        "distance": 0.034425
-      },
-      {
-        "pair": [
           "bishop",
           "knight"
         ],
         "distance": 0.040056
+      },
+      {
+        "pair": [
+          "bishop",
+          "toad"
+        ],
+        "distance": 0.041084
       },
       {
         "pair": [
@@ -497,10 +668,24 @@
       },
       {
         "pair": [
+          "dragon",
+          "queen"
+        ],
+        "distance": 0.045172
+      },
+      {
+        "pair": [
           "bishop",
           "lancer"
         ],
         "distance": 0.046738
+      },
+      {
+        "pair": [
+          "heron",
+          "toad"
+        ],
+        "distance": 0.049401
       },
       {
         "pair": [
@@ -546,6 +731,13 @@
       },
       {
         "pair": [
+          "heron",
+          "wraith"
+        ],
+        "distance": 0.070288
+      },
+      {
+        "pair": [
           "king",
           "knight"
         ],
@@ -567,6 +759,20 @@
       },
       {
         "pair": [
+          "knight",
+          "toad"
+        ],
+        "distance": 0.08114
+      },
+      {
+        "pair": [
+          "toad",
+          "wraith"
+        ],
+        "distance": 0.082121
+      },
+      {
+        "pair": [
           "lancer",
           "queen"
         ],
@@ -581,10 +787,66 @@
       },
       {
         "pair": [
+          "dragon",
+          "toad"
+        ],
+        "distance": 0.086529
+      },
+      {
+        "pair": [
           "queen",
           "wraith"
         ],
         "distance": 0.086586
+      },
+      {
+        "pair": [
+          "lancer",
+          "toad"
+        ],
+        "distance": 0.08781
+      },
+      {
+        "pair": [
+          "bishop",
+          "heron"
+        ],
+        "distance": 0.090484
+      },
+      {
+        "pair": [
+          "heron",
+          "knight"
+        ],
+        "distance": 0.091206
+      },
+      {
+        "pair": [
+          "king",
+          "toad"
+        ],
+        "distance": 0.09243
+      },
+      {
+        "pair": [
+          "queen",
+          "toad"
+        ],
+        "distance": 0.09287
+      },
+      {
+        "pair": [
+          "dragon",
+          "king"
+        ],
+        "distance": 0.094743
+      },
+      {
+        "pair": [
+          "bishop",
+          "dragon"
+        ],
+        "distance": 0.096958
       },
       {
         "pair": [
@@ -595,10 +857,10 @@
       },
       {
         "pair": [
-          "warden",
-          "wraith"
+          "dragon",
+          "heron"
         ],
-        "distance": 0.10049
+        "distance": 0.106823
       },
       {
         "pair": [
@@ -609,6 +871,34 @@
       },
       {
         "pair": [
+          "heron",
+          "lancer"
+        ],
+        "distance": 0.117837
+      },
+      {
+        "pair": [
+          "heron",
+          "queen"
+        ],
+        "distance": 0.118912
+      },
+      {
+        "pair": [
+          "dragon",
+          "wraith"
+        ],
+        "distance": 0.118984
+      },
+      {
+        "pair": [
+          "heron",
+          "king"
+        ],
+        "distance": 0.119115
+      },
+      {
+        "pair": [
           "knight",
           "pawn"
         ],
@@ -616,10 +906,24 @@
       },
       {
         "pair": [
+          "dragon",
+          "knight"
+        ],
+        "distance": 0.124884
+      },
+      {
+        "pair": [
           "king",
           "pawn"
         ],
         "distance": 0.125779
+      },
+      {
+        "pair": [
+          "dragon",
+          "lancer"
+        ],
+        "distance": 0.126955
       },
       {
         "pair": [
@@ -637,31 +941,10 @@
       },
       {
         "pair": [
-          "lancer",
-          "warden"
-        ],
-        "distance": 0.130875
-      },
-      {
-        "pair": [
-          "bishop",
-          "warden"
-        ],
-        "distance": 0.131785
-      },
-      {
-        "pair": [
           "berolina",
           "knight"
         ],
         "distance": 0.13467
-      },
-      {
-        "pair": [
-          "knight",
-          "warden"
-        ],
-        "distance": 0.137043
       },
       {
         "pair": [
@@ -672,10 +955,24 @@
       },
       {
         "pair": [
+          "heron",
+          "rook"
+        ],
+        "distance": 0.144102
+      },
+      {
+        "pair": [
           "pawn",
           "wraith"
         ],
         "distance": 0.145513
+      },
+      {
+        "pair": [
+          "pawn",
+          "toad"
+        ],
+        "distance": 0.146878
       },
       {
         "pair": [
@@ -707,10 +1004,10 @@
       },
       {
         "pair": [
-          "king",
-          "warden"
+          "berolina",
+          "toad"
         ],
-        "distance": 0.15492
+        "distance": 0.159975
       },
       {
         "pair": [
@@ -721,6 +1018,13 @@
       },
       {
         "pair": [
+          "rook",
+          "toad"
+        ],
+        "distance": 0.166998
+      },
+      {
+        "pair": [
           "berolina",
           "queen"
         ],
@@ -728,10 +1032,17 @@
       },
       {
         "pair": [
-          "queen",
-          "warden"
+          "dragon",
+          "rook"
         ],
-        "distance": 0.174922
+        "distance": 0.188448
+      },
+      {
+        "pair": [
+          "dragon",
+          "pawn"
+        ],
+        "distance": 0.18927
       },
       {
         "pair": [
@@ -742,17 +1053,24 @@
       },
       {
         "pair": [
-          "pawn",
-          "warden"
+          "berolina",
+          "dragon"
         ],
-        "distance": 0.195564
+        "distance": 0.190233
+      },
+      {
+        "pair": [
+          "heron",
+          "pawn"
+        ],
+        "distance": 0.192434
       },
       {
         "pair": [
           "berolina",
-          "warden"
+          "heron"
         ],
-        "distance": 0.196436
+        "distance": 0.199779
       },
       {
         "pair": [

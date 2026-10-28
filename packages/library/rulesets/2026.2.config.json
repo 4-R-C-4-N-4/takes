@@ -1,0 +1,32 @@
+{
+  "version": "2026.2",
+  "costs": {
+    "pawn": 1,
+    "knight": 3,
+    "bishop": 3,
+    "rook": 5,
+    "queen": 9,
+    "wraith": 4,
+    "lancer": 3,
+    "berolina": 1,
+    "toad": 3,
+    "heron": 3,
+    "dragon": 13
+  },
+  "pool": 39,
+  "maxCount": {
+    "queen": 1,
+    "dragon": 1
+  },
+  "promotionMode": "own-set",
+  "promotionTargets": [
+    "queen",
+    "rook",
+    "bishop",
+    "knight"
+  ],
+  "promotionFallback": [
+    "queen"
+  ],
+  "maxPlies": 400
+}

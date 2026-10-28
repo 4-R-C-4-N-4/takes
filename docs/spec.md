@@ -143,7 +143,9 @@ The classic pieces expressed in the schema, plus candidate new pieces. Candidate
 | Wraith | Minor or rook | \[1,0\] all, ∞, slide, move · \[1,1\] all, ∞, slide, capture | mRcB | Moves as a rook, captures as a bishop. Castling-eligible if declared rook tier and its measured value lands in the rook band. |
 | Lancer | Minor | \[0,1\] f, ∞, slide, both · \[0,1\] b, 1, slide, both | fRbW | Forward-only rook with a one-step retreat. |
 | Berolina | Pawn | \[1,1\] fl/fr, 1, slide, move · \[0,1\] f, 1, slide, capture | mfFcfW | Inverted pawn. Passes the validator. Not en passant eligible. |
-| Warden | Rook | \[1,0\] l/r, ∞, slide, both · \[0,1\] f/b, 1, slide, both | sRvW | Horizontal slider with vertical steps. Castling-eligible. |
+| Toad | Minor | \[2,0\] all, 1, leap, both · \[1,1\] all, 1, slide, both | DF | Two-square orthogonal hop plus diagonal step. |
+| Heron | Minor | \[2,2\] all, 1, leap, both · \[1,0\] all, 1, slide, both | AW | Two-square diagonal hop plus orthogonal step. |
+| Dragon | Major | Queen components · \[2,0\] and \[2,2\] all, 1, leap, both | QDA | Queen plus exactly-one-square hop. High cost; max one. |
 
 ## Valuation
 

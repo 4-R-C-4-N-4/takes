@@ -15,6 +15,10 @@ describe('pieceToBetza', () => {
     expect(pieceToBetza(rs.pieces.lancer!)).toBe('fRbW');
     expect(pieceToBetza(rs.pieces.berolina!)).toBe('mfFcfW');
     expect(pieceToBetza(rs.pieces.warden!)).toBe('sRvW');
+    const current = getRuleset('2026.2')!;
+    expect(pieceToBetza(current.pieces.toad!)).toBe('DF');
+    expect(pieceToBetza(current.pieces.heron!)).toBe('AW');
+    expect(pieceToBetza(current.pieces.dragon!)).toBe('RBDA');
   });
   it('limited sliders and rejections', () => {
     expect(componentToBetza({ vec: [1, 0], sym: ['f'], range: 3, path: 'slide', mode: 'move' })).toBe('mfR3');
@@ -65,9 +69,10 @@ function fen(pieces: Map<number, string>): string {
 
 const haveFsf = fsfPath() !== null;
 describe.skipIf(!haveFsf)('Betza round-trip vs Fairy-Stockfish (M5)', () => {
+  for (const rs of [getRuleset('2026.1')!, getRuleset('2026.2')!]) {
   const testPieces = Object.values(rs.pieces).filter((p) => p.id !== 'pawn');
   for (const p of testPieces) {
-    it(`${p.id}: identical move sets from every square, every blocker ring`, () => {
+    it(`${rs.version} ${p.id}: identical move sets from every square, every blocker ring`, () => {
       const ini = variantIni(rs).replace('king = k', 'king = k\nimmobile = o');
       const variant = ini.slice(1, ini.indexOf(']'));
       const cases: Array<{ fen: string; from: number; want: Set<string>; label: string }> = [];
@@ -93,5 +98,6 @@ describe.skipIf(!haveFsf)('Betza round-trip vs Fairy-Stockfish (M5)', () => {
       });
       expect(cases.length).toBeGreaterThan(100);
     });
+  }
   }
 });

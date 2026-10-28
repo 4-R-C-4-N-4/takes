@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { getRuleset } from '@takes/library';
 import { pieceSvg, badgeSvg, badgeMarks, resolveArt, KING_PIECE, pieceSignatures, BASELINE_Y, TIER_SIZE } from '../src/index.js';
 
-const ruleset = getRuleset('2026.1')!;
+const ruleset = getRuleset('2026.2')!;
 const pieces = [...Object.values(ruleset.pieces), KING_PIECE];
 const geometry = (p: typeof KING_PIECE) => pieceSvg(p).match(/<path d="([^"]+)"/)![1];
 
@@ -54,10 +54,11 @@ describe('pieceSvg', () => {
 
   it('encodes range, direction and separate capture signatures', () => {
     const rook = pieceSignatures(ruleset.pieces.rook);
-    const warden = pieceSignatures(ruleset.pieces.warden);
+    const heron = pieceSignatures(ruleset.pieces.heron);
     expect(rook.body.ortho.forward.range).toBe('slide');
-    expect(warden.body.ortho.forward.range).toBe('step');
-    expect(warden.body.ortho.left.range).toBe('slide');
+    expect(heron.body.ortho.forward.range).toBe('step');
+    expect(heron.body.leap).toBe(true);
+    expect(pieceSvg(ruleset.pieces.dragon)).not.toBe(pieceSvg(ruleset.pieces.queen));
     expect(rook.crest).toBeNull();
     const wraith = pieceSignatures(ruleset.pieces.wraith);
     expect(wraith.body.ortho.forward.present).toBe(true);

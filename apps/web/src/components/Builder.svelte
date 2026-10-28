@@ -14,7 +14,7 @@
   let { profileId = undefined }: { profileId?: string | undefined } = $props();
 
   const ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
-  const VANILLA_SETUP = '2026.1:RNBQKBNR/PPPPPPPP/8';
+  const VANILLA_SETUP = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
 
   function emptySetup(): Setup {
     return { version: CURRENT_RULESET_VERSION, ranks: [Array(8).fill(null), Array(8).fill(null), Array(8).fill(null)] };

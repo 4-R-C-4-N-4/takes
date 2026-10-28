@@ -14,8 +14,8 @@
   const ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
 
   // ---------- Hotseat (local) mode ----------
-  let whiteSetup = '2026.1:RNBQKBNR/PPPPPPPP/8';
-  let blackSetup = '2026.1:RNBQKBNR/PPPPPPPP/8';
+  let whiteSetup = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
+  let blackSetup = `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`;
   if (!isOnline && gameParam === 'hotseat') {
     try {
       const raw = sessionStorage.getItem('takes.hotseat');

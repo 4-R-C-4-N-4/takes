@@ -33,3 +33,9 @@ These are provisional defaults that resolve the issues raised in docs/plan-revie
 - [D15] **Art.** Procedural SVG is the baseline for every piece. Codex image-gen output goes to `art.candidate.svg` only, and a human promotes it to `art.svg`. Pieces are scaled by a per-tier size table, never fit to the box.
 
 - [D16] **Setup budget.** The pool is 39, which matches the vanilla army. `maxCount` is queen: 1. Values are placeholders until valuation (M6).
+
+- [D17] **Ruleset 2026.2 (current).** Ivy removed the Warden: its sideways-slide/vertical-step design did not earn a slot. 2026.1 stays published and unchanged (old profiles show "needs review"). 2026.2 adds three hop pieces using existing range-1 leap components, with no new rules:
+  - **Toad** `T` (minor, cost 3): leaps exactly two squares orthogonally over anything, and steps one square diagonally. Betza `DF`.
+  - **Heron** `H` (minor, cost 3): leaps exactly two squares diagonally over anything, and steps one square orthogonally. Betza `AW`.
+  - **Dragon** `D` (major, cost 13, max 1): a queen that can also hop exactly one adjacent square in any of the eight directions, landing two squares away. The jump limit is the balance lever: it cannot ride past a blocker or jump two squares. Betza `QDA`.
+  Costs are provisional until valuation. Queen and Dragon are each capped at one.

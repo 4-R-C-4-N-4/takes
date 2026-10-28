@@ -69,9 +69,9 @@ export function profileNeedsReview(p: StoredProfile): boolean {
 }
 
 export const SEED_PROFILES: Array<{ name: string; setup: string }> = [
-  { name: 'Vanilla', setup: '2026.1:RNBQKBNR/PPPPPPPP/8' },
-  { name: 'Warden Guard', setup: '2026.1:R1BQKB{warden}1/PPPPPPPP/2N2N2' },
-  { name: 'Knight Heavy', setup: '2026.1:RNBQKBNR/PPPPPPPP/2N2N2' },
+  { name: 'Vanilla', setup: '2026.2:RNBQKBNR/PPPPPPPP/8' },
+  { name: 'Hopper Guard', setup: '2026.2:R{toad}BQKB{heron}R/PPPPPPPP/8' },
+  { name: 'Dragon Hoard', setup: '2026.2:R1B{dragon}KB1R/PPPPPPPP/8' },
 ];
 
 /** Seed sample profiles into localStorage on first run only (empty store). */

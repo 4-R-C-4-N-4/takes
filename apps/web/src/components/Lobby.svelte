@@ -2,7 +2,7 @@
   import { loadProfiles, type StoredProfile } from '../lib/profiles.js';
   import { routeHref } from '../lib/router.js';
   import { BOT_LEVELS, type BotLevel } from '@takes/protocol';
-  import type { Color } from '@takes/library';
+  import { CURRENT_RULESET_VERSION, type Color } from '@takes/library';
 
   const profiles: StoredProfile[] = loadProfiles();
   let whiteId: string = profiles[0]?.id ?? '';
@@ -26,7 +26,7 @@
   function createInvite(): void {
     const profile = profiles.find((p) => p.id === inviteProfileId);
     if (!profile) return;
-    const opts = { ruleset: '2026.1', ...(inviteColor === 'random' ? {} : { color: inviteColor }) };
+    const opts = { ruleset: CURRENT_RULESET_VERSION, ...(inviteColor === 'random' ? {} : { color: inviteColor }) };
     try {
       sessionStorage.setItem('takes.online.pending', JSON.stringify({ kind: 'create', opts, setup: profile.setup }));
     } catch { /* ignore */ }
@@ -37,7 +37,7 @@
     const profile = profiles.find((p) => p.id === botProfileId);
     if (!profile) return;
     try {
-      sessionStorage.setItem('takes.online.pending', JSON.stringify({ kind: 'create', opts: { ruleset: '2026.1', bot: botLevel }, setup: profile.setup }));
+      sessionStorage.setItem('takes.online.pending', JSON.stringify({ kind: 'create', opts: { ruleset: CURRENT_RULESET_VERSION, bot: botLevel }, setup: profile.setup }));
     } catch { /* ignore */ }
     location.hash = routeHref('game', 'online-new');
   }

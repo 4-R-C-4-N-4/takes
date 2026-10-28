@@ -4,7 +4,7 @@ import { createGame } from '@takes/engine';
 import { fsfPath } from '@takes/betza';
 import { randomProfile, mulberry32, parity } from './index.js';
 
-const r = getRuleset('2026.1')!;
+const r = getRuleset('2026.2')!; // current ruleset: includes hopping pieces
 const N = Number(process.env.PARITY_N ?? 100);
 const DEPTH = Number(process.env.PARITY_DEPTH ?? 3);
 

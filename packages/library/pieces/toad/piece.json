@@ -1,0 +1,28 @@
+{
+  "id": "toad",
+  "name": "Toad",
+  "glyph": "T",
+  "tier": "minor",
+  "components": [
+    {
+      "vec": [
+        2,
+        0
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "leap",
+      "mode": "both"
+    },
+    {
+      "vec": [
+        1,
+        1
+      ],
+      "sym": "all",
+      "range": 1,
+      "path": "slide",
+      "mode": "both"
+    }
+  ]
+}

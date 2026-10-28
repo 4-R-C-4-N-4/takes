@@ -77,7 +77,8 @@ function silhouette(tier: Tier, sig: Signature, capture: Signature | null, royal
   } else if (anyOrtho && anyDiag) {
     // Three open crown points for combined orthogonal + diagonal sliders.
     head = [[34,y(.3)],[29,y(.04)],[42,y(.14)],[50,top],[58,y(.14)],[71,y(.04)],[66,y(.3)]];
-  } else if (sig.leap) {
+  } else if (sig.leap && !anyOrtho && !anyDiag) {
+    // Pure leaper: animal-head ears. Mixed leapers keep their step/slide head and gain wings below.
     head = [[36,y(.37)],[left,y(.08)],[43,y(.19)],[50,top],[57,y(.19)],[right,y(.08)],[64,y(.37)]];
   } else if (ortho.forward.range === 'slide' && !ortho.left.present && !ortho.right.present) {
     // Forward slider with a short backward step: long spear and broad guard.
@@ -111,9 +112,14 @@ function silhouette(tier: Tier, sig: Signature, capture: Signature | null, royal
     head = [[left,y(.34)],[left,y(.19)],[38,y(.19)],[38,y(.1)],[47,top],[47,y(.18)],[59,y(.025)],[64,y(.12)],[62,y(.19)],[right,y(.19)],[right,y(.34)]];
   }
   const neck = tier === 'rook' ? 21 : tier === 'pawn' ? 13 : 16;
+  // Hop wings: a leap added to a step/slide body is shown as swept shoulder wings.
+  const wings = sig.leap && (anyOrtho || anyDiag);
+  const wingSpan = Math.min(18, half - 4);
+  const leftWing: Array<[number, number]> = wings ? [[CX-neck,y(.62)],[CX-neck-wingSpan,y(.5)],[CX-neck-wingSpan+4,y(.42)],[CX-neck,y(.46)]] : [];
+  const rightWing: Array<[number, number]> = wings ? [[CX+neck,y(.46)],[CX+neck+wingSpan-4,y(.42)],[CX+neck+wingSpan,y(.5)],[CX+neck,y(.62)]] : [];
   return polygon([
     [left,bottom],[left,y(.91)],[CX-neck,y(.72)],
-    [CX-neck,y(.42)],...head,[CX+neck,y(.42)],
+    ...leftWing,[CX-neck,y(.42)],...head,[CX+neck,y(.42)],...rightWing,
     [CX+neck,y(.72)],[right,y(.91)],[right,bottom],
   ]);
 }

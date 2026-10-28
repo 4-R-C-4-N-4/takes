@@ -10,7 +10,8 @@ import { generateInviteCode, generateToken } from './ids.js';
 import { DIFFICULTY_OPTS, FsfBot, writeGameVariantIni, type Difficulty } from './bot/fsf-bot.js';
 import botProfilesJson from '../bots/profiles.json' with { type: 'json' };
 
-const botProfiles = botProfilesJson as Record<Difficulty, string>;
+/** Bot armies are pinned per ruleset, because setup strings carry and validate against a version. */
+const botProfiles = botProfilesJson as Record<string, Record<Difficulty, string>>;
 
 export interface SeatInfo {
   color: Color;
@@ -156,6 +157,8 @@ export class RoomManager {
     const ruleset = getRuleset(version);
     if (!ruleset) return { error: `unknown ruleset version '${version}'` };
     if (bot && !FsfBot.available()) return { error: 'bot engine unavailable: Fairy-Stockfish binary not found' };
+    const botSetup = bot ? botProfiles[version]?.[bot] : undefined;
+    if (bot && !botSetup) return { error: `no ${bot} bot profile for ruleset '${version}'` };
 
     let code = generateInviteCode();
     while (this.rooms.has(code)) code = generateInviteCode();
@@ -172,7 +175,7 @@ export class RoomManager {
       const botToken = generateToken();
       otherSeat = {
         color: otherC, token: botToken, tokenHash: hashToken(botToken), ws: null, ready: true, isBot: true,
-        setup: botProfiles[bot], disconnectedAt: null, forfeitTimer: null,
+        setup: botSetup!, disconnectedAt: null, forfeitTimer: null,
       };
     } else {
       otherSeat = {

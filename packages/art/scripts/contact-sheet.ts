@@ -19,8 +19,8 @@ mkdirSync(outDir, { recursive: true });
 
 mkdirSync(tmpDir, { recursive: true });
 
-const ruleset = getRuleset('2026.1');
-if (!ruleset) throw new Error('ruleset 2026.1 not found');
+const ruleset = getRuleset('2026.2');
+if (!ruleset) throw new Error('ruleset 2026.2 not found');
 const pieces = [...Object.values(ruleset.pieces).sort((a, b) => a.id.localeCompare(b.id)), KING_PIECE];
 
 const LIGHT = '#eceadc';

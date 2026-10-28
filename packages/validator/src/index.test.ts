@@ -190,9 +190,9 @@ describe('validatePiece: schema sanity', () => {
   });
 });
 
-describe('validateRuleset: shipped 2026.1 ruleset', () => {
-  it('has zero errors', () => {
-    const issues = validateRuleset(rs);
+describe('validateRuleset: shipped rulesets', () => {
+  it.each(['2026.1', '2026.2'])('%s has zero errors', (version) => {
+    const issues = validateRuleset(getRuleset(version)!);
     const errors = issues.filter((i) => i.severity === 'error');
     expect(errors).toEqual([]);
   });

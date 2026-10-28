@@ -1,5 +1,12 @@
 {
-  "easy": "2026.1:RNBQKBNR/PPPPPPPP/8",
-  "medium": "2026.1:R1BQKB{warden}1/PPPPPPPP/2N2N2",
-  "hard": "2026.1:{wraith}1BQKB{lancer}1/PPPPPPPP/2N2N2"
+  "2026.1": {
+    "easy": "2026.1:RNBQKBNR/PPPPPPPP/8",
+    "medium": "2026.1:R1BQKB{warden}1/PPPPPPPP/2N2N2",
+    "hard": "2026.1:{wraith}1BQKB{lancer}1/PPPPPPPP/2N2N2"
+  },
+  "2026.2": {
+    "easy": "2026.2:RNBQKBNR/PPPPPPPP/8",
+    "medium": "2026.2:R{toad}BQKB{heron}R/PPPPPPPP/8",
+    "hard": "2026.2:R1B{dragon}KB1R/PPPPPPPP/8"
+  }
 }
