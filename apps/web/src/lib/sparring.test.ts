@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { getRuleset } from '@takes/library';
 import { createGame, fromFEN } from '@takes/engine';
-import { chooseMove } from './sparring.js';
+import { chooseMove, chooseMoveAtLevel } from './sparring.js';
 import { sandboxRuleset, sandboxSetup, type Candidate } from './candidates.js';
 
 const r = getRuleset('2026.2')!;
@@ -34,5 +34,20 @@ describe('sparring bot', () => {
       expect(g.parseUci(g.moveToUci(m))).not.toBeNull();
       g.make(m);
     }
+  });
+});
+
+describe('sparring levels', () => {
+  it('easy still takes mate in one but otherwise varies its play', () => {
+    const mate = fromFEN(r, '6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1');
+    expect(mate.moveToUci(chooseMoveAtLevel(mate, 'easy', () => 0.99)!)).toBe('a1a8');
+    const g = createGame(r, '2026.2:RNBQKBNR/PPPPPPPP/8', '2026.2:RNBQKBNR/PPPPPPPP/8');
+    const picks = new Set([0, 0.3, 0.6, 0.99].map((x) => g.moveToUci(chooseMoveAtLevel(g, 'easy', () => x)!)));
+    expect(picks.size).toBeGreaterThan(1);
+    expect(g.toFEN()).toBe(createGame(r, '2026.2:RNBQKBNR/PPPPPPPP/8', '2026.2:RNBQKBNR/PPPPPPPP/8').toFEN());
+  });
+  it('every level returns a legal move', () => {
+    const g = createGame(r, '2026.2:RNBQKBNR/PPPPPPPP/8', '2026.2:RNBQKBNR/PPPPPPPP/8');
+    for (const lv of ['easy', 'medium', 'hard'] as const) expect(g.parseUci(g.moveToUci(chooseMoveAtLevel(g, lv)!))).not.toBeNull();
   });
 });

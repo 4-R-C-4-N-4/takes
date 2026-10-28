@@ -7,6 +7,33 @@ import type { Color, Ruleset } from '@takes/library';
 const MATE = 100_000;
 const KING_VALUE = 1_000;
 
+export type SparringLevel = 'easy' | 'medium' | 'hard';
+
+/**
+ * Difficulty presets. Easy looks one move ahead with no capture follow-up and picks randomly among
+ * moves close to the best (so it hangs pieces sometimes). Medium searches briefly; hard uses the
+ * full time budget. `rand` is injectable for tests.
+ */
+export function chooseMoveAtLevel(game: Game, level: SparringLevel, rand: () => number = Math.random): Move | null {
+  if (level === 'hard') return chooseMove(game, { timeMs: 900, maxDepth: 8 });
+  if (level === 'medium') return chooseMove(game, { timeMs: 250, maxDepth: 2 });
+  const values = pieceValues(game.ruleset);
+  const moves = game.legalMoves();
+  if (moves.length === 0) return null;
+  const scored = moves.map((m) => {
+    game.make(m);
+    const mate = game.legalMoves().length === 0 && game.inCheck();
+    const s = mate ? MATE : -evaluate(game, values);
+    game.unmake();
+    return { m, s };
+  });
+  scored.sort((a, b) => b.s - a.s);
+  const best = scored[0]!.s;
+  if (best >= MATE) return scored[0]!.m;
+  const pool = scored.filter((x) => x.s >= best - 250);
+  return pool[Math.floor(rand() * pool.length)]!.m;
+}
+
 export interface SparringOptions {
   /** Time budget in ms (checked between nodes). */
   timeMs?: number;
