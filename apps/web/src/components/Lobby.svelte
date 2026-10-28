@@ -1,5 +1,6 @@
 <script lang="ts">
   import { loadProfiles, type StoredProfile } from '../lib/profiles.js';
+  import { cpuColorFor } from '../lib/sides.js';
   import { routeHref } from '../lib/router.js';
   import { isStatic } from '../lib/target.js';
   import { BOT_LEVELS, type BotLevel } from '@takes/protocol';
@@ -45,8 +46,8 @@
 
   /** In-browser sparring CPU difficulty (easy/medium/hard), independent of the server bot levels. */
   let cpuLevel: SparringLevel = 'easy';
-  /** Local game opponent: the in-browser sparring CPU (colour it plays), or empty for hotseat (both sides, human). */
-  let localCpu: '' | 'w' | 'b' = 'w';
+  /** The colour the player takes against the in-browser CPU ("You play"); the CPU gets the other. */
+  let playerSide: 'w' | 'b' = 'w';
 
   function startVsCpu(): void {
     const army = profiles.find((p) => p.id === armyId);
@@ -54,7 +55,7 @@
     try {
       sessionStorage.setItem(
         'takes.hotseat',
-        JSON.stringify({ white: army.setup, black: army.setup, cpu: localCpu || null, cpuLevel }),
+        JSON.stringify({ white: army.setup, black: army.setup, cpu: cpuColorFor(playerSide), cpuLevel }),
       );
     } catch { /* ignore */ }
     location.hash = routeHref('game', 'hotseat');
@@ -133,7 +134,7 @@
           <div class="row">
             <div class="field">
               <label for="cpu-side">You play</label>
-              <select id="cpu-side" class="select" bind:value={localCpu} aria-label="Opponent">
+              <select id="cpu-side" class="select" bind:value={playerSide} aria-label="Opponent">
                 <option value="w">White — CPU plays Black</option>
                 <option value="b">Black — CPU plays White</option>
               </select>
