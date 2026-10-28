@@ -21,7 +21,7 @@
 </script>
 
 <button class="piece-card" class:selected data-testid="piece-tile" {onclick}>
-  <PieceIcon svg={art} size={48} />
+  <PieceIcon svg={art} size={60} />
   <span class="name">{piece.name}</span>
   <span class="row meta">
     <span class="glyph mono">{piece.glyph}</span>
@@ -32,16 +32,17 @@
 
 <style>
   .piece-card {
-    display: grid; grid-template-columns: 1fr; justify-items: center; gap: 4px;
-    background: var(--ink-1); border: 1px solid var(--line); border-radius: var(--r-3);
-    padding: var(--s-3) var(--s-2); min-width: 108px; cursor: pointer; text-align: center;
+    display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center;
+    column-gap: var(--s-3); row-gap: 2px;
+    background: var(--ink-1); border: 1px solid var(--line); border-radius: var(--r-2);
+    padding: var(--s-2) var(--s-3); min-width: 0; width: 100%; cursor: pointer; text-align: left;
     color: var(--text); transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
   }
   .piece-card:hover { background: var(--ink-2); }
   .piece-card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
-  .name { font-family: var(--font-display); font-size: var(--fs-md); font-weight: 560; margin-top: var(--s-1); }
+  .piece-card :global(.piece-icon) { grid-row: 1 / 3; flex-shrink: 0; }
+  .name { font-family: var(--font-display); font-size: var(--fs-md); font-weight: 560; }
   .meta { gap: var(--s-2); color: var(--text-faint); font-size: var(--fs-xs); }
   .glyph { color: var(--text-muted); }
-  .badge { display: block; width: 26px; height: 26px; margin-top: 2px; opacity: 0.85; --piece-fill: var(--text-faint); --piece-stroke: var(--text-faint); }
-  .badge :global(svg) { width: 100%; height: 100%; display: block; }
+  .badge { display: none; }
 </style>

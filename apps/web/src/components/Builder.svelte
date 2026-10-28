@@ -243,13 +243,21 @@
   const isNarrow = $derived(viewportWidth < 960);
   const cellSize = $derived.by(() => {
     const railW = isNarrow ? 0 : 320;
-    const available = Math.min(viewportWidth - railW - 96, viewportHeight * 0.62, 560);
-    return Math.max(32, Math.floor(available / 8));
+    const sidePad = isNarrow ? 24 : 96;
+    const available = Math.min(viewportWidth - railW - sidePad, viewportHeight * 0.72, 640);
+    return Math.max(isNarrow ? 44 : 56, Math.floor(available / 8));
   });
 
   function squareName(sq: number): string {
     return `${'abcdefgh'[sq % 8]}${Math.floor(sq / 8) + 1}`;
   }
+
+  const castlingCaption = $derived.by(() => {
+    const names = [...castlingFiles].sort((a, b) => a - b).map((f) => squareName(f));
+    if (!names.length) return null;
+    if (names.length === 1) return `Castles with ${names[0]}`;
+    return `Castles with ${names.join(' and ')}`;
+  });
 </script>
 
 <div class="page builder-page">
@@ -284,14 +292,12 @@
         </div>
       </div>
 
-      <p class="hint muted">
-        Castling partners (rook-tier near king): files
-        {#if castlingFiles.size}
-          <span class="mono">{[...castlingFiles].map((f) => 'abcdefgh'[f]).join(', ')}</span>
-        {:else}
-          none
-        {/if}
-      </p>
+      {#if castlingCaption}
+        <p class="hint muted castle-caption">
+          <span class="castle-glyph" aria-hidden="true">♜</span>
+          {castlingCaption}
+        </p>
+      {/if}
 
       {#if issues.length}
         <ul class="issues stack">
@@ -306,6 +312,9 @@
             </li>
           {/each}
         </ul>
+      {/if}
+      {#if !hasErrors(issues)}
+        <p class="hint muted"><span class="chip good">Ready to save</span></p>
       {/if}
 
       <div class="toolbar row">
@@ -393,9 +402,9 @@
 {/if}
 
 <style>
-  .builder-grid { display: grid; grid-template-columns: 1fr 300px; gap: var(--s-5); align-items: start; }
-  .board-zone { padding: var(--s-5); display: grid; gap: var(--s-4); }
-  .board-center { display: flex; justify-content: center; }
+  .builder-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: var(--s-5); align-items: start; }
+  .board-zone { padding: var(--s-5); display: grid; gap: var(--s-4); min-width: 0; }
+  .board-center { display: flex; justify-content: center; min-width: 0; }
 
   .budget-wrap { display: grid; gap: var(--s-2); }
   .budget-row { justify-content: space-between; }
@@ -406,16 +415,19 @@
   .budget-fill.over { background: var(--bad); }
 
   .hint { font-size: var(--fs-sm); margin: 0; }
+  .castle-caption { display: flex; align-items: center; gap: var(--s-2); }
+  .castle-glyph { color: var(--accent); font-size: var(--fs-md); line-height: 1; }
 
   .issues { list-style: none; padding: 0; margin: 0; }
   .issues li { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); padding: var(--s-1) 0; cursor: default; }
   .issue-msg { color: var(--text-muted); }
   .issues li.error .issue-msg { color: var(--text); }
 
-  .toolbar { flex-wrap: wrap; }
+  .divider { border-top: 1px solid var(--line); margin: 0; }
+  .toolbar { flex-wrap: wrap; align-items: center; }
   .setup-io { flex-wrap: nowrap; }
   .setup-io input { flex: 1; min-width: 0; }
-  .save-row { flex-wrap: nowrap; }
+  .save-row { flex-wrap: nowrap; align-items: center; }
   .save-row input { flex: 1; min-width: 0; }
 
   .palette-rail { padding: var(--s-4); display: grid; gap: var(--s-4); align-content: start; position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; }
@@ -441,5 +453,6 @@
   @media (max-width: 960px) {
     .builder-grid { grid-template-columns: 1fr; }
     .palette-rail { position: static; max-height: none; }
+    .board-zone { padding: var(--s-3); }
   }
 </style>
