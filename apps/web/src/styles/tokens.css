@@ -3,9 +3,8 @@
  * Direction: a quiet tournament hall. Warm charcoal and ivory, one vermilion accent that means
  * "takes" (captures, primary actions, danger-adjacent emphasis). Type carries hierarchy; boxes are rare.
  */
-@import '@fontsource-variable/fraunces';
-@import '@fontsource-variable/hanken-grotesk';
-@import '@fontsource-variable/jetbrains-mono';
+/* Fonts are loaded from fonts-full.css (dev/dynamic build, all unicode subsets) or
+   fonts-static.css (static build, latin + latin-ext only) — picked in main.ts. */
 
 :root {
   color-scheme: dark;

@@ -1,9 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { parseHash, routeHref, type Route } from './lib/router.js';
+  import { isStatic } from './lib/target.js';
   import Library from './components/Library.svelte';
-  // Candidates carries ~800 KB of screening data: load it only when the tab is opened.
-  const loadCandidates = () => import('./components/Candidates.svelte');
+  // Candidates carries ~800 KB of screening data: load it only when the tab is opened,
+  // and never in the static build (isStatic is a build-time constant, so this whole
+  // dynamic import is dead code there and the Candidates chunk is dropped entirely).
+  const loadCandidates = () => (isStatic ? Promise.reject(new Error('unavailable')) : import('./components/Candidates.svelte'));
   import Builder from './components/Builder.svelte';
   import Profiles from './components/Profiles.svelte';
   import Lobby from './components/Lobby.svelte';
@@ -17,7 +20,8 @@
     { screen: 'builder', label: 'Builder', icon: 'M4 20h16M4 4h16v12H4zM4 10h16M10 4v12' },
     { screen: 'profiles', label: 'Armies', icon: 'M6 4h12v16l-6-4-6 4z' },
     { screen: 'library', label: 'Library', icon: 'M5 4h4v16H5zM10 4h4v16h-4zM15.5 4.5l3.8 1-3.9 14.6-3.8-1z' },
-    { screen: 'candidates', label: 'Lab', icon: 'M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3M7.5 14h9' },
+    // The Lab (Candidates) is a dev/research tool, not shipped in the static build.
+    ...(isStatic ? [] : [{ screen: 'candidates', label: 'Lab', icon: 'M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3M7.5 14h9' } as const]),
   ];
   let route: Route = parseHash(location.hash);
 

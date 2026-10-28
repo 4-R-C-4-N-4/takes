@@ -1,6 +1,7 @@
 <script lang="ts">
   import { loadProfiles, type StoredProfile } from '../lib/profiles.js';
   import { routeHref } from '../lib/router.js';
+  import { isStatic } from '../lib/target.js';
   import { BOT_LEVELS, type BotLevel } from '@takes/protocol';
   import { CURRENT_RULESET_VERSION, getRuleset, parseSetup, setupCost, type Color } from '@takes/library';
   import { createGame } from '@takes/engine';
@@ -147,6 +148,7 @@
             </div>
           </div>
           <button class="btn primary" onclick={startVsCpu}>Play</button>
+          {#if !isStatic}
           <div class="divider"></div>
           <div class="server-bot-row">
             <p class="muted sm">Or spar against the server's Fairy-Stockfish bot:</p>
@@ -160,9 +162,16 @@
               <button class="btn ghost sm" onclick={playServerBot}>Play server bot</button>
             </div>
           </div>
+          {/if}
         </section>
 
         <div class="row online-row">
+          {#if isStatic}
+          <section class="stack panel mode-panel compact online-placeholder">
+            <h3>Online play</h3>
+            <p class="muted sm">Coming soon — play a friend over the network, no server in between.</p>
+          </section>
+          {:else}
           <section class="stack panel mode-panel compact">
             <h3>Invite a friend</h3>
             <p class="muted sm">Share a link; they join from any device.</p>
@@ -184,6 +193,7 @@
               <button class="btn sm" onclick={joinByCode}>Join</button>
             </div>
           </section>
+          {/if}
         </div>
 
         <section class="stack mode-panel secondary">
@@ -221,5 +231,6 @@
   .server-bot-row .field label { font-size: var(--fs-xs); }
 
   .online-row { align-items: stretch; }
+  .online-placeholder { flex: 1 1 0; opacity: 0.7; justify-content: center; align-items: center; text-align: center; }
   .online-row .mode-panel.compact { flex: 1 1 0; min-width: 220px; }
 </style>

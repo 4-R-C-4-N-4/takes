@@ -1,0 +1,4 @@
+/* Dev/dynamic build: load every unicode subset the fonts ship (fontsource default). */
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/hanken-grotesk';
+@import '@fontsource-variable/jetbrains-mono';
