@@ -22,10 +22,36 @@ function mirror(vectors: Vector[]): Vector[] {
  * mirror images into one entry by keeping the lexicographically smaller key.
  */
 export function canonicalKey(piece: Piece): string {
-  const vectors = expandPiece(piece, 'w');
+  const vectors = normaliseVectors(expandPiece(piece, 'w'));
   const own = vectorSetKey(vectors);
   const mirrored = vectorSetKey(mirror(vectors));
   return own <= mirrored ? own : mirrored;
+}
+
+/**
+ * Movement-equivalence normal form. Along one ray (same dx, dy, path) a longer range contains a
+ * shorter one, so only the maximum quiet range and the maximum capture range matter; `R + cW` moves
+ * exactly like `R`. Re-emit one vector per ray: 'both' when the two ranges agree, else a 'move' and/or
+ * a 'capture' vector. Without this, many keys describe the same piece.
+ */
+export function normaliseVectors(vectors: Vector[]): Vector[] {
+  const rays = new Map<string, { dx: number; dy: number; path: Vector['path']; mr: number; cr: number }>();
+  for (const v of vectors) {
+    const k = `${v.dx},${v.dy},${v.path}`;
+    const r = rays.get(k) ?? { dx: v.dx, dy: v.dy, path: v.path, mr: 0, cr: 0 };
+    if (v.mode !== 'capture') r.mr = Math.max(r.mr, v.range);
+    if (v.mode !== 'move') r.cr = Math.max(r.cr, v.range);
+    rays.set(k, r);
+  }
+  const out: Vector[] = [];
+  for (const r of rays.values()) {
+    if (r.mr === r.cr) out.push({ dx: r.dx, dy: r.dy, range: r.mr, path: r.path, mode: 'both' });
+    else {
+      if (r.mr > 0) out.push({ dx: r.dx, dy: r.dy, range: r.mr, path: r.path, mode: 'move' });
+      if (r.cr > 0) out.push({ dx: r.dx, dy: r.dy, range: r.cr, path: r.path, mode: 'capture' });
+    }
+  }
+  return out;
 }
 
 /**

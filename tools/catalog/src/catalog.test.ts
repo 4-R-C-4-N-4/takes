@@ -173,3 +173,15 @@ describe('tier and family assignment', () => {
     expect(families).toContain('slider');
   });
 });
+
+import { canonicalKey as ck } from './canonicalize.js';
+describe('movement-equivalence canonical key', () => {
+  it('R + cW and R + W have the same key as R (nested ranges along a ray)', () => {
+    const R = { vec: [0, 1] as [number, number], sym: 'all' as const, range: Infinity, path: 'slide' as const, mode: 'both' as const };
+    const mk = (components: any[]) => ({ id: 'x', name: 'x', glyph: 'Z', tier: 'rook' as const, components });
+    const rook = ck(mk([R]));
+    expect(ck(mk([R, { ...R, range: 1, mode: 'capture' }]))).toBe(rook);
+    expect(ck(mk([R, { ...R, range: 1 }]))).toBe(rook);
+    expect(ck(mk([{ ...R, mode: 'move' }, { ...R, range: 2, mode: 'capture' }]))).not.toBe(rook);
+  });
+});

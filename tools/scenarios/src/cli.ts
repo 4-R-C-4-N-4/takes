@@ -78,6 +78,23 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
 
   const timings: Array<{ id: string; stage: string; ms: number; games: number }> = [];
 
+  // Null controls: the replaced reference piece itself, injected as a CUSTOM piece. FSF plays custom
+  // pieces with auto-estimated values and without piece-specific eval terms, so even an identical piece
+  // can score below 0.5. Every candidate is judged against its slot's null score, not against 0.5.
+  const NULL_BETZA: Record<string, string> = { pawn: 'mfWcfF', minor: 'N', rook: 'R', major: 'RB' };
+  const nullScore: Record<string, number> = {};
+  const nullRows: string[] = [];
+  for (const tier of [...new Set(catalog.map((c) => c.tier))]) {
+    const ref = full.find((e) => e.betza === NULL_BETZA[tier]);
+    if (!ref) continue;
+    const settings = { ...DEFAULT_SETTINGS('C'), games: opts.stageCGames };
+    const out = await screenCandidate(ruleset, { ...ref, tier }, { ...settings, cacheDir: opts.cacheDir }, opts.workers);
+    nullScore[tier] = out.entry.metrics.score;
+    nullRows.push(`| ${tier} | ${ref.betza} | ${out.entry.metrics.games} | ${out.entry.metrics.score.toFixed(2)} [${out.entry.metrics.scoreCI.map((x) => x.toFixed(2)).join(', ')}] | ${out.entry.metrics.excluded} |`);
+    console.log(`[null] ${tier} (${ref.betza}): score ${out.entry.metrics.score.toFixed(3)}`);
+  }
+  const vsNull = (e: ScreenedEntry) => e.metrics.score - (nullScore[e.tier] ?? 0.5);
+
   // Stage B: every candidate.
   const stageB: ScreenedEntry[] = [];
   for (const entry of catalog) {
@@ -95,7 +112,8 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   for (const fam of families) {
     // Candidates with ANY excluded (parity) games are not rankable: their metrics come from a biased subset.
     const inFamily = stageB.filter((e) => e.families.includes(fam) && e.metrics.excluded === 0);
-    const ranked = rankByComposite(inFamily.map((e) => ({ id: e.piece.id, metrics: e.metrics })), opts.weights);
+    // Rank on strength relative to the slot's null control, so pawn- and rook-slot candidates compare fairly.
+    const ranked = rankByComposite(inFamily.map((e) => ({ id: e.piece.id, metrics: { ...e.metrics, score: 0.5 + vsNull(e) } })), opts.weights);
     const top = ranked.slice(0, opts.topK).map((r) => inFamily.find((e) => e.piece.id === r.id)!);
     topByFamily.set(fam, top);
   }
@@ -126,7 +144,12 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   writeFileSync(`${opts.outDir}/parity-failures.json`, JSON.stringify(parityFailures.map((e) => ({ betza: e.betza, key: e.key, excluded: e.metrics.excluded, games: e.metrics.games })), null, 2));
   const json = Object.fromEntries([...finalByFamily].map(([fam, entries]) => [fam, entries]));
   writeFileSync(`${opts.outDir}/shortlist.json`, JSON.stringify(json, null, 2));
-  writeFileSync(`${opts.outDir}/shortlist.md`, renderShortlistMd(finalByFamily, timings));
+  const nullMd = ['', '## Null controls (reference piece injected as a custom piece)', '', '| slot | betza | games | score [CI] | excluded |', '|---|---|---|---|---|', ...nullRows, '',
+    'Strength column to use: score minus the slot null score.', '',
+    '## Strength vs null control, all stage C candidates', '', '| family | betza | tier | score | null | delta |', '|---|---|---|---|---|---|',
+    ...[...finalByFamily].flatMap(([fam, es]) => es.map((e) => `| ${fam} | ${e.betza} | ${e.tier} | ${e.metrics.score.toFixed(2)} | ${(nullScore[e.tier] ?? 0.5).toFixed(2)} | ${vsNull(e) >= 0 ? '+' : ''}${vsNull(e).toFixed(2)} |`))].join('\n');
+  writeFileSync(`${opts.outDir}/shortlist.md`, renderShortlistMd(finalByFamily, timings) + nullMd + '\n');
+  writeFileSync(`${opts.outDir}/null-controls.json`, JSON.stringify(nullScore, null, 2));
   console.log(`wrote ${opts.outDir}/shortlist.json and shortlist.md`);
   console.log('timings:', JSON.stringify(timings));
 }

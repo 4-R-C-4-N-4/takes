@@ -8,8 +8,9 @@ import type { Family, StaticProfile } from './types.js';
 export function assignTier(piece: Piece, queenMobilityAvg: number, mobilityAvg: number): Tier {
   const asPawn: Piece = { ...piece, tier: 'pawn' };
   if (!hasErrors(validatePiece(asPawn))) return 'pawn';
-  if (isCastlingEligible(piece)) return 'rook';
+  // Major before rook: a queen-like piece is castling-eligible but belongs in the queen's slot.
   if (mobilityAvg >= 0.75 * queenMobilityAvg) return 'major';
+  if (isCastlingEligible(piece)) return 'rook';
   return 'minor';
 }
 

@@ -1,6 +1,7 @@
 /** Static profile computation [docs/catalog/PLAN.md step 3]. */
 import type { Piece, Ruleset, Vector } from '@takes/library';
 import { expandPiece, canMove, canCapture } from '@takes/library';
+import { normaliseVectors } from './canonicalize.js';
 import type { StaticProfile } from './types.js';
 
 const CENTER = [27, 28, 35, 36]; // d4,e4,d5,e5 (0-indexed, a1=0)
@@ -62,11 +63,11 @@ function vecKeySet(vectors: Vector[]): Set<string> {
 }
 
 export function nearestLibraryPiece(piece: Piece, ruleset: Ruleset): { id: string; distance: number } {
-  const mine = vecKeySet(expandPiece(piece, 'w'));
+  const mine = vecKeySet(normaliseVectors(expandPiece(piece, 'w')));
   let bestId = '';
   let bestDist = Infinity;
   for (const lp of Object.values(ruleset.pieces)) {
-    const theirs = vecKeySet(expandPiece(lp, 'w'));
+    const theirs = vecKeySet(normaliseVectors(expandPiece(lp, 'w')));
     const d = jaccardDistance(mine, theirs);
     if (d < bestDist) { bestDist = d; bestId = lp.id; }
   }
