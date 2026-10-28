@@ -167,10 +167,11 @@ export function validatePiece(p: Piece): Issue[] {
     issues.push(err('ROOK_CASTLING', `rook-tier piece '${p.id}' is not castling-eligible (needs an infinite unit slide covering l and r)`, [], { pieceId: p.id }));
   }
 
-  // FRONT_BACK_SYMMETRY [D19] (warning): a minor piece whose retreat differs from its advance is hard to
-  // read in play ("what does it guard behind it?"). Pawn tier is forward-only by definition.
-  if (p.tier === 'minor' && !isFrontBackSymmetric(p)) {
-    issues.push(warn('FRONT_BACK_SYMMETRY', `minor piece '${p.id}' moves differently forward and backward [D19]`, [], { pieceId: p.id }));
+  // SYMMETRY [D19] (warnings): every piece above pawn tier should be fully symmetric, so its safe and
+  // attacked squares read the same in every direction. Pawn tier is forward-only by definition.
+  if (p.tier !== 'pawn') {
+    if (!isFrontBackSymmetric(p)) issues.push(warn('FRONT_BACK_SYMMETRY', `${p.tier} piece '${p.id}' moves differently forward and backward [D19]`, [], { pieceId: p.id }));
+    if (!isLeftRightSymmetric(p)) issues.push(warn('LEFT_RIGHT_SYMMETRY', `${p.tier} piece '${p.id}' moves differently left and right [D19]`, [], { pieceId: p.id }));
   }
 
   // VALUE_BAND (warning only)
@@ -190,6 +191,14 @@ export function isFrontBackSymmetric(p: Piece): boolean {
   const vs = expandPiece(p, 'w');
   const set = new Set(vs.map((v) => key(v.dx, v.dy, v)));
   return vs.every((v) => set.has(key(v.dx, -v.dy + 0, v)));
+}
+
+/** True if the White move set equals its left/right mirror (dx -> -dx). */
+export function isLeftRightSymmetric(p: Piece): boolean {
+  const key = (dx: number, dy: number, v: { range: number; path: string; mode: string }) => `${dx},${dy},${v.range},${v.path},${v.mode}`;
+  const vs = expandPiece(p, 'w');
+  const set = new Set(vs.map((v) => key(v.dx, v.dy, v)));
+  return vs.every((v) => set.has(key(-v.dx + 0, v.dy, v)));
 }
 
 /** Ruleset validation: per-piece rules + cross-piece rules. */
