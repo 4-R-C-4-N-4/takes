@@ -10,6 +10,8 @@
   import { loadProfiles, addProfile, type StoredProfile } from '../lib/profiles.js';
   import { routeHref } from '../lib/router.js';
   import { idle, startDrag, moveDrag, tapSelect, consumeSelection, afterTapPlacement, cancel, type DragState, type DragSource } from '../lib/drag.js';
+  import { pieceLabel, type PieceLabel } from '../lib/pieceLabel.js';
+  import { KING_PIECE } from '../lib/king.js';
 
   let { profileId = undefined }: { profileId?: string | undefined } = $props();
 
@@ -89,11 +91,12 @@
     const id = selectedPaletteId ?? (selectedBoardCell !== null ? setup.ranks[Math.floor(selectedBoardCell / 8)]![selectedBoardCell % 8] : null);
     return id ? badgeFor(ruleset, id) : null;
   });
-  const selectedPreviewLabel = $derived.by(() => {
+  const selectedPreviewLabel = $derived.by((): PieceLabel | null => {
     const id = selectedPaletteId ?? (selectedBoardCell !== null ? setup.ranks[Math.floor(selectedBoardCell / 8)]![selectedBoardCell % 8] : null);
     if (!id) return null;
-    if (id === KING_ID) return 'King';
-    return ruleset.pieces[id]?.name ?? id;
+    if (id === KING_ID) return pieceLabel(KING_PIECE);
+    const piece = ruleset.pieces[id];
+    return piece ? pieceLabel(piece) : null;
   });
 
   function cellIndex(sq: number): [number, number] { return [Math.floor(sq / 8), sq % 8]; } // [rankIdx, file]
@@ -341,12 +344,13 @@
     </div>
 
     <aside class="palette-rail panel">
-      {#if selectedPreviewSvg}
+      {#if selectedPreviewSvg && selectedPreviewLabel}
         <div class="selection-preview">
           <PieceIcon svg={selectedPreviewSvg} size={40} />
-          <div>
+          <div class="selection-text">
             <span class="eyebrow">Selected</span>
-            <p>{selectedPreviewLabel}</p>
+            <p class:mono={selectedPreviewLabel.primaryIsNotation}>{selectedPreviewLabel.primary}</p>
+            {#if selectedPreviewLabel.secondary}<p class="nickname">{selectedPreviewLabel.secondary}</p>{/if}
           </div>
         </div>
         <div class="divider"></div>
@@ -357,15 +361,19 @@
           <span class="eyebrow">{tier}</span>
           <div class="tier-pieces">
             {#each Object.values(ruleset.pieces).filter((p) => p.tier === tier) as p (p.id)}
+              {@const label = pieceLabel(p)}
               <button
                 class="palette-piece"
                 class:selected={selectedPaletteId === p.id}
                 onclick={() => selectPalette(p.id)}
                 onpointerdown={(ev) => onPalettePointerDown(p.id, ev)}
-                title="{p.name} ({ruleset.costs[p.id]} pts)"
+                title="{label.primary} ({ruleset.costs[p.id]} pts)"
               >
                 <PieceIcon svg={artFor(ruleset, p.id)} size={28} />
-                <span class="piece-label">{p.name}</span>
+                <span class="piece-label-group">
+                  <span class="piece-label" class:mono={label.primaryIsNotation}>{label.primary}</span>
+                  {#if label.secondary}<span class="piece-nickname">{label.secondary}</span>{/if}
+                </span>
                 <span class="piece-cost num">{ruleset.costs[p.id]}</span>
               </button>
             {/each}
@@ -431,8 +439,11 @@
   .save-row input { flex: 1; min-width: 0; }
 
   .palette-rail { padding: var(--s-4); display: grid; gap: var(--s-4); align-content: start; position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; }
-  .selection-preview { display: flex; align-items: center; gap: var(--s-3); }
-  .selection-preview p { margin: 2px 0 0; font: 600 var(--fs-md)/1.2 var(--font-ui); }
+  .selection-preview { display: flex; align-items: center; gap: var(--s-3); min-width: 0; }
+  .selection-text { min-width: 0; }
+  .selection-text p { margin: 2px 0 0; font: 600 var(--fs-md)/1.2 var(--font-ui); overflow-wrap: anywhere; }
+  .selection-text p.mono { font-family: var(--font-mono); }
+  .selection-text p.nickname { margin-top: 1px; font: 500 var(--fs-xs)/1.2 var(--font-ui); color: var(--text-muted); }
 
   .tier-group { display: grid; gap: var(--s-2); }
   .tier-pieces { display: grid; gap: var(--s-1); }
@@ -445,7 +456,10 @@
   }
   .palette-piece:hover { background: var(--ink-3); }
   .palette-piece.selected { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 1px var(--accent) inset; }
-  .piece-label { flex: 1; text-align: left; font: 500 var(--fs-sm)/1.2 var(--font-ui); }
+  .piece-label-group { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0; }
+  .piece-label { text-align: left; font: 500 var(--fs-sm)/1.2 var(--font-ui); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .piece-label.mono { font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.01em; }
+  .piece-nickname { text-align: left; font-size: var(--fs-xxs, 11px); color: var(--text-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .piece-cost { font-size: var(--fs-xs); color: var(--text-faint); }
 
   .drag-ghost { position: fixed; pointer-events: none; transform: translate(-50%, -50%); opacity: 0.85; z-index: 50; }

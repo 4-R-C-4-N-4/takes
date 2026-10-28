@@ -2,6 +2,7 @@
   // Piece tile used in the Library grid: art, name, glyph + cost, tiny move badge.
   import type { Piece } from '@takes/library';
   import PieceIcon from '../PieceIcon.svelte';
+  import { pieceLabel } from '../../lib/pieceLabel.js';
 
   let {
     piece,
@@ -18,12 +19,15 @@
     selected?: boolean;
     onclick: () => void;
   } = $props();
+
+  const label = $derived(pieceLabel(piece));
 </script>
 
-<button class="piece-card" class:selected data-testid="piece-tile" {onclick}>
+<button class="piece-card" class:selected data-testid="piece-tile" title="{label.primary} ({cost} pts)" {onclick}>
   <PieceIcon svg={art} size={60} />
-  <span class="name">{piece.name}</span>
+  <span class="name" class:mono={label.primaryIsNotation}>{label.primary}</span>
   <span class="row meta">
+    {#if label.secondary}<span class="nickname">{label.secondary}</span>{/if}
     <span class="glyph mono">{piece.glyph}</span>
     <span class="num cost">{cost}</span>
   </span>
@@ -41,8 +45,10 @@
   .piece-card:hover { background: var(--ink-2); }
   .piece-card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
   .piece-card :global(.piece-icon) { grid-row: 1 / 3; flex-shrink: 0; }
-  .name { font-family: var(--font-display); font-size: var(--fs-md); font-weight: 560; }
-  .meta { gap: var(--s-2); color: var(--text-faint); font-size: var(--fs-xs); }
+  .name { font-family: var(--font-display); font-size: var(--fs-md); font-weight: 560; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .name.mono { font-family: var(--font-mono); font-size: var(--fs-sm); letter-spacing: 0.01em; }
+  .meta { gap: var(--s-2); color: var(--text-faint); font-size: var(--fs-xs); min-width: 0; }
+  .nickname { color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
   .glyph { color: var(--text-muted); }
   .badge { display: none; }
 </style>

@@ -5,6 +5,7 @@
   import { KING_PIECE } from '../lib/king.js';
   import PieceTile from './explore/PieceTile.svelte';
   import Inspector from './explore/Inspector.svelte';
+  import { pieceLabel } from '../lib/pieceLabel.js';
 
   const ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
   const pieces: Piece[] = [KING_PIECE, ...Object.values(ruleset.pieces)];
@@ -62,7 +63,13 @@
 
     <aside class="panel inspector-pane" class:empty={!selected}>
       {#if selected}
-        <Inspector piece={selected} art={artFor(ruleset, selected.id)} cost={costOf(selected)} cellSize={44} />
+        <Inspector
+          piece={selected}
+          art={artFor(ruleset, selected.id)}
+          cost={costOf(selected)}
+          cellSize={44}
+          title={pieceLabel(selected).primaryIsNotation ? pieceLabel(selected).primary : undefined}
+        />
       {:else}
         <p class="muted">Pick a piece to preview its moves and attacks.</p>
       {/if}

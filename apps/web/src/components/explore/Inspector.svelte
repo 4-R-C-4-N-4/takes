@@ -45,6 +45,7 @@
     <div class="stack tight">
       <h2 class:mono-title={title !== undefined}>{title ?? piece.name}</h2>
       <p class="muted meta">
+        {#if title !== undefined && title !== piece.name}<span class="nickname">{piece.name}</span>{/if}
         <span class="mono">{piece.glyph}</span>
         <span class="eyebrow tier">{piece.tier}</span>
         {#if cost !== undefined}<span class="num cost">{cost} pt{cost === 1 ? '' : 's'}</span>{/if}
@@ -78,7 +79,8 @@
   .head { align-items: center; min-width: 0; }
   .head h2 { overflow-wrap: anywhere; min-width: 0; }
   .head h2.mono-title { font-family: var(--font-mono); font-size: var(--fs-lg); font-weight: 600; }
-  .meta { display: flex; gap: var(--s-2); align-items: center; }
+  .meta { display: flex; gap: var(--s-2); align-items: center; flex-wrap: wrap; }
+  .nickname { color: var(--text-muted); }
   .cost { color: var(--text); font-weight: 600; }
   .legend { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; font-size: var(--fs-xs); margin-top: var(--s-1); }
   .key { display: inline-block; width: 11px; height: 11px; border-radius: var(--r-1); margin-right: 3px; vertical-align: middle; }

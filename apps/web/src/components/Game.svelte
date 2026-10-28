@@ -11,6 +11,7 @@
   import { wsUrl } from '../net/url.js';
   import { onDestroy } from 'svelte';
   import { routeHref } from '../lib/router.js';
+  import { pieceLabel } from '../lib/pieceLabel.js';
 
   export let gameParam: string | undefined = undefined;
 
@@ -270,8 +271,19 @@
     return '';
   }
 
-  function capturedIcons(ids: string[]): { svg: string; id: string }[] {
-    return ids.map((id) => ({ svg: artFor(ruleset, id), id }));
+  function capturedIcons(ids: string[]): { svg: string; id: string; title: string }[] {
+    return ids.map((id) => ({ svg: artFor(ruleset, id), id, title: titleFor(id) }));
+  }
+
+  function pieceById(id: string) {
+    return id === 'king' ? null : ruleset.pieces[id];
+  }
+
+  function titleFor(id: string): string {
+    const p = pieceById(id);
+    if (!p) return id;
+    const label = pieceLabel(p);
+    return label.secondary ? `${label.primary} · ${label.secondary}` : label.primary;
   }
 
   $: status = game?.status();
@@ -315,7 +327,7 @@
           <span class="eyebrow side">{topColor === 'w' ? 'White' : 'Black'}</span>
           <span class="num diff" class:neg={materialDiff(topColor) < 0} class:pos={materialDiff(topColor) > 0}>{materialDiff(topColor) > 0 ? `+${materialDiff(topColor)}` : ''}</span>
           <div class="tray" aria-label="Pieces {topColor === 'w' ? 'White' : 'Black'} has captured">
-            {#each capturedIcons(captured[topColor === 'w' ? 'b' : 'w']) as p, i (i)}<PieceIcon svg={p.svg} color={topColor === 'w' ? 'b' : 'w'} size={18} />{/each}
+            {#each capturedIcons(captured[topColor === 'w' ? 'b' : 'w']) as p, i (i)}<span title={p.title}><PieceIcon svg={p.svg} color={topColor === 'w' ? 'b' : 'w'} size={18} /></span>{/each}
           </div>
         </div>
 
@@ -328,8 +340,9 @@
               <p class="eyebrow">Promote to</p>
               <div class="row">
                 {#each promoChoice.targets as t}
-                  <button class="btn promo-btn" onclick={() => choosePromo(t)} aria-label="Promote to {t}">
-                    <span class="mono">{t}</span>
+                  {@const tl = titleFor(t)}
+                  <button class="btn promo-btn" onclick={() => choosePromo(t)} aria-label="Promote to {tl}" title={tl}>
+                    <span class="mono">{pieceLabel(pieceById(t) ?? ruleset.pieces[t]!).primary.slice(0, 4)}</span>
                   </button>
                 {/each}
               </div>
@@ -343,7 +356,7 @@
           <span class="eyebrow side">{bottomColor === 'w' ? 'White' : 'Black'}</span>
           <span class="num diff" class:neg={materialDiff(bottomColor) < 0} class:pos={materialDiff(bottomColor) > 0}>{materialDiff(bottomColor) > 0 ? `+${materialDiff(bottomColor)}` : ''}</span>
           <div class="tray" aria-label="Pieces {bottomColor === 'w' ? 'White' : 'Black'} has captured">
-            {#each capturedIcons(captured[bottomColor === 'w' ? 'b' : 'w']) as p, i (i)}<PieceIcon svg={p.svg} color={bottomColor === 'w' ? 'b' : 'w'} size={18} />{/each}
+            {#each capturedIcons(captured[bottomColor === 'w' ? 'b' : 'w']) as p, i (i)}<span title={p.title}><PieceIcon svg={p.svg} color={bottomColor === 'w' ? 'b' : 'w'} size={18} /></span>{/each}
           </div>
         </div>
 
@@ -382,11 +395,11 @@
             <span class="num diff" class:neg={materialDiff('b') < 0} class:pos={materialDiff('b') > 0}>{materialDiff('b') > 0 ? `+${materialDiff('b')}` : materialDiff('b') || ''}</span>
           </div>
           <div class="tray" aria-label="Pieces Black has captured">
-            {#each capturedIcons(captured.w) as p, i (i)}<PieceIcon svg={p.svg} color="w" size={20} />{/each}
+            {#each capturedIcons(captured.w) as p, i (i)}<span title={p.title}><PieceIcon svg={p.svg} color="w" size={20} /></span>{/each}
           </div>
           <div class="divider"></div>
           <div class="tray" aria-label="Pieces White has captured">
-            {#each capturedIcons(captured.b) as p, i (i)}<PieceIcon svg={p.svg} color="b" size={20} />{/each}
+            {#each capturedIcons(captured.b) as p, i (i)}<span title={p.title}><PieceIcon svg={p.svg} color="b" size={20} /></span>{/each}
           </div>
           <div class="player" class:tomove={game.sideToMove() === 'w' && !effectiveResult}>
             <span class="dot" aria-hidden="true"></span>
