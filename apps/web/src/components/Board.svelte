@@ -1,7 +1,7 @@
 <script lang="ts">
   // Reusable SVG board: renders `ranks` x 8 squares. Used by Library preview, Builder and Game.
   import PieceIcon from './PieceIcon.svelte';
-  import { squareXY, isLight } from '../lib/board.js';
+  import { isLight } from '../lib/board.js';
 
   let {
     ranks = 8,
@@ -10,6 +10,7 @@
     pieces = new Map<number, { svg: string; color: 'w' | 'b' }>(),
     highlights = new Map<number, string>(),
     fileLabels = false,
+    coordinates = false,
     onSquareClick = undefined,
     onPieceDown = undefined,
   }: {
@@ -22,6 +23,8 @@
     highlights?: Map<number, string>;
     /** show a-h file letters under the board */
     fileLabels?: boolean;
+    /** show rank/file coordinates inside the edge squares (DESIGN.md board spec) */
+    coordinates?: boolean;
     onSquareClick?: ((sq: number) => void) | undefined;
     onPieceDown?: ((sq: number, ev: PointerEvent) => void) | undefined;
   } = $props();
@@ -50,9 +53,15 @@
       onSquareClick?.(sq);
     }
   }
+
+  // Edge squares: bottom row gets file letters, left column gets rank numbers.
+  function isBottomRow(sq: number, ranks: number, flipped: boolean): boolean {
+    const r = Math.floor(sq / 8);
+    return flipped ? r === ranks - 1 : r === 0;
+  }
 </script>
 
-<div class="board-shell" data-board-root style="--cell:{cellSize}px">
+<div class="board-shell" data-board-root style="--cell:{cellSize}px; --cols:8; --ranks:{ranks}">
   <svg viewBox="0 0 {width} {height}" width={width} height={height} class="board" role="img" aria-label="board">
     {#each squareList as sq (sq)}
       {@const p = xy(sq, ranks, flipped, cellSize)}
@@ -70,8 +79,22 @@
         onkeydown={(ev) => onKey(sq, ev)}
       />
       {#if highlights.has(sq)}
-        <rect x={p.x} y={p.y} width={cellSize} height={cellSize} class="highlight {highlights.get(sq)}" />
+        {@const h = highlights.get(sq)!}
+        <rect x={p.x} y={p.y} width={cellSize} height={cellSize} class="highlight {h}" />
+        {#if h === 'quiet' || h === 'both'}
+          <circle class="mark-dot" cx={p.x + cellSize / 2} cy={p.y + cellSize / 2} r={cellSize * 0.14} />
+        {/if}
+        {#if h === 'capture' || h === 'both'}
+          <circle class="mark-ring" cx={p.x + cellSize / 2} cy={p.y + cellSize / 2} r={cellSize * 0.42} />
+        {/if}
       {/if}
+      {#if coordinates && isBottomRow(sq, ranks, flipped)}
+        <text class="coord file" x={p.x + cellSize - 4} y={p.y + cellSize - 4}>{'abcdefgh'[sq % 8]}</text>
+      {/if}
+    {/each}
+    {#each squareList.filter((sq) => (flipped ? sq % 8 === 7 : sq % 8 === 0)) as sq}
+      {@const p = xy(sq, ranks, flipped, cellSize)}
+      <text class="rank-label" x={p.x + 3} y={p.y + 12} fill={isLight(sq) ? 'oklch(30% 0.02 60 / 0.65)' : 'oklch(96% 0.012 90 / 0.8)'}>{Math.floor(sq / 8) + 1}</text>
     {/each}
     {#each squareList as sq (sq)}
       {@const p = xy(sq, ranks, flipped, cellSize)}
@@ -88,14 +111,10 @@
             onclick={() => onSquareClick?.(sq)}
             onkeydown={(ev) => onKey(sq, ev)}
           >
-            <PieceIcon svg={piece.svg} color={piece.color} size={cellSize} />
+            <PieceIcon svg={piece.svg} color={piece.color} size={cellSize * 0.84} />
           </div>
         </foreignObject>
       {/if}
-    {/each}
-    {#each squareList.filter((sq) => (flipped ? sq % 8 === 7 : sq % 8 === 0)) as sq}
-      {@const p = xy(sq, ranks, flipped, cellSize)}
-      <text class="rank-label" x={p.x + 3} y={p.y + 12} fill={isLight(sq) ? '#302b22' : '#fff'}>{Math.floor(sq / 8) + 1}</text>
     {/each}
   </svg>
   {#if fileLabels}
@@ -109,23 +128,45 @@
 </div>
 
 <style>
-  .rank-label { pointer-events: none; font-size: 11px; font-weight: bold; }
   .board-shell { display: inline-block; max-width: 100%; }
-  .board { touch-action: none; max-width: 100%; height: auto; display: block; }
-  .square.light { fill: #e9e3d3; }
-  .square.dark { fill: #7a6a52; }
-  .square:focus-visible { outline: 3px solid #6ab0f3; outline-offset: -2px; }
+  .board {
+    touch-action: none; width: 100%; max-width: calc(var(--cell) * 8); height: auto; display: block;
+    border-radius: var(--r-3); box-shadow: var(--shadow-2);
+  }
+  .square.light { fill: var(--sq-light); }
+  .square.dark { fill: var(--sq-dark); }
+  .square { cursor: pointer; }
+  .square:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+
   .highlight { pointer-events: none; }
-  .highlight.quiet { fill: rgba(70, 150, 230, 0.4); }
-  .highlight.capture { fill: rgba(220, 70, 70, 0.45); }
-  .highlight.both { fill: rgba(160, 90, 220, 0.5); }
-  .highlight.select { fill: rgba(240, 220, 90, 0.5); }
-  .highlight.lastmove { fill: rgba(240, 220, 90, 0.3); }
-  .highlight.error { fill: rgba(220, 40, 40, 0.5); }
-  .highlight.warning { fill: rgba(230, 170, 40, 0.5); }
-  .highlight.check { fill: rgba(255, 0, 0, 0.6); }
-  .piece-cell { width: 100%; height: 100%; cursor: pointer; }
-  .piece-cell:focus-visible { outline: 2px solid #6ab0f3; }
-  .file-row { display: flex; }
-  .file-label { text-align: center; font-size: 11px; opacity: 0.6; }
+  .highlight.select { fill: var(--mark-select); }
+  .highlight.lastmove { fill: var(--mark-last); }
+  .highlight.error { fill: var(--mark-error); }
+  .highlight.warning { fill: var(--mark-warning); }
+  .highlight.check { fill: var(--mark-check); }
+  /* quiet/capture/both are drawn via the dot/ring marks below; keep a very faint tint so the
+     highlighted square remains detectable even without the mark (e.g. in automated checks). */
+  .highlight.quiet, .highlight.capture, .highlight.both { fill: transparent; }
+
+  .mark-dot { fill: var(--mark-move); pointer-events: none; }
+  .mark-ring {
+    fill: none; stroke: var(--mark-capture); stroke-width: calc(var(--cell) * 0.07); pointer-events: none;
+  }
+
+  .coord { pointer-events: none; font-family: var(--font-ui); font-weight: 600; font-size: calc(var(--cell) * 0.22); }
+  .coord.file { text-anchor: end; fill: color-mix(in oklch, var(--sq-light) 0%, var(--sq-dark) 0%); }
+  /* Coordinate colour follows the square it sits on, computed per-square via currentColor trick isn't
+     practical in SVG text fill from CSS alone, so use a contrast-safe neutral that reads on both. */
+  .coord { fill: oklch(40% 0.02 60 / 0.65); }
+
+  .piece-cell {
+    width: 100%; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: transform var(--t-fast) var(--ease);
+  }
+  .piece-cell:hover { transform: scale(1.04); }
+  .piece-cell:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: var(--r-1); }
+  @media (prefers-reduced-motion: reduce) { .piece-cell { transition: none; } .piece-cell:hover { transform: none; } }
+
+  .file-row { display: flex; margin-top: var(--s-1); }
+  .file-label { text-align: center; font-size: var(--fs-xs); color: var(--text-faint); font-weight: 600; }
 </style>
