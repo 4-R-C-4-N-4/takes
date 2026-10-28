@@ -19,7 +19,9 @@
     "@takes/engine": "workspace:*",
     "@takes/library": "workspace:*",
     "@takes/protocol": "workspace:*",
-    "@takes/validator": "workspace:*"
+    "@takes/room": "workspace:*",
+    "@takes/validator": "workspace:*",
+    "trystero": "0.26"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.1",

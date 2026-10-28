@@ -3,6 +3,7 @@
   import { cpuColorFor } from '../lib/sides.js';
   import { routeHref } from '../lib/router.js';
   import { isStatic } from '../lib/target.js';
+  import { generateP2PCode } from '../net/p2p-session.js';
   import { BOT_LEVELS, type BotLevel } from '@takes/protocol';
   import { CURRENT_RULESET_VERSION, getRuleset, parseSetup, setupCost, type Color } from '@takes/library';
   import { createGame } from '@takes/engine';
@@ -43,6 +44,8 @@
   let joinCode = '';
   let inviteColor: Color | 'random' = 'random';
   let botLevel: BotLevel = 'easy';
+  let p2pColor: Color = 'w';
+  let p2pJoinCode = '';
 
   /** In-browser sparring CPU difficulty (easy/medium/hard), independent of the server bot levels. */
   let cpuLevel: SparringLevel = 'easy';
@@ -91,6 +94,24 @@
 
   function joinByCode(): void {
     const code = joinCode.trim().toUpperCase();
+    if (!code) return;
+    location.hash = routeHref('join', code);
+  }
+
+  // ---- P2P (static build): create a fresh invite code and jump straight to the game route;
+  // Game.svelte does the actual joinTrysteroLink()+HostSession work on mount. ----
+  function createP2PGame(): void {
+    const army = profiles.find((p) => p.id === armyId);
+    if (!army) return;
+    const code = generateP2PCode();
+    try {
+      sessionStorage.setItem(`takes.p2p.pending.${code}`, JSON.stringify({ kind: 'host', setup: army.setup, color: p2pColor }));
+    } catch { /* ignore */ }
+    location.hash = routeHref('game', `p2p-${code}`);
+  }
+
+  function joinP2PByCode(): void {
+    const code = p2pJoinCode.trim().toUpperCase();
     if (!code) return;
     location.hash = routeHref('join', code);
   }
@@ -168,9 +189,22 @@
 
         <div class="row online-row">
           {#if isStatic}
-          <section class="stack panel mode-panel compact online-placeholder">
-            <h3>Online play</h3>
-            <p class="muted sm">Coming soon — play a friend over the network, no server in between.</p>
+          <section class="stack panel mode-panel compact p2p-panel">
+            <h3>Play a friend online</h3>
+            <p class="muted sm">Share a link; moves go directly between your browsers.</p>
+            <div class="field">
+              <label for="p2p-color">Your colour</label>
+              <select id="p2p-color" class="select sm" bind:value={p2pColor} disabled>
+                <option value="w">White</option>
+              </select>
+            </div>
+            <button class="btn sm" onclick={createP2PGame}>Create game</button>
+            <div class="divider"></div>
+            <div class="row">
+              <input class="input mono sm" placeholder="Invite code" bind:value={p2pJoinCode} aria-label="Invite code" />
+              <button class="btn sm" onclick={joinP2PByCode}>Join</button>
+            </div>
+            <p class="muted xs">Online play finds your opponent through public relays; moves go directly between your browsers.</p>
           </section>
           {:else}
           <section class="stack panel mode-panel compact">
@@ -232,6 +266,6 @@
   .server-bot-row .field label { font-size: var(--fs-xs); }
 
   .online-row { align-items: stretch; }
-  .online-placeholder { flex: 1 1 0; opacity: 0.7; justify-content: center; align-items: center; text-align: center; }
   .online-row .mode-panel.compact { flex: 1 1 0; min-width: 220px; }
+  .muted.xs { font-size: var(--fs-xs); color: var(--text-faint); }
 </style>

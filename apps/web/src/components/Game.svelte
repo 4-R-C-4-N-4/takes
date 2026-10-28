@@ -10,13 +10,19 @@
   import { OnlineGameController, type OnlineSnapshot, type Intent } from '../net/online-game.js';
   import { loadToken } from '../net/client.js';
   import { wsUrl } from '../net/url.js';
+  import {
+    createHostSession, createGuestSession, resumeP2PSession, buildResumeSnapshot, hasStoredP2PSession,
+    type P2PHandle, type P2PStatus,
+  } from '../net/p2p-session.js';
   import { onDestroy } from 'svelte';
   import { routeHref } from '../lib/router.js';
   import { pieceLabel } from '../lib/pieceLabel.js';
 
   export let gameParam: string | undefined = undefined;
 
-  const isOnline = gameParam?.startsWith('online-') ?? false;
+  const isServerOnline = gameParam?.startsWith('online-') ?? false;
+  const isP2P = gameParam?.startsWith('p2p-') ?? false;
+  const isOnline = isServerOnline || isP2P;
   let ruleset = getRuleset(CURRENT_RULESET_VERSION)!;
 
   // ---------- Hotseat (local) mode ----------
@@ -66,6 +72,15 @@
   let ctrl: OnlineGameController | null = null;
   let myColor: 'w' | 'b' | null = null;
   let renderTick = 0;
+  let p2pStatus: P2PStatus | null = null;
+  let p2pHandle: P2PHandle | null = null;
+  let showLeaveOption = false;
+  let leaveTimer: ReturnType<typeof setTimeout> | undefined;
+  /** startP2P() is async, so it can't call onDestroy() directly (Svelte requires that during
+   *  synchronous component init) — it stashes cleanup functions here instead, run from the
+   *  single top-level onDestroy() below. */
+  let p2pDisposed = false;
+  const p2pCleanups: Array<() => void> = [];
 
   function startOnline(): void {
     ctrl = new OnlineGameController({ url: wsUrl() });
@@ -73,7 +88,8 @@
       online = s;
       myColor = s.color;
       if (s.game) { game = s.game; }
-      if (s.lastMove) { lastMove = s.lastMove; recordMove(s.lastMove, game ? (game.sideToMove() === 'w' ? 'b' : 'w') : 'w'); }
+      if (s.lastMove && game && history.length < game.ply()) { lastMove = s.lastMove; recordMove(s.lastMove, game.sideToMove() === 'w' ? 'b' : 'w'); }
+      if (s.moves) history = [...s.moves];
       renderTick++;
       if (s.phase === 'playing' || s.phase === 'over') revealed = true;
       if (s.code && gameParam === 'online-new') {
@@ -105,8 +121,105 @@
     ctrl.start(intent);
   }
 
-  if (isOnline) startOnline();
-  onDestroy(() => ctrl?.close());
+  /** P2P (static build): the invite code never touches a server — the transport is a
+   *  HostSession/GuestSession loopback over a Trystero WebRTC link, joined here. */
+  async function startP2P(): Promise<void> {
+    const code = gameParam!.slice('p2p-'.length);
+    const pendingKey = `takes.p2p.pending.${code}`;
+    let handle: P2PHandle | null = null;
+    let intent: Intent;
+    try {
+      const pendingRaw = sessionStorage.getItem(pendingKey);
+      if (pendingRaw) {
+        sessionStorage.removeItem(pendingKey);
+        const pending = JSON.parse(pendingRaw) as { kind: 'host' | 'guest'; setup: string };
+        if (pending.kind === 'host') {
+          handle = await createHostSession({ code, ruleset: CURRENT_RULESET_VERSION, setup: pending.setup, forfeitMs: Infinity });
+          intent = { kind: 'p2p', code, color: 'w', ruleset: CURRENT_RULESET_VERSION, setup: pending.setup };
+        } else {
+          handle = await createGuestSession({ code, ruleset: CURRENT_RULESET_VERSION, setup: pending.setup });
+          intent = { kind: 'p2p', code, color: 'b', ruleset: CURRENT_RULESET_VERSION, setup: pending.setup };
+        }
+      } else if (hasStoredP2PSession(code)) {
+        handle = await resumeP2PSession({ code, ruleset: CURRENT_RULESET_VERSION });
+        const snap = buildResumeSnapshot(code, CURRENT_RULESET_VERSION);
+        if (!handle || !snap) {
+          handle?.close();
+          if (p2pDisposed) return;
+          online = blankOnlineSnapshot('Could not resume this game in this browser.');
+          return;
+        }
+        intent = {
+          kind: 'p2p', code, color: snap.color, ruleset: CURRENT_RULESET_VERSION, setup: snap.mySetup ?? '',
+          resumeSnapshot: { moves: snap.moves, mySetup: snap.mySetup, opponentReady: snap.opponentReady, game: snap.game, result: snap.result as OnlineSnapshot['result'], phase: snap.phase },
+        };
+      } else {
+        online = blankOnlineSnapshot('This invite link is no longer valid in this browser — ask your opponent for a new one.');
+        return;
+      }
+    } catch {
+      handle?.close();
+      if (p2pDisposed) return;
+      online = blankOnlineSnapshot('Could not connect to the relay network. Check your connection and try again.');
+      return;
+    }
+    if (p2pDisposed) { handle.close(); return; }
+    p2pHandle = handle;
+    p2pCleanups.push(() => handle.close());
+    const unsubStatus = handle.onStatus((s) => {
+      p2pStatus = s;
+      if (s === 'peer-left') {
+        clearTimeout(leaveTimer);
+        leaveTimer = setTimeout(() => { showLeaveOption = true; }, 120_000);
+      } else if (s === 'connected') {
+        showLeaveOption = false;
+        clearTimeout(leaveTimer);
+      }
+    });
+    p2pCleanups.push(unsubStatus, () => clearTimeout(leaveTimer));
+
+    ctrl = new OnlineGameController(handle.transport);
+    const unsub = ctrl.subscribe((s) => {
+      online = s;
+      myColor = s.color;
+      if (s.game) { game = s.game; }
+      if (s.lastMove && game && history.length < game.ply()) { lastMove = s.lastMove; recordMove(s.lastMove, game.sideToMove() === 'w' ? 'b' : 'w'); }
+      if (s.moves) history = [...s.moves];
+      renderTick++;
+      if (s.phase === 'playing' || s.phase === 'over') revealed = true;
+    });
+    p2pCleanups.push(unsub);
+    ctrl.start(intent);
+  }
+
+  function blankOnlineSnapshot(error: string): OnlineSnapshot {
+    return {
+      phase: 'over', code: null, color: null, ruleset: '', bot: null, mySetup: null,
+      opponentReady: false, setupIssues: null, game: null, lastMove: null, result: null,
+      drawOfferBy: null, opponentConnected: true, forfeitInMs: null, error,
+    };
+  }
+
+  function leaveGame(): void {
+    try { sessionStorage.setItem(`takes.p2p.abandoned.${gameParam}`, '1'); } catch { /* ignore */ }
+    location.hash = routeHref('lobby');
+  }
+
+  function p2pStatusMessage(status: P2PStatus | null): string | null {
+    switch (status) {
+      case 'connecting': return 'Connecting to relays…';
+      case 'could-not-connect': return "Couldn't connect to your opponent directly — some networks block this. Try a different network or device.";
+      case 'peer-left': return 'Opponent disconnected.';
+      default: return null;
+    }
+  }
+
+  if (isP2P) void startP2P().catch(() => {
+    p2pCleanups.splice(0).reverse().forEach(fn => fn());
+    if (!p2pDisposed) online = blankOnlineSnapshot('Could not initialize online play. Please reload.');
+  });
+  else if (isServerOnline) startOnline();
+  onDestroy(() => { p2pDisposed = true; ctrl?.close(); p2pCleanups.reverse().forEach((fn) => fn()); });
 
   function inviteLink(): string {
     return online?.code ? `${location.origin}${location.pathname}#/join/${online.code}` : '';
@@ -296,7 +409,7 @@
   }
 
   $: status = game?.status();
-  $: effectiveResult = resigned ? { result: resigned === 'w' ? '0-1' : '1-0', reason: `${resigned === 'w' ? 'White' : 'Black'} resigned` } : status && status.result !== '*' ? status : null;
+  $: effectiveResult = isOnline && online?.result ? online.result : resigned ? { result: resigned === 'w' ? '0-1' : '1-0', reason: `${resigned === 'w' ? 'White' : 'Black'} resigned` } : status && status.result !== '*' ? status : null;
   /** Visual top/bottom of the board, independent of whose rail row is listed where. */
   $: boardFlipped = isOnline ? myColor === 'b' : flipped;
   $: topColor = (boardFlipped ? 'w' : 'b') as 'w' | 'b';
@@ -304,7 +417,9 @@
 </script>
 
 <div class="page game-page">
-  {#if isOnline && online && online.phase !== 'playing' && online.phase !== 'over'}
+  {#if isOnline && !online}
+    <p class="muted reveal">Connecting to relays…</p>
+  {:else if isOnline && online && online.phase !== 'playing' && online.phase !== 'over'}
     <div class="panel waiting">
       <p class="eyebrow">Waiting for opponent</p>
       <h2>Invite sent</h2>
@@ -323,11 +438,27 @@
       {#if online.setupIssues}
         <p class="chip bad">Setup rejected: {online.setupIssues.map((i) => i.message).join('; ')}</p>
       {/if}
+      {#if isP2P && p2pStatusMessage(p2pStatus)}<p class="chip {p2pStatus === 'could-not-connect' ? 'bad' : 'warn'}">{p2pStatusMessage(p2pStatus)}</p>{/if}
+      {#if isP2P}<p class="muted sm">Online play finds your opponent through public relays; moves go directly between your browsers.</p>{/if}
       {#if online.error}<p class="chip bad">{online.error}</p>{/if}
     </div>
+  {:else if isOnline && online?.error && !game}
+    <p class="chip bad" role="alert">{online.error}</p>
   {:else if !revealed}
     <p class="muted reveal">Revealing setups…</p>
   {:else if game}
+    {#if isOnline && online?.error}
+      <div class="panel banner bad">
+        <p class="chip bad">{online.error}</p>
+        {#if online.error.includes('version')}<p class="muted sm">Both players should reload the page.</p>{/if}
+      </div>
+    {/if}
+    {#if isP2P && p2pStatus === 'peer-left'}
+      <div class="panel banner warn">
+        <p class="chip warn">Opponent disconnected.</p>
+        {#if showLeaveOption}<button class="btn sm ghost" onclick={leaveGame}>Leave game</button>{/if}
+      </div>
+    {/if}
     <div class="game-grid">
       <div class="board-col">
         <div class="player-bar top" class:tomove={game.sideToMove() === topColor && !effectiveResult}>
@@ -525,6 +656,8 @@
 
   .waiting { display: grid; gap: var(--s-3); max-width: 480px; }
   .waiting .input { max-width: 420px; }
+  .banner { margin-bottom: var(--s-3); display: flex; align-items: center; gap: var(--s-2); max-width: var(--content-max); }
+  .banner.bad { border-color: color-mix(in oklch, var(--bad) 45%, transparent); }
 
   .result-overlay {
     position: fixed; inset: 0; z-index: 30; display: grid; place-items: center;

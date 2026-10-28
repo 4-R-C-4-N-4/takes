@@ -6,6 +6,7 @@ import { createGame, type Game, type Move } from '@takes/engine';
 import type { BotLevel, ServerMsg, WireIssue, WireReason, WireResult } from '@takes/protocol';
 import type { Color } from '@takes/library';
 import { TakesClient, loadToken, type ClientOpts } from './client.js';
+import type { OnlineTransport } from './transport.js';
 
 export type Phase = 'connecting' | 'setup-wait' | 'playing' | 'over';
 
@@ -20,6 +21,7 @@ export interface OnlineSnapshot {
   setupIssues: WireIssue[] | null;
   game: Game | null;
   lastMove: Move | null;
+  moves?: string[];
   result: { result: WireResult; reason: WireReason } | null;
   drawOfferBy: Color | null;
   opponentConnected: boolean;
@@ -33,22 +35,29 @@ export interface CreateOpts { ruleset: string; color?: Color; bot?: BotLevel }
 export type Intent =
   | { kind: 'create'; opts: CreateOpts; setup: string }
   | { kind: 'join'; code: string; setup: string }
-  | { kind: 'resume'; code: string };
+  | { kind: 'resume'; code: string }
+  /** P2P (static build): the transport is already live (HostSession/GuestSession); no
+   *  create_room/join_room round trip — just record code/color/ruleset and submit the setup
+   *  (or, on resume, start from a pre-built snapshot instead of resubmitting it). */
+  | { kind: 'p2p'; code: string; color: Color; ruleset: string; setup: string; resumeSnapshot?: Partial<OnlineSnapshot> };
 
 export class OnlineGameController {
-  private client: TakesClient;
+  private client: OnlineTransport & { connect(code?: string): void };
   private snap: OnlineSnapshot;
   private readonly listeners = new Set<(s: OnlineSnapshot) => void>();
+  private readonly unsubMessage: () => void;
   private pendingSetup: string | null = null;
 
-  constructor(clientOpts: ClientOpts) {
-    this.client = new TakesClient(clientOpts);
+  /** Accepts either server-connection options (wraps a TakesClient) or an already-built
+   *  transport (P2P's HostSession/GuestSession loopback, wrapped with a no-op connect()). */
+  constructor(clientOrTransport: ClientOpts | (OnlineTransport & { connect(code?: string): void })) {
+    this.client = 'url' in clientOrTransport ? new TakesClient(clientOrTransport) : clientOrTransport;
     this.snap = {
       phase: 'connecting', code: null, color: null, ruleset: '', bot: null,
-      mySetup: null, opponentReady: false, setupIssues: null, game: null, lastMove: null,
+      mySetup: null, opponentReady: false, setupIssues: null, game: null, lastMove: null, moves: [],
       result: null, drawOfferBy: null, opponentConnected: true, forfeitInMs: null, error: null,
     };
-    this.client.onMessage((m) => this.handle(m));
+    this.unsubMessage = this.client.onMessage((m) => this.handle(m));
   }
 
   subscribe(fn: (s: OnlineSnapshot) => void): () => void {
@@ -66,6 +75,17 @@ export class OnlineGameController {
   start(intent: Intent): void {
     if (intent.kind === 'resume') {
       this.client.connect(intent.code);
+      return;
+    }
+    if (intent.kind === 'p2p') {
+      this.client.connect();
+      if (intent.resumeSnapshot) {
+        this.emit({ code: intent.code, color: intent.color, ruleset: intent.ruleset, ...intent.resumeSnapshot });
+      } else {
+        this.pendingSetup = intent.setup;
+        this.emit({ code: intent.code, color: intent.color, ruleset: intent.ruleset, phase: 'setup-wait' });
+        this.client.send({ t: 'submit_setup', setup: intent.setup });
+      }
       return;
     }
     this.pendingSetup = intent.setup;
@@ -92,7 +112,7 @@ export class OnlineGameController {
   offerDraw(): void { this.client.send({ t: 'offer_draw', ply: this.snap.game?.ply() ?? 0 }); }
   acceptDraw(): void { this.client.send({ t: 'accept_draw', ply: this.snap.game?.ply() ?? 0 }); }
 
-  close(): void { this.client.close(); }
+  close(): void { this.unsubMessage(); this.listeners.clear(); this.client.close(); }
 
   private handle(msg: ServerMsg): void {
     switch (msg.t) {
@@ -117,7 +137,7 @@ export class OnlineGameController {
         const rs = getRuleset(this.snap.ruleset);
         if (!rs) return;
         const game = createGame(rs, msg.setups.w, msg.setups.b);
-        this.emit({ phase: 'playing', game, lastMove: null });
+        this.emit({ phase: 'playing', game, lastMove: null, moves: [] });
         return;
       }
       case 'move_made': {
@@ -127,7 +147,7 @@ export class OnlineGameController {
         if (!move) return; // should not happen; server is authoritative and validated
         game.make(move);
         const status = game.status();
-        this.emit({ game, lastMove: move });
+        this.emit({ game, lastMove: move, moves: [...(this.snap.moves ?? []), msg.uci] });
         if (status.result !== '*') this.emit({ phase: 'over', result: { result: status.result, reason: status.reason ?? 'move-cap' } });
         return;
       }
@@ -159,7 +179,7 @@ export class OnlineGameController {
           code: s.code, color: s.you, ruleset: s.ruleset,
           phase: s.phase === 'setup' ? 'setup-wait' : s.phase === 'over' ? 'over' : 'playing',
           mySetup: s.setups[s.you] ?? null, opponentReady: !!s.setups[s.you === 'w' ? 'b' : 'w'],
-          game, drawOfferBy: s.drawOfferBy ?? null,
+          game, moves: [...s.moves], lastMove: null, drawOfferBy: s.drawOfferBy ?? null,
           result: s.result ?? null,
         });
         return;
