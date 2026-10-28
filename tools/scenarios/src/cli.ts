@@ -18,6 +18,9 @@ interface CliOptions {
   cacheDir: string;
   outDir: string;
   weights: CompositeWeights;
+  /** Stage A: stratified sample size per family (0 = all). */
+  samplePerFamily?: number;
+  seed?: number;
 }
 
 function parseArgs(argv: string[]): CliOptions {
@@ -32,6 +35,8 @@ function parseArgs(argv: string[]): CliOptions {
     else if (a === '--workers') opts.workers = Number(next());
     else if (a === '--cache-dir') opts.cacheDir = next();
     else if (a === '--out-dir') opts.outDir = next();
+    else if (a === '--sample-per-family') opts.samplePerFamily = Number(next());
+    else if (a === '--seed') opts.seed = Number(next());
   }
   return opts;
 }
@@ -48,7 +53,14 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   const opts = parseArgs(argv);
   const ruleset = getRuleset('2026.2');
   if (!ruleset) throw new Error("ruleset '2026.2' not found");
-  const catalog = await loadCatalog(opts);
+  const full = await loadCatalog(opts);
+  // Stage A: drop exact library duplicates, then take a stratified per-family sample (PLAN.md step 4).
+  let catalog = full.filter((e) => e.profile.nearestLibraryDistance > 0 || !opts.catalogPath);
+  if (opts.samplePerFamily) {
+    const { stratifiedSample } = await import('@takes/catalog');
+    catalog = stratifiedSample(catalog, opts.samplePerFamily, opts.seed ?? 42);
+  }
+  console.log(`[stage A] ${full.length} catalog entries -> ${catalog.length} candidates`);
 
   const timings: Array<{ id: string; stage: string; ms: number; games: number }> = [];
 
