@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { CURRENT_RULESET_VERSION, getRuleset, parseSetup, setupCost } from './index.js';
+import { getRuleset, parseSetup, setupCost } from './index.js';
 
 const r = getRuleset('2026.4')!;
 const prev = getRuleset('2026.3')!;
 
 describe('ruleset 2026.4', () => {
-  it('is current and keeps the 2026.3 roster and movement', () => {
-    expect(CURRENT_RULESET_VERSION).toBe('2026.4');
+  it('keeps the 2026.3 roster and movement', () => {
     expect(Object.keys(r.pieces).sort()).toEqual(Object.keys(prev.pieces).sort());
     for (const id of Object.keys(r.pieces)) expect(r.pieces[id]!.components, id).toEqual(prev.pieces[id]!.components);
   });

@@ -26,7 +26,7 @@ describe('D19 full symmetry above pawn tier', () => {
     expect(isFrontBackSymmetric(lopsided)).toBe(false);
   });
   it('2026.3 and 2026.4 have no D19 warnings at all (Lancer is gone)', () => {
-    for (const v of ['2026.3', '2026.4']) expect(validateRuleset(getRuleset(v)!), v).toEqual([]);
+    for (const v of ['2026.3', '2026.4', '2026.5']) expect(validateRuleset(getRuleset(v)!), v).toEqual([]);
   });
   it('never applies to pawn-tier pieces and keeps the ruleset error-free', () => {
     expect(validatePiece(r.pieces.pawn!).some((i) => i.code === 'FRONT_BACK_SYMMETRY')).toBe(false);

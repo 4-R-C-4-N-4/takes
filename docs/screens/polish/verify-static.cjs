@@ -142,7 +142,7 @@ function serve() {
       await click(page.getByLabel('Opponent', { exact: true }));
       await page.selectOption('#cpu-side', 'w');
       await click(page.locator('#cpu-level button', { hasText: 'Easy' }));
-      await page.selectOption('#cpu-army', '2026.4:R{halo}B1KB{jester}R/PPPPPPPP/8');
+      await page.selectOption('#cpu-army', '2026.5:R{halo}B1KB{jester}R/PPPPPPPP/8');
       await click(page.getByRole('button', { name: 'Play', exact: true }));
       await page.locator('.piece-cell[data-sq="60"]').waitFor(); // both armies revealed
       assert.equal(JSON.parse(await page.evaluate(() => sessionStorage.getItem('takes.hotseat'))).cpu, 'b');
@@ -240,14 +240,14 @@ function serve() {
       await page.reload();
       await page.getByRole('heading', { name: 'Armies', exact: true }).waitFor();
       let saved = await page.evaluate(() => JSON.parse(localStorage.getItem('takes.profiles')));
-      assert.equal(saved.find((p) => p.id === 'old_ok').setup, '2026.4:R{halo}B1KB{jester}R/PPPPPPPP/8', `${name}: legal old army not auto-updated`);
+      assert.equal(saved.find((p) => p.id === 'old_ok').setup, '2026.5:R{halo}B1KB{jester}R/PPPPPPPP/8', `${name}: legal old army not auto-updated`);
       assert.equal(saved.find((p) => p.id === 'old_bad').setup, '2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8');
       const countBefore = saved.length;
-      assert(await page.getByText('Not legal in 2026.4', { exact: false }).count() > 0, `${name}: no reason for the illegal old army`);
+      assert(await page.getByText('Not legal in 2026.5', { exact: false }).count() > 0, `${name}: no reason for the illegal old army`);
       await noOverflow();
       await click(page.getByRole('link', { name: 'Edit it to fix', exact: true }));
       await page.getByRole('heading', { name: 'Builder', exact: true }).waitFor();
-      await page.getByText('Built for 2026.3; saving updates it to 2026.4.', { exact: true }).waitFor();
+      await page.getByText('Built for 2026.3; saving updates it to 2026.5.', { exact: true }).waitFor();
       assert.equal(await page.locator('.budget').textContent(), 'Cost: 44 / 39');
       // Remove the Impact on b1 (a real pointer drag off the board), which brings the army to 39.
       const impact = page.locator('.piece-cell[data-sq="1"]');
@@ -263,8 +263,8 @@ function serve() {
       await page.getByRole('heading', { name: 'Armies', exact: true }).waitFor();
       saved = await page.evaluate(() => JSON.parse(localStorage.getItem('takes.profiles')));
       assert.equal(saved.length, countBefore, `${name}: saving an edited army added a copy`);
-      assert.equal(saved.find((p) => p.id === 'old_bad').setup, '2026.4:R1B{bane}KB1R/PPPPPPPP/8', `${name}: fixed army not saved as current`);
-      assert.equal(await page.getByText('Not legal in 2026.4', { exact: false }).count(), 0);
+      assert.equal(saved.find((p) => p.id === 'old_bad').setup, '2026.5:R1B{bane}KB1R/PPPPPPPP/8', `${name}: fixed army not saved as current`);
+      assert.equal(await page.getByText('Not legal in 2026.5', { exact: false }).count(), 0);
 
       // Builder palette: Coroner (capped at one) is listed with the Queen in the major tier.
       await click(page.getByRole('link', { name: 'Builder', exact: true }));

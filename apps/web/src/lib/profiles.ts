@@ -92,11 +92,11 @@ export function profileNeedsReview(p: StoredProfile): boolean {
 }
 
 export const SEED_PROFILES: Array<{ name: string; setup: string }> = [
-  { name: 'Vanilla', setup: '2026.4:RNBQKBNR/PPPPPPPP/8' },
-  { name: 'Leaper Court', setup: '2026.4:R{halo}B1KB{jester}R/PPPPPPPP/8' },
-  { name: 'Hierophant', setup: '2026.4:R{scarab}B{hierophant}KB{seal}1/PPPPPPPP/8' },
-  { name: 'Bane', setup: '2026.4:R1B{bane}KB1R/PPPPPPPP/8' },
-  { name: 'Triton Push', setup: '2026.4:R{octopus}B1KB{turtle}R/PPP{triton}{triton}PPP/8' },
+  { name: 'Vanilla', setup: '2026.5:RNBQKBNR/PPPPPPPP/8' },
+  { name: 'Leaper Court', setup: '2026.5:R{halo}B1KB{jester}R/PPPPPPPP/8' },
+  { name: 'Hierophant', setup: '2026.5:R{scarab}B{hierophant}KB{seal}1/PPPPPPPP/8' },
+  { name: 'Bane', setup: '2026.5:R1B{bane}KB1R/PPPPPPPP/8' },
+  { name: 'Triton Push', setup: '2026.5:R{octopus}B1KB{turtle}R/PPP{triton}{triton}PPP/8' },
 ];
 
 /** Seed sample profiles into localStorage on first run only (empty store). */

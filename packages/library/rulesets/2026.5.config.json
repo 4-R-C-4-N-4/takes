@@ -1,0 +1,48 @@
+{
+  "version": "2026.5",
+  "costs": {
+    "pawn": 1,
+    "knight": 3,
+    "bishop": 3,
+    "rook": 5,
+    "queen": 9,
+    "triton": 2.5,
+    "coroner": 7,
+    "bullseye": 6,
+    "sai": 2,
+    "impact": 5,
+    "worm": 2,
+    "octopus": 5,
+    "scarab": 5,
+    "vine": 2,
+    "seal": 5,
+    "rose": 1.5,
+    "bane": 15,
+    "halo": 4,
+    "jester": 4,
+    "azazel": 6,
+    "turtle": 3,
+    "broom": 1,
+    "hierophant": 8,
+    "prince": 3,
+    "dancer": 2
+  },
+  "pool": 39,
+  "maxCount": {
+    "queen": 1,
+    "hierophant": 1,
+    "bane": 1,
+    "coroner": 1
+  },
+  "promotionMode": "own-set",
+  "promotionTargets": [
+    "queen",
+    "rook",
+    "bishop",
+    "knight"
+  ],
+  "promotionFallback": [
+    "queen"
+  ],
+  "maxPlies": 400
+}

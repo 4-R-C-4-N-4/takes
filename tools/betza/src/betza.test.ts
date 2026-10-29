@@ -74,7 +74,7 @@ function fen(pieces: Map<number, string>): string {
 
 const haveFsf = fsfPath() !== null;
 describe.skipIf(!haveFsf)('Betza round-trip vs Fairy-Stockfish (M5)', () => {
-  for (const rs of [getRuleset('2026.1')!, getRuleset('2026.2')!, getRuleset('2026.3')!, getRuleset('2026.4')!]) {
+  for (const rs of [getRuleset('2026.1')!, getRuleset('2026.2')!, getRuleset('2026.3')!, getRuleset('2026.4')!, getRuleset('2026.5')!]) {
   const testPieces = Object.values(rs.pieces).filter((p) => p.id !== 'pawn');
   for (const p of testPieces) {
     it(`${rs.version} ${p.id}: identical move sets from every square, every blocker ring`, () => {
