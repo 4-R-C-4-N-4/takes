@@ -142,7 +142,7 @@ function serve() {
       await click(page.getByLabel('Opponent', { exact: true }));
       await page.selectOption('#cpu-side', 'w');
       await click(page.locator('#cpu-level button', { hasText: 'Easy' }));
-      await page.selectOption('#cpu-army', '2026.3:R{halo}B1KB{jester}R/PPPPPPPP/8');
+      await page.selectOption('#cpu-army', '2026.4:R{halo}B1KB{jester}R/PPPPPPPP/8');
       await click(page.getByRole('button', { name: 'Play', exact: true }));
       await page.locator('.piece-cell[data-sq="60"]').waitFor(); // both armies revealed
       assert.equal(JSON.parse(await page.evaluate(() => sessionStorage.getItem('takes.hotseat'))).cpu, 'b');
@@ -227,6 +227,37 @@ function serve() {
         assert(box.x >= 0 && box.x + box.width <= vw, `${name}: armies menu off-screen (${box.x}..${box.x + box.width} of ${vw})`);
         await click(more);
       }
+
+      // Armies saved under an older ruleset: one tap moves legal ones to the current version;
+      // ones that broke the new rules (Bane now costs 15) explain why and stay as they were.
+      await page.evaluate(() => {
+        const list = JSON.parse(localStorage.getItem('takes.profiles') || '[]');
+        list.push({ id: 'old_ok', name: 'Old leapers', setup: '2026.3:R{halo}B1KB{jester}R/PPPPPPPP/8', createdAt: 1 });
+        list.push({ id: 'old_bad', name: 'Old bane', setup: '2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8', createdAt: 2 });
+        localStorage.setItem('takes.profiles', JSON.stringify(list));
+      });
+      await page.reload();
+      await page.getByRole('heading', { name: 'Armies', exact: true }).waitFor();
+      await page.getByText('1 army is from an older ruleset', { exact: false }).waitFor();
+      assert(await page.getByText('Not legal in 2026.4', { exact: false }).count() > 0, `${name}: no reason for the illegal old army`);
+      await click(page.getByRole('button', { name: 'Update it', exact: true }));
+      const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('takes.profiles')));
+      assert.equal(saved.find((p) => p.id === 'old_ok').setup, '2026.4:R{halo}B1KB{jester}R/PPPPPPPP/8');
+      assert.equal(saved.find((p) => p.id === 'old_bad').setup, '2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8');
+      assert.equal(await page.getByText('from an older ruleset', { exact: false }).count(), 0);
+      await noOverflow();
+
+      // Builder palette: Coroner (capped at one) is listed with the Queen in the major tier.
+      await click(page.getByRole('link', { name: 'Builder', exact: true }));
+      await page.getByRole('heading', { name: 'Builder', exact: true }).waitFor();
+      const groupOf = (title) => page.getByTitle(title, { exact: false }).first().evaluate((el) =>
+        (el.closest('.tier-group')?.querySelector(':scope > .eyebrow')?.textContent ?? '').trim().toLowerCase());
+      const queenGroup = await groupOf('Queen (9 pts)');
+      assert.equal(queenGroup, 'major');
+      assert.equal(await groupOf('BN (7 pts)'), queenGroup, `${name}: Coroner not grouped with the Queen`);
+      assert(await page.getByTitle('RBN (15 pts)', { exact: true }).count() > 0, `${name}: Bane should cost 15`);
+      // The king is the first palette entry: every army needs one.
+      assert.equal(await page.locator('.palette-piece').first().getAttribute('title'), 'King (0 pts)', `${name}: King not first in the palette`);
 
       assert.equal(offOriginRequests.length, 0, `${name}: cross-origin requests: ${offOriginRequests.join(', ')}`);
       assert.deepEqual(errors, [], `${name}: console/page errors: ${errors.join(' | ')}`);

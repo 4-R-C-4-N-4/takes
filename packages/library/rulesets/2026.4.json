@@ -1,0 +1,785 @@
+{
+  "version": "2026.4",
+  "pieces": {
+    "pawn": {
+      "id": "pawn",
+      "name": "Pawn",
+      "glyph": "P",
+      "tier": "pawn",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": [
+            "f"
+          ],
+          "range": 1,
+          "path": "slide",
+          "mode": "move"
+        },
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": [
+            "f"
+          ],
+          "range": 2,
+          "path": "slide",
+          "mode": "move",
+          "cond": "rank2"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": [
+            "fl",
+            "fr"
+          ],
+          "range": 1,
+          "path": "slide",
+          "mode": "capture"
+        }
+      ]
+    },
+    "knight": {
+      "id": "knight",
+      "name": "Knight",
+      "glyph": "N",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "bishop": {
+      "id": "bishop",
+      "name": "Bishop",
+      "glyph": "B",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "rook": {
+      "id": "rook",
+      "name": "Rook",
+      "glyph": "R",
+      "tier": "rook",
+      "components": [
+        {
+          "vec": [
+            1,
+            0
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "queen": {
+      "id": "queen",
+      "name": "Queen",
+      "glyph": "Q",
+      "tier": "major",
+      "components": [
+        {
+          "vec": [
+            1,
+            0
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "triton": {
+      "id": "triton",
+      "name": "Triton",
+      "glyph": "T",
+      "tier": "pawn",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": [
+            "f"
+          ],
+          "range": 3,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": [
+            "fl",
+            "fr"
+          ],
+          "range": 3,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "coroner": {
+      "id": "coroner",
+      "name": "Coroner",
+      "glyph": "C",
+      "tier": "major",
+      "components": [
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "bullseye": {
+      "id": "bullseye",
+      "name": "Bullseye",
+      "glyph": "Y",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": "all",
+          "range": 3,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "sai": {
+      "id": "sai",
+      "name": "Sai",
+      "glyph": "S",
+      "tier": "pawn",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": [
+            "f"
+          ],
+          "range": 3,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": [
+            "fl",
+            "fr"
+          ],
+          "range": 2,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "impact": {
+      "id": "impact",
+      "name": "Impact",
+      "glyph": "I",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": "all",
+          "range": 2,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "worm": {
+      "id": "worm",
+      "name": "Worm",
+      "glyph": "W",
+      "tier": "pawn",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": [
+            "f"
+          ],
+          "range": 2,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": [
+            "fl",
+            "fr"
+          ],
+          "range": 3,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "octopus": {
+      "id": "octopus",
+      "name": "Octopus",
+      "glyph": "O",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": "all",
+          "range": 3,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": 3,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "scarab": {
+      "id": "scarab",
+      "name": "Scarab",
+      "glyph": "X",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": 3,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "vine": {
+      "id": "vine",
+      "name": "Vine",
+      "glyph": "V",
+      "tier": "pawn",
+      "components": [
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": [
+            "fl",
+            "fr"
+          ],
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            2,
+            2
+          ],
+          "sym": [
+            "fl",
+            "fr"
+          ],
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "seal": {
+      "id": "seal",
+      "name": "Seal",
+      "glyph": "E",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": "all",
+          "range": 2,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "rose": {
+      "id": "rose",
+      "name": "Rose",
+      "glyph": "Z",
+      "tier": "pawn",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": [
+            "f"
+          ],
+          "range": 2,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": [
+            "fl",
+            "fr"
+          ],
+          "range": 2,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "bane": {
+      "id": "bane",
+      "name": "Bane",
+      "glyph": "G",
+      "tier": "major",
+      "components": [
+        {
+          "vec": [
+            1,
+            0
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "halo": {
+      "id": "halo",
+      "name": "Halo",
+      "glyph": "H",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            0,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "jester": {
+      "id": "jester",
+      "name": "Jester",
+      "glyph": "J",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            2,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "azazel": {
+      "id": "azazel",
+      "name": "Azazel",
+      "glyph": "A",
+      "tier": "rook",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            2,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "turtle": {
+      "id": "turtle",
+      "name": "Turtle",
+      "glyph": "U",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            0,
+            2
+          ],
+          "sym": [
+            "f",
+            "b"
+          ],
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "broom": {
+      "id": "broom",
+      "name": "Broom",
+      "glyph": "M",
+      "tier": "pawn",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": [
+            "f"
+          ],
+          "range": 1,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": [
+            "fl",
+            "fr"
+          ],
+          "range": 1,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "hierophant": {
+      "id": "hierophant",
+      "name": "Hierophant",
+      "glyph": "F",
+      "tier": "major",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": "all",
+          "range": null,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            2
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "leap",
+          "mode": "both"
+        }
+      ]
+    },
+    "prince": {
+      "id": "prince",
+      "name": "Prince",
+      "glyph": "L",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    },
+    "dancer": {
+      "id": "dancer",
+      "name": "Dancer",
+      "glyph": "D",
+      "tier": "minor",
+      "components": [
+        {
+          "vec": [
+            0,
+            1
+          ],
+          "sym": [
+            "f",
+            "b"
+          ],
+          "range": 1,
+          "path": "slide",
+          "mode": "both"
+        },
+        {
+          "vec": [
+            1,
+            1
+          ],
+          "sym": "all",
+          "range": 1,
+          "path": "slide",
+          "mode": "both"
+        }
+      ]
+    }
+  },
+  "costs": {
+    "pawn": 1,
+    "knight": 3,
+    "bishop": 3,
+    "rook": 5,
+    "queen": 9,
+    "triton": 3,
+    "coroner": 7,
+    "bullseye": 6,
+    "sai": 3,
+    "impact": 5,
+    "worm": 3,
+    "octopus": 5,
+    "scarab": 5,
+    "vine": 3,
+    "seal": 5,
+    "rose": 2,
+    "bane": 15,
+    "halo": 4,
+    "jester": 4,
+    "azazel": 6,
+    "turtle": 3,
+    "broom": 1,
+    "hierophant": 8,
+    "prince": 3,
+    "dancer": 2
+  },
+  "pool": 39,
+  "maxCount": {
+    "queen": 1,
+    "hierophant": 1,
+    "bane": 1,
+    "coroner": 1
+  },
+  "promotionMode": "own-set",
+  "promotionTargets": [
+    "queen",
+    "rook",
+    "bishop",
+    "knight"
+  ],
+  "promotionFallback": [
+    "queen"
+  ],
+  "maxPlies": 400
+}

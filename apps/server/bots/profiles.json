@@ -13,5 +13,10 @@
     "easy": "2026.3:RNBQKBNR/PPPPPPPP/8",
     "medium": "2026.3:R{halo}B1KB{jester}R/PPPPPPPP/8",
     "hard": "2026.3:R{scarab}B{hierophant}KB{seal}1/PPPPPPPP/8"
+  },
+  "2026.4": {
+    "easy": "2026.4:RNBQKBNR/PPPPPPPP/8",
+    "medium": "2026.4:R{halo}B1KB{jester}R/PPPPPPPP/8",
+    "hard": "2026.4:R{scarab}B{hierophant}KB{seal}1/PPPPPPPP/8"
   }
 }

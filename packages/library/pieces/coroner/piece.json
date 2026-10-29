@@ -2,7 +2,7 @@
   "id": "coroner",
   "name": "Coroner",
   "glyph": "C",
-  "tier": "minor",
+  "tier": "major",
   "components": [
     {
       "vec": [

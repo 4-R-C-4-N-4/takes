@@ -12,8 +12,8 @@ const DIST = path.join(__dirname, '..', '..', '..', 'apps', 'web', 'dist-static'
 const PORT = Number(process.env.STATIC_PORT || 43202);
 const BASE = `http://127.0.0.1:${PORT}/takes`;
 // White: Octopus (R3B3), Turtle (vDN) and two Tritons (fR3fB3) in front of the king; Black: vanilla.
-const WHITE = '2026.3:R{octopus}B1KB{turtle}R/PPP{triton}{triton}PPP/8';
-const BLACK = '2026.3:RNBQKBNR/PPPPPPPP/8';
+const WHITE = '2026.4:R{octopus}B1KB{turtle}R/PPP{triton}{triton}PPP/8';
+const BLACK = '2026.4:RNBQKBNR/PPPPPPPP/8';
 // Triton e2-e5, ...g7-g6 opens the diagonal: e5xh8 promotes (found by a seeded engine search).
 const LINE = 'e2e5,g7g6';
 

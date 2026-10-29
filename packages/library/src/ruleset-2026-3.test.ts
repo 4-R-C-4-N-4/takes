@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CURRENT_RULESET_VERSION, expandPiece, getRuleset, parseSetup, setupCost } from './index.js';
+import { expandPiece, getRuleset, parseSetup, setupCost } from './index.js';
 import verdicts from '../../../docs/catalog/verdicts.json' with { type: 'json' };
 
 const r = getRuleset('2026.3')!;
@@ -10,8 +10,7 @@ const key = (v: { dx: number; dy: number; range: number; path: string; mode: str
 describe('ruleset 2026.3', () => {
   const keepers = verdicts.filter((v) => v.verdict === 'keep');
 
-  it('is current: the five classics plus the 20 designer keepers, nothing else', () => {
-    expect(CURRENT_RULESET_VERSION).toBe('2026.3');
+  it('the five classics plus the 20 designer keepers, nothing else', () => {
     expect(keepers).toHaveLength(20);
     expect(Object.keys(r.pieces).sort()).toEqual([...CLASSICS, ...keepers.map((k) => k.name!.toLowerCase())].sort());
     for (const id of ['wraith', 'lancer', 'berolina', 'toad', 'heron', 'dragon']) expect(r.pieces[id], id).toBeUndefined();

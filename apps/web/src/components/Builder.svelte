@@ -381,6 +381,26 @@
         <div class="divider"></div>
       {/if}
 
+      <!-- Every army needs exactly one king, so it leads the palette. -->
+      <div class="tier-group">
+        <span class="eyebrow">king</span>
+        <div class="tier-pieces">
+          <div class="palette-row">
+          <button
+            class="palette-piece"
+            class:selected={selectedPaletteId === KING_ID}
+            onclick={() => selectPalette(KING_ID)}
+            onpointerdown={(ev) => onPalettePointerDown(KING_ID, ev)}
+            title="King (0 pts)"
+          >
+            <PieceIcon svg={artFor(ruleset, 'king')} size={28} />
+            <span class="piece-label">King</span>
+            <span class="piece-cost num">0</span>
+          </button>
+          <button class="btn ghost piece-info" aria-label="Moves of King" onclick={() => (sheetId = KING_ID)}>ⓘ</button>
+          </div>
+        </div>
+      </div>
       {#each tierOrder() as tier (tier)}
         <div class="tier-group">
           <span class="eyebrow">{tier}</span>
@@ -408,25 +428,6 @@
           </div>
         </div>
       {/each}
-      <div class="tier-group">
-        <span class="eyebrow">king</span>
-        <div class="tier-pieces">
-          <div class="palette-row">
-          <button
-            class="palette-piece"
-            class:selected={selectedPaletteId === KING_ID}
-            onclick={() => selectPalette(KING_ID)}
-            onpointerdown={(ev) => onPalettePointerDown(KING_ID, ev)}
-            title="King (0 pts)"
-          >
-            <PieceIcon svg={artFor(ruleset, 'king')} size={28} />
-            <span class="piece-label">King</span>
-            <span class="piece-cost num">0</span>
-          </button>
-          <button class="btn ghost piece-info" aria-label="Moves of King" onclick={() => (sheetId = KING_ID)}>ⓘ</button>
-          </div>
-        </div>
-      </div>
     </aside>
   </div>
 </div>

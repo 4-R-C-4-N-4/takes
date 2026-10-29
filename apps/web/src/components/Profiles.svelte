@@ -7,8 +7,10 @@
     duplicateProfile,
     deleteProfile,
     profileNeedsReview,
+    saveProfiles,
     type StoredProfile,
   } from '../lib/profiles.js';
+  import { upgradeSetup } from '../lib/upgradeArmy.js';
   import { routeHref } from '../lib/router.js';
   import { artFor } from '../lib/pieceArt.js';
   import PieceIcon from './PieceIcon.svelte';
@@ -49,6 +51,19 @@
     navigator.clipboard?.writeText(p.setup).catch(() => {});
   }
 
+  // Armies saved under an older ruleset: one tap moves them to the current version when they are
+  // still legal there; otherwise the reason is shown and Edit opens them in the Builder.
+  const upgradable = $derived(profiles.filter((p) => profileNeedsReview(p) && upgradeSetup(p.setup).ok));
+  function upgrade(ids: string[]): void {
+    const next = profiles.map((p) => {
+      if (!ids.includes(p.id)) return p;
+      const res = upgradeSetup(p.setup);
+      return res.ok ? { ...p, setup: res.setup } : p;
+    });
+    saveProfiles(next);
+    refresh(next);
+  }
+
   function remove(p: StoredProfile): void {
     if (confirm(`Delete "${p.name}"? This cannot be undone.`)) refresh(deleteProfile(p.id));
   }
@@ -77,6 +92,13 @@
     </div>
     <a class="btn primary" href={routeHref('builder')}>New army</a>
   </div>
+
+  {#if upgradable.length > 0}
+    <div class="panel upgrade-banner row">
+      <p>{upgradable.length} {upgradable.length === 1 ? 'army is' : 'armies are'} from an older ruleset and can move to {CURRENT_RULESET_VERSION} unchanged.</p>
+      <button class="btn sm" onclick={() => upgrade(upgradable.map((p) => p.id))}>Update {upgradable.length === 1 ? 'it' : 'all'}</button>
+    </div>
+  {/if}
 
   {#if profiles.length === 0}
     <div class="panel empty">
@@ -110,6 +132,14 @@
               <span class="chip {valid ? 'good' : 'bad'}">{valid ? 'valid' : 'invalid'}</span>
               {#if needsReview}<span class="chip warn">needs review</span>{/if}
             </div>
+            {#if needsReview}
+              {@const up = upgradeSetup(p.setup)}
+              <p class="faint review-note">
+                Built for {p.setup.split(':')[0]}.
+                {#if up.ok}<button class="link-btn" onclick={() => upgrade([p.id])}>Update to {CURRENT_RULESET_VERSION}</button>
+                {:else}Not legal in {CURRENT_RULESET_VERSION}: {up.reason} Edit it to fix.{/if}
+              </p>
+            {/if}
             <code class="mono faint setup-str">{p.setup}</code>
           </div>
           <div class="army-actions row">
@@ -179,6 +209,9 @@
     .overflow-panel { left: 0; right: auto; max-width: calc(100vw - 2 * var(--s-4)); }
   }
   .import-panel { padding: var(--s-4); }
+  .upgrade-banner { justify-content: space-between; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4); margin-bottom: var(--s-3); }
+  .review-note { font-size: var(--fs-xs); margin: 0; }
+  .link-btn { appearance: none; background: none; border: 0; padding: 0; color: var(--accent); font: inherit; text-decoration: underline; cursor: pointer; min-height: 24px; }
   .import-panel .row { flex-wrap: nowrap; }
   .import-panel input { flex: 1; }
 </style>
