@@ -1,5 +1,6 @@
 // Profile storage: localStorage 'takes.profiles', wrapped in try/catch [impl.md "Profile storage"].
 import { CURRENT_RULESET_VERSION } from '@takes/library';
+import { upgradeSetup } from './upgradeArmy.js';
 
 export interface StoredProfile {
   id: string;
@@ -46,6 +47,28 @@ export function renameProfile(id: string, name: string): StoredProfile[] {
   const profiles = loadProfiles().map((p) => (p.id === id ? { ...p, name } : p));
   saveProfiles(profiles);
   return profiles;
+}
+
+/** Save an edited army over the one it was opened from (same id), instead of adding a copy. */
+export function updateProfile(id: string, name: string, setup: string): StoredProfile[] {
+  const profiles = loadProfiles().map((p) => (p.id === id ? { ...p, name, setup } : p));
+  saveProfiles(profiles);
+  return profiles;
+}
+
+/** On startup, move every saved army that is still legal under the current ruleset to it. Armies
+ *  that a new version broke (over budget, removed pieces) keep their version and show for review. */
+export function autoUpgradeProfiles(): { profiles: StoredProfile[]; upgraded: number } {
+  let upgraded = 0;
+  const profiles = loadProfiles().map((p) => {
+    if (!profileNeedsReview(p)) return p;
+    const res = upgradeSetup(p.setup);
+    if (!res.ok) return p;
+    upgraded++;
+    return { ...p, setup: res.setup };
+  });
+  if (upgraded > 0) saveProfiles(profiles);
+  return { profiles, upgraded };
 }
 
 export function duplicateProfile(id: string): StoredProfile[] {

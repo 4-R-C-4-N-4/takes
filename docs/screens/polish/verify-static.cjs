@@ -228,8 +228,9 @@ function serve() {
         await click(more);
       }
 
-      // Armies saved under an older ruleset: one tap moves legal ones to the current version;
-      // ones that broke the new rules (Bane now costs 15) explain why and stay as they were.
+      // Armies saved under an older ruleset: legal ones move to the current version automatically;
+      // ones the new rules broke (Bane now costs 15) say why, open in the Builder under the current
+      // ruleset, and saving the fix overwrites the same army as current (no copy, no stale version).
       await page.evaluate(() => {
         const list = JSON.parse(localStorage.getItem('takes.profiles') || '[]');
         list.push({ id: 'old_ok', name: 'Old leapers', setup: '2026.3:R{halo}B1KB{jester}R/PPPPPPPP/8', createdAt: 1 });
@@ -238,14 +239,32 @@ function serve() {
       });
       await page.reload();
       await page.getByRole('heading', { name: 'Armies', exact: true }).waitFor();
-      await page.getByText('1 army is from an older ruleset', { exact: false }).waitFor();
-      assert(await page.getByText('Not legal in 2026.4', { exact: false }).count() > 0, `${name}: no reason for the illegal old army`);
-      await click(page.getByRole('button', { name: 'Update it', exact: true }));
-      const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('takes.profiles')));
-      assert.equal(saved.find((p) => p.id === 'old_ok').setup, '2026.4:R{halo}B1KB{jester}R/PPPPPPPP/8');
+      let saved = await page.evaluate(() => JSON.parse(localStorage.getItem('takes.profiles')));
+      assert.equal(saved.find((p) => p.id === 'old_ok').setup, '2026.4:R{halo}B1KB{jester}R/PPPPPPPP/8', `${name}: legal old army not auto-updated`);
       assert.equal(saved.find((p) => p.id === 'old_bad').setup, '2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8');
-      assert.equal(await page.getByText('from an older ruleset', { exact: false }).count(), 0);
+      const countBefore = saved.length;
+      assert(await page.getByText('Not legal in 2026.4', { exact: false }).count() > 0, `${name}: no reason for the illegal old army`);
       await noOverflow();
+      await click(page.getByRole('link', { name: 'Edit it to fix', exact: true }));
+      await page.getByRole('heading', { name: 'Builder', exact: true }).waitFor();
+      await page.getByText('Built for 2026.3; saving updates it to 2026.4.', { exact: true }).waitFor();
+      assert.equal(await page.locator('.budget').textContent(), 'Cost: 44 / 39');
+      // Remove the Impact on b1 (a real pointer drag off the board), which brings the army to 39.
+      const impact = page.locator('.piece-cell[data-sq="1"]');
+      await impact.scrollIntoViewIfNeeded();
+      const ib = await impact.boundingBox();
+      await page.mouse.move(ib.x + ib.width / 2, ib.y + ib.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(4, 4, { steps: 12 });
+      await page.mouse.up();
+      await page.locator('.piece-cell[data-sq="1"]').waitFor({ state: 'detached' });
+      assert.equal(await page.locator('.budget').textContent(), 'Cost: 39 / 39');
+      await click(page.getByRole('button', { name: 'Save profile', exact: true }));
+      await page.getByRole('heading', { name: 'Armies', exact: true }).waitFor();
+      saved = await page.evaluate(() => JSON.parse(localStorage.getItem('takes.profiles')));
+      assert.equal(saved.length, countBefore, `${name}: saving an edited army added a copy`);
+      assert.equal(saved.find((p) => p.id === 'old_bad').setup, '2026.4:R1B{bane}KB1R/PPPPPPPP/8', `${name}: fixed army not saved as current`);
+      assert.equal(await page.getByText('Not legal in 2026.4', { exact: false }).count(), 0);
 
       // Builder palette: Coroner (capped at one) is listed with the Queen in the major tier.
       await click(page.getByRole('link', { name: 'Builder', exact: true }));

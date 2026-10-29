@@ -8,7 +8,8 @@
   import PieceIcon from './PieceIcon.svelte';
   import { artFor, tierOrder, badgeFor } from '../lib/pieceArt.js';
   import { computeCastlingHints } from '../lib/castling.js';
-  import { loadProfiles, addProfile, type StoredProfile } from '../lib/profiles.js';
+  import { loadProfiles, addProfile, updateProfile, type StoredProfile } from '../lib/profiles.js';
+  import { openInCurrentRuleset } from '../lib/upgradeArmy.js';
   import { routeHref } from '../lib/router.js';
   import { paletteGesture, idle, startDrag, moveDrag, tapSelect, consumeSelection, afterTapPlacement, cancel, type DragState, type DragSource } from '../lib/drag.js';
   import { pieceLabel, type PieceLabel } from '../lib/pieceLabel.js';
@@ -36,16 +37,26 @@
     setup = emptySetup();
     saveName = existing?.name ?? '';
     drag = idle();
+    openedFrom = undefined;
     if (existing) {
-      try { setup = parseSetup(existing.setup); } catch { /* keep empty */ }
+      try { openSetup(parseSetup(existing.setup)); } catch { /* keep empty */ }
     } else {
       try {
         const draft = sessionStorage.getItem('takes.builder.draft');
         sessionStorage.removeItem('takes.builder.draft');
-        if (draft) setup = parseSetup(draft);
+        if (draft) openSetup(parseSetup(draft));
       } catch { /* keep empty */ }
     }
   });
+
+  /** Old-version armies (saved, pasted or imported) open re-versioned to the current ruleset, so
+   *  the issues shown are the current rules' and saving writes the current version. */
+  let openedFrom = $state<string | undefined>(undefined);
+  function openSetup(s: Setup): void {
+    const opened = openInCurrentRuleset(s);
+    setup = opened.setup;
+    openedFrom = opened.from;
+  }
 
   const setupText = $derived(serializeSetup(setup));
   const cost = $derived(setupCost(setup, ruleset));
@@ -240,7 +251,7 @@
 
   function onPasteSetup(): void {
     try {
-      setup = parseSetup(setupTextDraft);
+      openSetup(parseSetup(setupTextDraft));
     } catch (e) {
       alert(`Could not parse setup: ${(e as Error).message}`);
     }
@@ -256,7 +267,10 @@
 
   function save(): void {
     const name = saveName.trim() || `Profile ${new Date().toLocaleString()}`;
-    addProfile(name, setupText);
+    // Editing an existing army overwrites it; a new army (or a pasted draft) is added.
+    const existing = profileId ? loadProfiles().find((p: StoredProfile) => p.id === profileId) : undefined;
+    if (existing) updateProfile(existing.id, name, setupText);
+    else addProfile(name, setupText);
     location.hash = routeHref('profiles');
   }
 
@@ -311,6 +325,9 @@
       </div>
 
       <div class="budget-wrap">
+        {#if openedFrom}
+          <p class="chip warn version-note">Built for {openedFrom}; saving updates it to {CURRENT_RULESET_VERSION}.</p>
+        {/if}
         <div class="row budget-row">
           <p class="budget num" class:over={cost > ruleset.pool}>Cost: {cost} / {ruleset.pool}</p>
           {#if cost > ruleset.pool}<span class="chip bad">over budget</span>{/if}

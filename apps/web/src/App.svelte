@@ -12,9 +12,11 @@
   import Lobby from './components/Lobby.svelte';
   import Join from './components/Join.svelte';
   import Game from './components/Game.svelte';
-  import { seedIfEmpty } from './lib/profiles.js';
+  import { seedIfEmpty, autoUpgradeProfiles } from './lib/profiles.js';
 
   seedIfEmpty();
+  // Saved armies still legal under a newly published ruleset move to it without any prompt.
+  autoUpgradeProfiles();
   const NAV: Array<{ screen: Route['screen']; label: string; icon: string }> = [
     { screen: 'lobby', label: 'Play', icon: 'M8 5v14l11-7z' },
     { screen: 'builder', label: 'Builder', icon: 'M4 20h16M4 4h16v12H4zM4 10h16M10 4v12' },

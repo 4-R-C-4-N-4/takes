@@ -7,7 +7,10 @@ import {
   deleteProfile,
   seedIfEmpty,
   profileNeedsReview,
+  updateProfile,
+  autoUpgradeProfiles,
 } from '../profiles.js';
+import { CURRENT_RULESET_VERSION } from '@takes/library';
 
 // Minimal localStorage polyfill for node test environment.
 class MemoryStorage {
@@ -45,6 +48,30 @@ describe('profiles store', () => {
   it('flags profiles pinned to an old ruleset version as needing review', () => {
     const profiles = addProfile('Old', '1999.0:RNBQKBNR/PPPPPPPP/8');
     expect(profileNeedsReview(profiles[0]!)).toBe(true);
+  });
+
+  it('saving an edited army updates it in place instead of adding a copy', () => {
+    let profiles = addProfile('Mine', '2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8');
+    const id = profiles[0]!.id;
+    profiles = updateProfile(id, 'Mine v2', `${CURRENT_RULESET_VERSION}:R{impact}B{bane}KB2/PPPPPPPP/8`);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0]).toMatchObject({ id, name: 'Mine v2', setup: `${CURRENT_RULESET_VERSION}:R{impact}B{bane}KB2/PPPPPPPP/8` });
+    expect(loadProfiles()).toEqual(profiles);
+  });
+
+  it('automatically moves still-legal old armies to the current ruleset and leaves broken ones for review', () => {
+    addProfile('Leapers', '2026.3:R{halo}B1KB{jester}R/PPPPPPPP/8');
+    addProfile('Too rich', '2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8'); // over the pool once Bane costs 15
+    addProfile('Current', `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`);
+    const { profiles, upgraded } = autoUpgradeProfiles();
+    expect(upgraded).toBe(1);
+    expect(profiles.map((p) => p.setup)).toEqual([
+      `${CURRENT_RULESET_VERSION}:R{halo}B1KB{jester}R/PPPPPPPP/8`,
+      '2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8',
+      `${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`,
+    ]);
+    expect(loadProfiles()).toEqual(profiles);
+    expect(autoUpgradeProfiles().upgraded).toBe(0); // idempotent
   });
 
   it('survives a storage exception by returning an empty list', () => {

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { upgradeSetup } from './upgradeArmy.js';
+import { upgradeSetup, openInCurrentRuleset } from './upgradeArmy.js';
+import { CURRENT_RULESET_VERSION, parseSetup } from '@takes/library';
 
 describe('upgrading saved armies to the current ruleset', () => {
   it('re-versions an army that is still legal under the current ruleset', () => {
@@ -21,5 +22,14 @@ describe('upgrading saved armies to the current ruleset', () => {
 
   it('leaves current armies alone', () => {
     expect(upgradeSetup('2026.4:RNBQKBNR/PPPPPPPP/8')).toEqual({ ok: true, setup: '2026.4:RNBQKBNR/PPPPPPPP/8' });
+  });
+
+  it('opens an old army in the Builder under the current ruleset so it can be fixed and saved', () => {
+    const opened = openInCurrentRuleset(parseSetup('2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8'));
+    expect(opened.setup.version).toBe(CURRENT_RULESET_VERSION);
+    expect(opened.setup.ranks).toEqual(parseSetup('2026.3:R{impact}B{bane}KB1R/PPPPPPPP/8').ranks);
+    expect(opened.from).toBe('2026.3');
+    const current = openInCurrentRuleset(parseSetup(`${CURRENT_RULESET_VERSION}:RNBQKBNR/PPPPPPPP/8`));
+    expect(current.from).toBeUndefined();
   });
 });
