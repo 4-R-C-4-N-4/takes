@@ -168,6 +168,24 @@ function serve() {
       await page.waitForFunction(() => /\(2\)/.test(document.querySelector('.moves .eyebrow')?.textContent ?? '') &&
         /To move: White/.test(document.body.innerText), undefined, { timeout: 10000 });
       await noOverflow();
+      // Play again restarts the SAME match (same armies, colour, CPU) instead of going to the lobby.
+      const gameUrl = page.url();
+      await click(page.getByRole('button', { name: 'Resign', exact: true }));
+      await click(page.getByRole('button', { name: 'Confirm resign', exact: true }));
+      const over = page.getByRole('alertdialog', { name: 'Game over', exact: true });
+      await over.waitFor();
+      await click(over.getByRole('button', { name: 'Play again', exact: true }));
+      await over.waitFor({ state: 'detached' });
+      assert.equal(page.url(), gameUrl, `${name}: Play again left the game route`);
+      await page.waitForFunction(() => /\(0\)/.test(document.querySelector('.moves .eyebrow')?.textContent ?? ''));
+      await page.locator('.piece-cell[data-sq="60"]').waitFor();
+      assert.equal(await page.locator('.piece-cell[data-sq="28"]').count(), 0, `${name}: board not reset`);
+      assert.equal(await page.locator('.piece-cell[data-sq="59"]').count(), 0, `${name}: CPU army changed on restart`);
+      await page.waitForTimeout(800); // a stale CPU reply from the old game must not land
+      assert(/\(0\)/.test(await page.locator('.moves .eyebrow').first().innerText()), `${name}: stale CPU move after restart`);
+      await drag(page.locator('.piece-cell[data-sq="12"]'), page.locator('rect[data-sq="28"]'));
+      await page.waitForFunction(() => /\(2\)/.test(document.querySelector('.moves .eyebrow')?.textContent ?? '') &&
+        /To move: White/.test(document.body.innerText), undefined, { timeout: 10000 });
       await page.evaluate(() => { location.hash = '#/lobby'; });
       await page.waitForFunction(() => location.hash.includes('lobby'));
       await page.getByRole('heading', { name: 'Play', exact: true }).waitFor();
@@ -195,6 +213,20 @@ function serve() {
       await click(page.getByRole('link', { name: 'Library', exact: true }));
       await page.getByRole('heading', { name: 'Library', exact: true }).waitFor();
       await noOverflow();
+
+      // Armies: the per-army actions menu (phone: the ⋯ toggle) must open fully on screen.
+      await click(page.getByRole('link', { name: 'Armies', exact: true }));
+      await page.getByRole('heading', { name: 'Armies', exact: true }).waitFor();
+      const more = page.locator('summary.overflow-toggle').first();
+      if (await more.isVisible()) {
+        await click(more);
+        const panel = page.locator('.overflow-panel').first();
+        await panel.waitFor();
+        const box = await panel.boundingBox();
+        const vw = await page.evaluate(() => innerWidth);
+        assert(box.x >= 0 && box.x + box.width <= vw, `${name}: armies menu off-screen (${box.x}..${box.x + box.width} of ${vw})`);
+        await click(more);
+      }
 
       assert.equal(offOriginRequests.length, 0, `${name}: cross-origin requests: ${offOriginRequests.join(', ')}`);
       assert.deepEqual(errors, [], `${name}: console/page errors: ${errors.join(' | ')}`);

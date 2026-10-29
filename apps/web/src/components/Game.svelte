@@ -344,12 +344,17 @@
     maybeCpuMove();
   }
 
+  /** Bumped on every local restart so a CPU reply scheduled for the previous game is dropped. */
+  let gameGen = 0;
+
   function maybeCpuMove(): void {
     if (!game || isOnline || cpuColor === null || cpuThinking) return;
     if (game.sideToMove() !== cpuColor || game.status().result !== '*') return;
     cpuThinking = true;
+    const gen = gameGen;
     // Yield first so the human's move paints before the search blocks the main thread.
     setTimeout(() => {
+      if (gen !== gameGen) return;
       const reply = game ? chooseMoveAtLevel(game, cpuLevel) : null;
       cpuThinking = false;
       if (reply) playMove(reply);
@@ -377,7 +382,24 @@
   function offerDraw(): void { ctrl?.offerDraw(); }
   function acceptDraw(): void { ctrl?.acceptDraw(); }
 
-  function playAgain(): void { location.hash = routeHref('lobby'); }
+  /** Local games (hotseat, vs CPU, test drives) restart the same match in place: same armies,
+   *  colours, CPU level and ruleset. The route doesn't change, so re-navigating would not remount.
+   *  Online games need both players, so they go back to the lobby for a new invite. */
+  function playAgain(): void {
+    if (isOnline) { location.hash = routeHref('lobby'); return; }
+    gameGen++;
+    cpuThinking = false;
+    game = createGame(ruleset, whiteSetup, blackSetup);
+    lastMove = null; selectedSq = null; promoChoice = null; inspectedSq = null;
+    resignConfirm = false; resigned = null; resultDismissed = false;
+    history = []; captured = { w: [], b: [] };
+    revealed = false;
+    renderTick++;
+    clearTimeout(restartRevealTimer);
+    restartRevealTimer = setTimeout(() => { revealed = true; maybeCpuMove(); }, 400);
+  }
+  let restartRevealTimer: ReturnType<typeof setTimeout> | undefined;
+  onDestroy(() => clearTimeout(restartRevealTimer));
   function backToLobby(): void { location.hash = routeHref('lobby'); }
 
   function movePairs(h: string[]): Array<{ n: number; w: string; b: string | undefined }> {
@@ -615,7 +637,7 @@
           <p class="muted">{effectiveResult.reason ?? 'unknown'}</p>
           <div class="row">
             <button class="btn ghost" onclick={() => resultDismissed = true}>Inspect board</button>
-            <button class="btn primary" onclick={playAgain}>Play again</button>
+            <button class="btn primary" onclick={playAgain}>{isOnline ? 'New game' : 'Play again'}</button>
             <button class="btn ghost" onclick={backToLobby}>Back to lobby</button>
           </div>
         </div>

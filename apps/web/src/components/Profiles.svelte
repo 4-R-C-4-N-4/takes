@@ -175,6 +175,8 @@
     .army-actions { grid-column: 1 / -1; justify-content: flex-start; }
     .action-extra { display: none; }
     .overflow-menu { display: block; }
+    /* On phones the actions sit at the row's left edge, so a right-anchored panel opened off-screen. */
+    .overflow-panel { left: 0; right: auto; max-width: calc(100vw - 2 * var(--s-4)); }
   }
   .import-panel { padding: var(--s-4); }
   .import-panel .row { flex-wrap: nowrap; }
