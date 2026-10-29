@@ -148,7 +148,11 @@ const out = __dirname;
       await page.getByPlaceholder('Paste a setup string to check it').fill(imported);
       await click(page.getByRole('button', { name: 'Open in builder', exact: true }));
       await click(page.getByRole('button', { name: 'Import / Export', exact: true }));
-      assert.equal(await page.locator('.setup-io input').inputValue(), imported);
+      // An old-version string opens with the same squares under the current ruleset, and says so.
+      const current = await page.evaluate(() => document.querySelector('.setup-io input').value.split(':')[0]);
+      assert.notEqual(current, '2026.1');
+      assert.equal(await page.locator('.setup-io input').inputValue(), `${current}:${imported.split(':')[1]}`);
+      await page.getByText(`Built for 2026.1; saving updates it to ${current}.`, { exact: true }).waitFor();
       await click(page.getByRole('link', { name: 'Library', exact: true }));
       await click(page.locator('.piece-card').filter({ has: page.locator('.glyph', { hasText: /^N$/ }) }));
       const oldHighlights = await page.locator('.highlight').count();
