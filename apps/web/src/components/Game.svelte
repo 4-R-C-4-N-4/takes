@@ -496,8 +496,10 @@
               <div class="row">
                 {#each promoChoice.targets as t}
                   {@const tl = titleFor(t)}
+                  {@const label = pieceLabel(pieceById(t) ?? ruleset.pieces[t]!)}
                   <button class="btn promo-btn" onclick={() => choosePromo(t)} aria-label="Promote to {tl}" title={tl}>
-                    <span class="mono">{pieceLabel(pieceById(t) ?? ruleset.pieces[t]!).primary.slice(0, 4)}</span>
+                    <PieceIcon svg={artFor(ruleset, t)} color={game.sideToMove()} size={44} />
+                    <span class="promo-label mono">{label.primary}</span>
                   </button>
                 {/each}
               </div>
@@ -679,8 +681,14 @@
   .promo-popover {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     z-index: 5; padding: var(--s-4); display: grid; gap: var(--s-2);
+    width: max-content; max-width: calc(100% - 2 * var(--s-2));
   }
-  .promo-btn { min-width: 48px; min-height: 48px; font-size: var(--fs-lg); }
+  .promo-popover .row { flex-wrap: wrap; justify-content: center; gap: var(--s-1); }
+  .promo-btn {
+    display: grid; justify-items: center; gap: 2px; min-width: 64px; min-height: 64px;
+    padding: var(--s-1) var(--s-2); font-size: var(--fs-xs);
+  }
+  .promo-label { max-width: 8ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-muted); }
 
   .waiting { display: grid; gap: var(--s-3); max-width: 480px; }
   .waiting .input { max-width: 420px; }
