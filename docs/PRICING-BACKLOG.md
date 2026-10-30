@@ -10,6 +10,7 @@ Ivy is compiling a larger set of piece-value updates for 2026.6. Collected feedb
 - Already settled: the pawn tier ladder (2026.5, D22). Strict downgrades cost less, and none reach Bishop price.
 
 Inputs available when 2026.6 is assembled:
+- Mobility vs cost (`docs/PIECE-MOBILITY.md`): Coroner ≈ Scarab in busy positions; Octopus and Impact are the busiest minors at 5.
 - Four-way screen results (`docs/catalog/fourway/screened.json`): strength vs the replaced piece. These are screening numbers, not prices.
 - The self-play valuation harness (`docs/valuation/`). It needs per-piece runs of hundreds to thousands of games, with knight and bishop as controls, before its numbers are trusted.
 
