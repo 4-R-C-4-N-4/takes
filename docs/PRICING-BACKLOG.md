@@ -14,6 +14,21 @@ Inputs available when 2026.6 is assembled:
 - Four-way screen results (`docs/catalog/fourway/screened.json`): strength vs the replaced piece. These are screening numbers, not prices.
 - The self-play valuation harness (`docs/valuation/`). It needs per-piece runs of hundreds to thousands of games, with knight and bishop as controls, before its numbers are trusted.
 
+## Bane: a structural problem, not only a price (Ivy, 2026-10-28)
+
+Bane (RBN, the classic "Amazon") can force checkmate on a lone king with no help from its own king.
+No other 2026.5 piece can. Ivy's winning plan with it: force trades until the minors are gone, then
+hunt the king with Bane alone. Games feel different when only one side has Bane. They are balanced
+mainly when both sides have one, or when the engine trades it for Queen/Hierophant (Hard mode tends
+to). A fixed setup cost can't fully price a piece whose value climbs as the board empties.
+Options to weigh for 2026.6 (no decision yet):
+- A **super-major tier**: Bane plus one or two peers, with an army cap of one super-major total, so
+  armies choose a super-major rather than one side simply having it.
+- Treat "can mate unassisted" as a design line (like D19's symmetry): super-major only, or not at all.
+- Verify the claim first with a small retrograde analysis: for each piece X, is K+X vs K a forced win,
+  and is it forced with the attacking king kept out of play? That tells which pieces are mate-capable
+  with help, and which (Bane, any candidate peers) need no help.
+
 Reference point: AlphaZero's self-play values for classical chess (Tomašev et al., "Assessing Game
 Balance with AlphaZero", 2020): pawn 1, knight 3.05, bishop 3.33, rook 5.63, queen 9.5. Its method
 (fitting win rate against material imbalance over self-play games) carries over to Takes. Its
