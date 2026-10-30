@@ -572,7 +572,7 @@
           <div class="panel inspect-panel" data-testid="piece-inspector" aria-live="polite">
             <div class="row"><strong class:mono={label.primaryIsNotation}>{label.primary}</strong><button class="btn sm ghost" onclick={() => inspectedSq = null} aria-label="Clear piece inspection">Close</button></div>
             {#if label.secondary}<p class="muted">{label.secondary}</p>{/if}
-            <p class="muted">● Can move · ◯ Can capture</p>
+            <p class="muted">● Can move · ◯ Attacks, or guards its own piece</p>
           </div>
         {/if}
         <div class="panel players">

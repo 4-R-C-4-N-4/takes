@@ -11,7 +11,8 @@ export const INSPECT_KING: Piece = {
 };
 
 /** Movement and attacks, without turn, check, castling or en-passant legality.
- * Empty attacked squares get rings too; friendly occupied squares stop the ray.
+ * Empty attacked squares get rings too. A friendly piece on a capturing line also gets a ring and
+ * stops the ray: the inspected piece guards it, so taking there invites a recapture.
  * Movement history is unavailable, so rank2 depends only on relative rank.
  */
 export function inspectMarks(ruleset: Ruleset, board: readonly (InspectPiece | null)[], from: number): Map<number, PreviewMark> {
@@ -28,7 +29,8 @@ export function inspectMarks(ruleset: Ruleset, board: readonly (InspectPiece | n
       if (f < 0 || f > 7 || r < 0 || r > 7) break;
       const sq = r * 8 + f, target = board[sq];
       const quiet = !target && canMove(v);
-      const capture = target?.color !== owner.color && canCapture(v);
+      // Any piece on a capturing line is covered: enemies can be taken, friends are guarded.
+      const capture = canCapture(v);
       if (quiet || capture) {
         const mark = quiet && capture ? 'both' : quiet ? 'quiet' : 'capture';
         const prior = out.get(sq);
