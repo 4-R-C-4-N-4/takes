@@ -66,9 +66,9 @@ export function analyseMate(piece: Piece, assisted: boolean): MateReport {
   const result = new Int16Array(size); // 0 unknown, >0: win in n plies (attacker perspective)
   const legal = new Uint8Array(size);
 
-  const xAttacks = (w: number, x: number, ignoreB: number | null): Uint8Array => {
+  const xAttacks = (w: number, x: number): Uint8Array => {
     const a = new Uint8Array(N);
-    walk(rays, x, (sq) => (assisted && sq === w) || (ignoreB === null ? false : false), 'capture', (sq) => { a[sq] = 1; });
+    walk(rays, x, (sq) => assisted && sq === w, 'capture', (sq) => { a[sq] = 1; });
     return a;
   };
   // Precompute X attack sets with only the attacking king as blocker (defending king removed).
@@ -76,7 +76,7 @@ export function analyseMate(piece: Piece, assisted: boolean): MateReport {
   const attacksOf = (w: number, x: number) => {
     const key = w * N + x;
     let a = attackCache.get(key);
-    if (!a) { a = xAttacks(w, x, null); attackCache.set(key, a); }
+    if (!a) { a = xAttacks(w, x); attackCache.set(key, a); }
     return a;
   };
   const defended = (w: number, x: number) => assisted && kingAdj(w, x);
@@ -130,7 +130,8 @@ export function analyseMate(piece: Piece, assisted: boolean): MateReport {
         whiteSuccessors(w, x, b, (w2, x2) => {
           if (win) return;
           const j = idx(w2, x2, b, 1);
-          if (legal[j] && result[j] > 0 && result[j] < ply) win = true;
+          const rj = result[j]!;
+          if (legal[j] && rj > 0 && rj < ply) win = true;
         });
         if (win) { result[i] = ply; changed = true; }
       } else {
@@ -142,7 +143,8 @@ export function analyseMate(piece: Piece, assisted: boolean): MateReport {
         for (const m of moves) {
           if (m.capture) { allLose = false; break; }
           const j = idx(w, x, m.to, 0);
-          if (!(legal[j] && result[j] > 0 && result[j] < ply)) { allLose = false; break; }
+          const rj = result[j]!;
+          if (!(legal[j] && rj > 0 && rj < ply)) { allLose = false; break; }
         }
         if (allLose) { result[i] = ply; changed = true; }
       }
@@ -157,8 +159,9 @@ export function analyseMate(piece: Piece, assisted: boolean): MateReport {
     // Only count positions where X is not immediately en prise to the defending king.
     if (kingAdj(x, b) && !defended(w, x)) continue;
     total++;
-    const won = result[i] > 0;
-    if (won) { wins++; longest = Math.max(longest, Math.ceil(result[i] / 2)); }
+    const ri = result[i]!;
+    const won = ri > 0;
+    if (won) { wins++; longest = Math.max(longest, Math.ceil(ri / 2)); }
     if (corners.has(b)) { cornerTotal++; if (won) cornerWins++; }
   }
   return { winShare: total ? wins / total : 0, longestMate: longest, mateExists, cornerWinShare: cornerTotal ? cornerWins / cornerTotal : 0 };
